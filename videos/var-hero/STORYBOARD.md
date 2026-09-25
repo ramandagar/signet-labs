@@ -1,6 +1,6 @@
 ---
 format: 1920x1080
-duration: 100s
+duration: 83s
 message: "Your agent says done. Prove it."
 arc: PAS (pain known and urgent: agents self-report completion)
 audience: engineering leaders running autonomous agents in production
@@ -104,7 +104,7 @@ Scene 4 (8.2–11.9s): recovery streams under the rail, token-typed:
 - duration: 8.256s
 - transition_in: cut
 - src: compositions/frames/03b-install.html
-- status: outline
+- status: animated
 - voiceover: "And it's small. One runtime, five lines, zero dependencies. Wrap any framework's tool calls — the gate does the rest."
 - type: feature_showcase
 - blueprint: prompt-type-submit-generate (Reproduce)
@@ -175,7 +175,7 @@ against the riser's release; hold to cut.
 - duration: 8.64s
 - transition_in: cut
 - src: compositions/frames/05b-resume.html
-- status: outline
+- status: animated
 - voiceover: "When the process dies mid-run, the session resumes at the exact step it stopped. State intact, meter intact — no re-payment."
 - type: benefit_highlight
 - blueprint: agent-progress-theater (Adapt)
@@ -200,7 +200,7 @@ Scene 4 (6.5–8.5s): hold, subtle jitter; the completed card reads on.
 - duration: 9.6s
 - transition_in: cut
 - src: compositions/frames/05c-cost.html
-- status: outline
+- status: animated
 - voiceover: "Budgets are enforced, not suggested. Tokens, dollars, wall-clock. Irreversible work earns the flagship model — everything else routes cheap."
 - type: benefit_highlight
 - blueprint: dataviz-countup (Reproduce)
@@ -223,7 +223,7 @@ up: "BUDGET_EXCEEDED — session stopped" in amber; hold; the numbers read.
 - duration: 8.363s
 - transition_in: cut
 - src: compositions/frames/05d-identity.html
-- status: outline
+- status: animated
 - voiceover: "Every call carries signed identity — who is really asking, and what they may do. Later, the audit trail answers for all of it."
 - type: benefit_highlight
 - blueprint: comparison-split (Reproduce)
