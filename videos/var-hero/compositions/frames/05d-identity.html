@@ -1,0 +1,705 @@
+<template>
+  <div id="root" data-composition-id="05d-identity" data-width="1920" data-height="1080">
+    <style>
+      @font-face {
+        font-family: "Barlow";
+        font-style: normal;
+        font-weight: 900;
+        font-display: block;
+        src: url("assets/fonts/barlow-latin-900-normal.woff2") format("woff2"),
+          url("assets/fonts/Barlow-900.woff2") format("woff2"),
+          url("assets/fonts/Barlow-Black.woff2") format("woff2");
+      }
+      @font-face {
+        font-family: "IBM Plex Mono";
+        font-style: normal;
+        font-weight: 400;
+        font-display: block;
+        src: url("assets/fonts/ibm-plex-mono-latin-400-normal.woff2") format("woff2"),
+          url("assets/fonts/IBMPlexMono-400.woff2") format("woff2"),
+          url("assets/fonts/IBMPlexMono-Regular.woff2") format("woff2");
+      }
+      @font-face {
+        font-family: "IBM Plex Mono";
+        font-style: normal;
+        font-weight: 500;
+        font-display: block;
+        src: url("assets/fonts/ibm-plex-mono-latin-500-normal.woff2") format("woff2"),
+          url("assets/fonts/IBMPlexMono-500.woff2") format("woff2"),
+          url("assets/fonts/IBMPlexMono-Medium.woff2") format("woff2");
+      }
+      @font-face {
+        font-family: "IBM Plex Mono";
+        font-style: normal;
+        font-weight: 600;
+        font-display: block;
+        src: url("assets/fonts/ibm-plex-mono-latin-600-normal.woff2") format("woff2"),
+          url("assets/fonts/IBMPlexMono-600.woff2") format("woff2"),
+          url("assets/fonts/IBMPlexMono-SemiBold.woff2") format("woff2");
+      }
+
+      #root {
+        position: relative;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        container-type: size;
+        color: #ffffff;
+        font-family: "Barlow", sans-serif;
+      }
+
+      /* full-bleed ground rides on a clip layer, never #root */
+      .f05-bg {
+        position: absolute;
+        inset: 0;
+        background-color: #1a1a19;
+        background-image: radial-gradient(circle, rgba(255, 255, 255, 0.055) 1.3px, transparent 1.3px);
+        background-size: 54px 54px;
+        background-position: 27px 27px;
+      }
+
+      /* 3D scene root — perspective REQUIRED for the book-open tilts */
+      .f05-stage {
+        position: absolute;
+        inset: 0;
+        perspective: 1700px;
+      }
+      .f05-split {
+        position: absolute;
+        inset: 0;
+        transform-style: preserve-3d;
+      }
+
+      /* ambient side glows — each wing owns a color identity */
+      .f05-glow {
+        position: absolute;
+        width: 940px;
+        height: 760px;
+        top: 40px;
+        z-index: 1;
+        opacity: 0;
+      }
+      .f05-glow-l {
+        left: 110px;
+        background: radial-gradient(closest-side, rgba(57, 135, 229, 0.34), transparent 72%);
+      }
+      .f05-glow-r {
+        left: 870px;
+        background: radial-gradient(closest-side, rgba(12, 163, 12, 0.28), transparent 72%);
+      }
+
+      /* symmetry axis — the 1px compare divider */
+      .f05-axis {
+        position: absolute;
+        left: 960px;
+        top: 306px;
+        width: 1px;
+        height: 480px;
+        z-index: 1;
+        background: #d7d8d9;
+        opacity: 0.35;
+        transform-origin: 50% 0;
+      }
+
+      /* slide chrome — hairline bars, mono */
+      .f05-chrome {
+        position: absolute;
+        left: 110px;
+        right: 110px;
+        height: 44px;
+        z-index: 5;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-family: "IBM Plex Mono", monospace;
+        font-weight: 500;
+        font-size: 0.95cqw;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: #ffffff;
+      }
+      .f05-chrome-top {
+        top: 56px;
+        border-bottom: 1px solid #d7d8d9;
+      }
+      .f05-chrome-bot {
+        top: 800px;
+        border-top: 1px solid #d7d8d9;
+        color: #afb3b7;
+      }
+      .f05-kicker {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        color: #3987e5;
+      }
+      .f05-kicker::before {
+        content: "";
+        width: 36px;
+        height: 2px;
+        background: #3987e5;
+      }
+      .f05-counter {
+        color: #ffffff;
+      }
+
+      /* concept title — sets the split */
+      .f05-title {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 150px;
+        z-index: 3;
+        text-align: center;
+        font-family: "Barlow", sans-serif;
+        font-weight: 900;
+        font-size: 3.2cqw;
+        line-height: 1.1;
+        letter-spacing: -0.02em;
+        color: #ffffff;
+        opacity: 0;
+        user-select: none;
+      }
+      .f05-title .acc {
+        color: #3987e5;
+      }
+
+      /* the two panels — equal width, equal weight */
+      .f05-card {
+        position: absolute;
+        width: 660px;
+        top: 330px;
+        z-index: 2;
+        background: #1a1a19;
+        border: 1px solid #d7d8d9;
+        transform-style: preserve-3d;
+        will-change: transform;
+        opacity: 0;
+      }
+      /* shadow falls WITH the facing direction: left faces right → shadow right */
+      .f05-card-l {
+        left: 252px;
+        height: 440px;
+        box-shadow: 26px 20px 70px rgba(0, 0, 0, 0.5);
+      }
+      .f05-col-r {
+        left: 1008px;
+        height: 440px;
+        box-shadow: -26px 20px 70px rgba(0, 0, 0, 0.5);
+      }
+
+      .f05-head {
+        position: relative;
+        height: 74px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 32px;
+        border-bottom: 1px solid #d7d8d9;
+        font-family: "IBM Plex Mono", monospace;
+        font-weight: 600;
+        font-size: 1.25cqw;
+        color: #ffffff;
+        white-space: nowrap;
+      }
+      .f05-head .meta {
+        font-weight: 400;
+        font-size: 0.95cqw;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: #afb3b7;
+      }
+
+      /* envelope rows — key · value, mono */
+      .f05-rows {
+        position: relative;
+      }
+      .f05-row {
+        position: relative;
+        height: 70px;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        padding: 0 32px;
+        border-bottom: 1px solid rgba(215, 216, 217, 0.28);
+        font-family: "IBM Plex Mono", monospace;
+        white-space: nowrap;
+      }
+      .f05-key {
+        font-weight: 600;
+        font-size: 1.4cqw;
+        color: #ffffff;
+      }
+      .f05-sep {
+        font-weight: 400;
+        font-size: 1.2cqw;
+        color: rgba(255, 255, 255, 0.4);
+      }
+      .f05-val {
+        font-weight: 400;
+        font-size: 1.2cqw;
+        color: #afb3b7;
+      }
+      .f05-perms {
+        display: flex;
+        gap: 10px;
+      }
+      .f05-perm {
+        font-family: "IBM Plex Mono", monospace;
+        font-weight: 500;
+        font-size: 0.95cqw;
+        color: #e5e6e7;
+        padding: 5px 11px;
+        border: 1px solid rgba(215, 216, 217, 0.42);
+      }
+
+      /* signature footer + seal ring */
+      .f05-foot {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 86px;
+        display: flex;
+        align-items: center;
+        padding: 0 32px;
+        font-family: "IBM Plex Mono", monospace;
+        font-weight: 400;
+        font-size: 1.05cqw;
+        color: #afb3b7;
+        white-space: nowrap;
+      }
+      .f05-seal {
+        position: absolute;
+        right: 26px;
+        bottom: 11px;
+        width: 68px;
+        height: 68px;
+        opacity: 0;
+      }
+      .f05-seal-ringbase {
+        fill: none;
+        stroke: rgba(57, 135, 229, 0.22);
+        stroke-width: 3.5;
+      }
+      .f05-seal-ring {
+        fill: none;
+        stroke: #3987e5;
+        stroke-width: 3.5;
+        stroke-linecap: round;
+      }
+      .f05-seal-tick {
+        fill: none;
+        stroke: #ffffff;
+        stroke-width: 4;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      /* right wing — tool-call card */
+      .f05-tool {
+        position: relative;
+        width: 660px;
+        height: 240px;
+        background: #1a1a19;
+        border: 1px solid #d7d8d9;
+      }
+      .f05-tool .f05-head {
+        height: 62px;
+      }
+      .f05-code {
+        position: relative;
+        padding: 26px 32px 0;
+        font-family: "IBM Plex Mono", monospace;
+        white-space: nowrap;
+      }
+      .f05-codeline {
+        font-weight: 500;
+        font-size: 1.35cqw;
+        color: #ffffff;
+        opacity: 0;
+      }
+      .f05-codeline .arg {
+        font-weight: 400;
+        color: #afb3b7;
+      }
+      .f05-metaline {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-top: 26px;
+        font-weight: 400;
+        font-size: 1.2cqw;
+        color: #afb3b7;
+        opacity: 0;
+      }
+      .f05-slot {
+        position: relative;
+        width: 356px;
+        height: 42px;
+        border: 1px dashed rgba(57, 135, 229, 0.55);
+        background: rgba(57, 135, 229, 0.05);
+      }
+      .f05-token {
+        position: absolute;
+        inset: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(57, 135, 229, 0.22);
+        border: 1px solid #3987e5;
+        font-family: "IBM Plex Mono", monospace;
+        font-weight: 500;
+        font-size: 1.05cqw;
+        color: #ffffff;
+        transform-origin: 0 50%;
+        opacity: 0;
+      }
+
+      /* right wing — audit table (grows beneath) */
+      .f05-audit {
+        position: relative;
+        width: 660px;
+        height: 178px;
+        margin-top: 22px;
+        background: #1a1a19;
+        border: 1px solid #d7d8d9;
+        opacity: 0;
+      }
+      .f05-audit .f05-head {
+        height: 56px;
+      }
+      .f05-audit-row {
+        position: relative;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        padding: 0 32px;
+        font-family: "IBM Plex Mono", monospace;
+        white-space: nowrap;
+        opacity: 0;
+      }
+      .f05-audit-row + .f05-audit-row {
+        border-top: 1px solid rgba(215, 216, 217, 0.28);
+      }
+      .f05-chip {
+        position: absolute;
+        right: 28px;
+        top: 14px;
+        font-family: "IBM Plex Mono", monospace;
+        font-weight: 600;
+        font-size: 0.9cqw;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        padding: 6px 13px;
+        color: #1a1a19;
+        opacity: 0;
+      }
+      .f05-chip-admit {
+        background: #0ca30c;
+      }
+      .f05-chip-halt {
+        background: #fab219;
+      }
+
+      /* verified pill — badge at the right panel's inner edge */
+      .f05-verified {
+        position: absolute;
+        left: 968px;
+        top: 534px;
+        z-index: 4;
+        background: #3987e5;
+        color: #ffffff;
+        font-family: "IBM Plex Mono", monospace;
+        font-weight: 600;
+        font-size: 0.95cqw;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        padding: 8px 16px;
+        white-space: nowrap;
+        opacity: 0;
+      }
+    </style>
+
+    <div class="clip f05-bg" data-start="0" data-duration="8.363" data-track-index="0"></div>
+
+    <div class="clip f05-stage" data-start="0" data-duration="8.363" data-track-index="1">
+      <div class="f05-glow f05-glow-l" id="f05-glow-l"></div>
+      <div class="f05-glow f05-glow-r" id="f05-glow-r"></div>
+      <div class="f05-axis" id="f05-axis"></div>
+
+      <div class="f05-chrome f05-chrome-top" id="f05-chrome-top">
+        <span class="f05-kicker">identity · signed envelope</span>
+        <span>no. 05</span>
+      </div>
+
+      <div class="f05-title" id="f05-title">signed <span class="acc">identity</span></div>
+
+      <div class="f05-split">
+        <!-- left wing — the identity envelope -->
+        <div class="f05-card f05-card-l" id="f05-card-l">
+          <div class="f05-head">
+            <span>io.var.identity.envelope</span>
+            <span class="meta">v1</span>
+          </div>
+          <div class="f05-rows">
+            <div class="f05-row">
+              <span class="f05-key">principal</span><span class="f05-sep">·</span>
+              <span class="f05-val">alice@company.com</span>
+            </div>
+            <div class="f05-row">
+              <span class="f05-key">agent</span><span class="f05-sep">·</span>
+              <span class="f05-val">agent-coder-01</span>
+            </div>
+            <div class="f05-row">
+              <span class="f05-key">perms</span><span class="f05-sep">·</span>
+              <span class="f05-perms">
+                <span class="f05-perm">read:repo</span>
+                <span class="f05-perm">write:repo</span>
+                <span class="f05-perm">run:tests</span>
+              </span>
+            </div>
+            <div class="f05-row">
+              <span class="f05-key">exp</span><span class="f05-sep">·</span>
+              <span class="f05-val">14:02Z</span>
+            </div>
+          </div>
+          <div class="f05-foot">
+            <span>ed25519 · sig 9c1e42</span>
+            <svg class="f05-seal" id="f05-seal" viewBox="0 0 68 68" width="68" height="68">
+              <circle class="f05-seal-ringbase" cx="34" cy="34" r="27" />
+              <circle class="f05-seal-ring" id="f05-seal-ring" cx="34" cy="34" r="27" transform="rotate(-90 34 34)" />
+              <path class="f05-seal-tick" id="f05-seal-tick" d="M23 34.5 L30.5 42 L45 26" />
+            </svg>
+          </div>
+        </div>
+
+        <!-- right wing — tool call + audit record -->
+        <div class="f05-card f05-col-r" id="f05-col-r">
+          <div class="f05-tool" id="f05-tool">
+            <div class="f05-head">
+              <span>tool call</span>
+              <span class="meta">runtime</span>
+            </div>
+            <div class="f05-code">
+              <div class="f05-codeline" id="f05-codeline">run_tests<span class="arg">({ scope: "repo" })</span></div>
+              <div class="f05-metaline" id="f05-metaline">
+                <span>_meta:</span>
+                <span class="f05-slot">
+                  <span class="f05-token" id="f05-token">env_9f3ac41e</span>
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="f05-audit" id="f05-audit">
+            <div class="f05-head">
+              <span>audit trail</span>
+              <span class="meta">per action</span>
+            </div>
+            <div class="f05-audit-row">
+              <span class="f05-key" style="font-size: 1.15cqw">agent-1</span><span class="f05-sep">·</span>
+              <span class="f05-val">run_tests</span>
+              <span class="f05-chip f05-chip-admit" id="f05-chip-admit">admit</span>
+            </div>
+            <div class="f05-audit-row">
+              <span class="f05-key" style="font-size: 1.15cqw">agent-2</span><span class="f05-sep">·</span>
+              <span class="f05-val">deploy</span>
+              <span class="f05-chip f05-chip-halt" id="f05-chip-halt">halt</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="f05-verified" id="f05-verified">verified</div>
+
+      <div class="f05-chrome f05-chrome-bot" id="f05-chrome-bot">
+        <span>envelope → audit</span>
+        <span class="f05-counter" id="f05-counter">events 0/2</span>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script>
+      (function () {
+        var D = 8.363;
+
+        var tl = gsap.timeline({ paused: true });
+        window.__timelines = window.__timelines || {};
+        window.__timelines["05d-identity"] = tl;
+
+        var $ = function (id) {
+          return document.getElementById(id);
+        };
+
+        /* ── measured stroke draws (never guessed) ── */
+        var ring = $("f05-seal-ring");
+        var ringLen = ring.getTotalLength() * 1.02;
+        ring.style.strokeDasharray = String(ringLen);
+        ring.style.strokeDashoffset = String(ringLen);
+        var tick = $("f05-seal-tick");
+        var tickLen = tick.getTotalLength() * 1.02;
+        tick.style.strokeDasharray = String(tickLen);
+        tick.style.strokeDashoffset = String(tickLen);
+
+        /* ── discrete counter states — pure function of t ── */
+        var EVENTS = [
+          { t: 5.75, s: 1 },
+          { t: 6.6, s: 2 },
+        ];
+        var counter = $("f05-counter");
+        var drv = { t: 0 };
+        tl.to(
+          drv,
+          {
+            t: D,
+            duration: D,
+            ease: "none",
+            onUpdate: function () {
+              var n = 0;
+              for (var i = EVENTS.length - 1; i >= 0; i--) {
+                if (drv.t >= EVENTS[i].t) {
+                  n = EVENTS[i].s;
+                  break;
+                }
+              }
+              counter.textContent = "events " + n + "/2";
+            },
+          },
+          0
+        );
+
+        /* ── Scene 1 (0.0–2.5): title down, left wing pivots in, envelope fields land, seal closes ── */
+        tl.fromTo("#f05-chrome-top", { y: 12, opacity: 0 }, { y: 0, opacity: 1, duration: 0.32, ease: "power3.out" }, 0.02);
+        tl.fromTo("#f05-chrome-bot", { y: 12, opacity: 0 }, { y: 0, opacity: 1, duration: 0.32, ease: "power3.out" }, 0.08);
+        tl.fromTo("#f05-title", { y: -26, opacity: 0 }, { y: 0, opacity: 1, duration: 0.55, ease: "power3.out" }, 0.05);
+        tl.fromTo("#f05-axis", { scaleY: 0 }, { scaleY: 1, duration: 0.7, ease: "power2.out" }, 0.18);
+
+        /* split-tilt entry — left card from the left wing, overshoot settles to +12° */
+        tl.fromTo(
+          "#f05-card-l",
+          { x: -420, rotateY: 22, scale: 0.85, opacity: 0 },
+          { x: 0, rotateY: 12, scale: 1, opacity: 1, duration: 0.9, ease: "power3.out" },
+          0.2
+        );
+        tl.fromTo("#f05-glow-l", { opacity: 0, scale: 0.86 }, { opacity: 0.46, scale: 1, duration: 0.85, ease: "power2.out" }, 0.25);
+
+        var envRows = document.querySelectorAll("#f05-card-l .f05-row");
+        var rowAt = [0.55, 0.95, 1.3, 1.7];
+        envRows.forEach(function (row, i) {
+          tl.fromTo(row, { y: 18, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: "power3.out" }, rowAt[i]);
+          var kids = [row.querySelector(".f05-key"), row.querySelector(".f05-sep"), row.querySelector(".f05-val"), row.querySelector(".f05-perms")];
+          kids.forEach(function (k, j) {
+            if (!k) return;
+            tl.fromTo(k, { x: -12, opacity: 0 }, { x: 0, opacity: 1, duration: 0.3, ease: "power3.out" }, rowAt[i] + 0.08 + j * 0.06);
+          });
+        });
+        /* perm chips stagger inside their row */
+        document.querySelectorAll("#f05-card-l .f05-perm").forEach(function (c, i) {
+          tl.fromTo(c, { scale: 0.7, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.32, ease: "power3.out" }, 1.38 + i * 0.1);
+        });
+
+        /* the signature seal — ring draws closed, then the tick */
+        tl.fromTo("#f05-seal", { opacity: 0 }, { opacity: 1, duration: 0.25, ease: "power1.out" }, 1.45);
+        tl.to(ring, { strokeDashoffset: 0, duration: 0.95, ease: "power2.inOut" }, 1.6);
+        tl.to(tick, { strokeDashoffset: 0, duration: 0.32, ease: "power2.out" }, 2.42);
+
+        /* ── Scene 2 (2.5–5.0): right wing mirrors in, _meta slot fills, verified pops ── */
+        tl.fromTo(
+          "#f05-col-r",
+          { x: 460, rotateY: -22, scale: 0.85, opacity: 0 },
+          { x: 0, rotateY: -12, scale: 1, opacity: 1, duration: 0.9, ease: "power3.out" },
+          2.55
+        );
+        tl.fromTo("#f05-glow-r", { opacity: 0, scale: 0.86 }, { opacity: 0.4, scale: 1, duration: 0.85, ease: "power2.out" }, 2.6);
+
+        tl.fromTo("#f05-codeline", { y: 14, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: "power3.out" }, 3.2);
+        tl.fromTo("#f05-metaline", { y: 14, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: "power3.out" }, 3.5);
+
+        /* the token slot fills */
+        tl.fromTo("#f05-token", { scaleX: 0, opacity: 1 }, { scaleX: 1, opacity: 1, duration: 0.45, ease: "power3.out" }, 4.15);
+
+        /* badge pop — the lone overshoot, at the right panel's inner edge */
+        tl.fromTo(
+          "#f05-verified",
+          { scale: 0.5, y: 8, opacity: 0 },
+          { scale: 1, y: 0, opacity: 1, duration: 0.42, ease: "back.out(1.4)" },
+          4.55
+        );
+
+        /* ── Scene 3 (5.0–8.36): audit table grows beneath, rows land one per beat, hold ── */
+        tl.fromTo("#f05-audit", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power3.out" }, 5.05);
+
+        tl.fromTo(
+          "#f05-audit .f05-audit-row:nth-child(2)",
+          { y: 22, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.4, ease: "power3.out" },
+          5.55
+        );
+        tl.fromTo("#f05-chip-admit", { scale: 0.55, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.34, ease: "power3.out" }, 5.8);
+
+        tl.fromTo(
+          "#f05-audit .f05-audit-row:nth-child(3)",
+          { y: 22, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.4, ease: "power3.out" },
+          6.4
+        );
+        tl.fromTo("#f05-chip-halt", { scale: 0.55, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.34, ease: "power3.out" }, 6.65);
+
+        /* counter text flips ride the master driver: 1/2 @5.75, 2/2 @6.6 */
+
+        /* ── hold: counter-phase idle float (opposite signs, bounded, ends at rest) ── */
+        var cardL = $("f05-card-l");
+        var colR = $("f05-col-r");
+        var fl = { p: 0 };
+        tl.to(
+          fl,
+          {
+            p: Math.PI,
+            duration: 1.4,
+            ease: "none",
+            onUpdate: function () {
+              var s = Math.sin(fl.p);
+              gsap.set(cardL, { y: s * 3 });
+              gsap.set(colR, { y: -s * 3 });
+            },
+          },
+          6.9
+        );
+
+        /* glow breathes — bounded, staggered periods, end at rest */
+        var g1 = $("f05-glow-l");
+        var b1 = { p: 0 };
+        tl.to(
+          b1,
+          {
+            p: Math.PI * 3,
+            duration: 3.9,
+            ease: "none",
+            onUpdate: function () {
+              var s = Math.sin(b1.p);
+              gsap.set(g1, { opacity: 0.46 + s * 0.03, scale: 1 + s * 0.012 });
+            },
+          },
+          1.15
+        );
+        var g2 = $("f05-glow-r");
+        var b2 = { p: 0 };
+        tl.to(
+          b2,
+          {
+            p: Math.PI * 3,
+            duration: 3.9,
+            ease: "none",
+            onUpdate: function () {
+              var s = Math.sin(b2.p);
+              gsap.set(g2, { opacity: 0.4 + s * 0.03, scale: 1 + s * 0.012 });
+            },
+          },
+          3.55
+        );
+      })();
+    </script>
+  </div>
+</template>

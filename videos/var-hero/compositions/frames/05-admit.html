@@ -1,0 +1,304 @@
+<template>
+  <div data-hf-id="hf-c8ig" id="root" data-composition-id="05-admit" data-width="1920" data-height="1080">
+    <!-- Track 0 — full-bleed ground: white plane + faint hairline grid -->
+    <div data-hf-id="hf-verq" class="clip f5-bg" data-start="0" data-duration="4.245" data-track-index="0"></div>
+
+    <!-- Track 1 — the scene -->
+    <div data-hf-id="hf-bwly" class="clip f5-scene" data-start="0" data-duration="4.245" data-track-index="1">
+      <!-- Decision card (continues the 04-checks card family; present at cut) -->
+      <div data-hf-id="hf-02aq" class="f5-card" id="f5-card">
+        <div data-hf-id="hf-obia" class="f5-ripple" id="f5-ripple"></div>
+        <div data-hf-id="hf-c7q9" class="f5-kicker"><span data-hf-id="hf-8cox" class="f5-rule"></span>decision</div>
+        <div data-hf-id="hf-al7v" class="f5-verdict">
+          <div data-hf-id="hf-9o94" class="f5-flipwrap" id="f5-flipwrap">
+            <div data-hf-id="hf-nq3j" class="f5-face f5-face-front" data-layout-allow-overlap="">halt</div>
+            <div data-hf-id="hf-snin" class="f5-face f5-face-back" data-layout-allow-overlap="">admit</div>
+          </div>
+        </div>
+        <div data-hf-id="hf-z9ki" class="f5-sub" id="f5-sub">
+          <svg data-hf-id="hf-t4dx" width="26" height="26" viewBox="0 0 26 26" aria-hidden="true">
+            <path data-hf-id="hf-othz" id="f5-check" d="M4 14 L10.5 20 L22 6" pathLength="1" />
+          </svg>
+          <span data-hf-id="hf-kree">attested · no. 05</span>
+        </div>
+        <!-- content-hash slot (absolute so the chip mates font-independently) -->
+        <div data-hf-id="hf-53z7" class="f5-hashlabel">content</div>
+        <div data-hf-id="hf-lfb0" class="f5-slot"></div>
+        <div data-hf-id="hf-7ily" class="f5-chip" id="f5-chip" data-layout-allow-occlusion="" data-layout-allow-overflow="">9f3a·c41e</div>
+      </div>
+
+      <!-- attested chain -->
+      <div data-hf-id="hf-8io9" class="f5-chainlabel" id="f5-chainlabel">attested chain</div>
+      <svg data-hf-id="hf-4jb6" class="f5-connectors" viewBox="0 0 780 64" aria-hidden="true">
+        <line data-hf-id="hf-3a0u" id="f5-c12" x1="150" y1="32" x2="210" y2="32" pathLength="1" />
+        <line data-hf-id="hf-y6s8" id="f5-c23" x1="360" y1="32" x2="420" y2="32" pathLength="1" />
+        <line data-hf-id="hf-krki" id="f5-c34" x1="570" y1="32" x2="630" y2="32" pathLength="1" />
+      </svg>
+      <div data-hf-id="hf-x9l7" class="f5-block" id="f5-block1"></div>
+      <div data-hf-id="hf-rize" class="f5-block" id="f5-block2">77b2</div>
+      <div data-hf-id="hf-kkyk" class="f5-block" id="f5-block3">3d91</div>
+      <div data-hf-id="hf-6g4m" class="f5-block" id="f5-block4">a4e8</div>
+    </div>
+  </div>
+
+  <style>
+    /* No font files ship with the project — local()-only faces, generic fallbacks, no network. */
+    @font-face {
+      font-family: "Barlow";
+      src: local("Barlow Black"), local("Barlow ExtraBold"), local("Barlow Bold"),
+        local("Barlow SemiBold"), local("Barlow Medium"), local("Barlow");
+      font-weight: 100 900;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: "IBM Plex Mono";
+      src: local("IBM Plex Mono Medium"), local("IBM Plex Mono");
+      font-weight: 400 600;
+      font-style: normal;
+    }
+
+    #root {
+      position: relative;
+      width: 1920px;
+      height: 1080px;
+      overflow: hidden;
+      background: transparent;
+      color: #ffffff;
+      font-family: "Barlow", sans-serif;
+    }
+
+    .f5-bg {
+      position: absolute;
+      inset: 0;
+      background-color: #1a1a19;
+      background-image:
+        linear-gradient(to right, rgba(215, 216, 217, 0.16) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(215, 216, 217, 0.16) 1px, transparent 1px);
+      background-size: 96px 96px;
+    }
+    .f5-scene {
+      position: absolute;
+      inset: 0;
+    }
+
+    /* — decision card — */
+    .f5-card {
+      position: absolute;
+      left: 510px;
+      top: 160px;
+      width: 900px;
+      height: 470px;
+      border: 1px solid #d7d8d9;
+      background: #1a1a19;
+      padding: 48px 56px 44px;
+    }
+    .f5-ripple {
+      position: absolute;
+      inset: -2px;
+      border: 2px solid #0ca30c;
+      opacity: 0;
+      pointer-events: none;
+    }
+    .f5-kicker {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 15px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #3987e5;
+    }
+    .f5-rule {
+      width: 36px;
+      height: 2px;
+      background: #3987e5;
+    }
+    .f5-verdict {
+      margin-top: 22px;
+      height: 230px;
+      perspective: 1400px;
+    }
+    .f5-flipwrap {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+    }
+    .f5-face {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backface-visibility: hidden;
+      font-weight: 900;
+      font-size: 176px;
+      line-height: 0.9;
+      letter-spacing: -0.04em;
+      text-transform: lowercase;
+    }
+    .f5-face-front {
+      color: #ffffff;
+    }
+    .f5-face-back {
+      color: #0ca30c;
+      transform: rotateY(180deg);
+    }
+    .f5-sub {
+      margin-top: 14px;
+      height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 15px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.55);
+      opacity: 0;
+    }
+    #f5-check {
+      fill: none;
+      stroke: #0ca30c;
+      stroke-width: 3.5;
+      stroke-dasharray: 1;
+      stroke-dashoffset: 1;
+    }
+
+    /* — content-hash slot + traveling chip (card-relative) — */
+    .f5-hashlabel {
+      position: absolute;
+      left: 56px;
+      top: 398px;
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 15px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #3987e5;
+    }
+    .f5-slot {
+      position: absolute;
+      left: 154px;
+      top: 426px;
+      width: 176px;
+      height: 1px;
+      background: rgba(255, 255, 255, 0.25);
+    }
+    .f5-chip {
+      position: absolute;
+      left: 154px;
+      top: 390px;
+      width: 176px;
+      line-height: 34px;
+      text-align: center;
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 30px;
+      color: #ffffff;
+      z-index: 5;
+    }
+
+    /* — attested chain — */
+    .f5-chainlabel {
+      position: absolute;
+      left: 570px;
+      top: 656px;
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 15px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.55);
+      opacity: 0;
+    }
+    .f5-connectors {
+      position: absolute;
+      left: 570px;
+      top: 700px;
+      width: 780px;
+      height: 64px;
+      overflow: visible;
+    }
+    .f5-connectors line {
+      stroke: #3987e5;
+      stroke-opacity: 0.8;
+      stroke-width: 2;
+      stroke-dasharray: 1;
+      stroke-dashoffset: 1;
+    }
+    #f5-c34 {
+      stroke: #0ca30c;
+      stroke-opacity: 1;
+    }
+    .f5-block {
+      position: absolute;
+      top: 700px;
+      width: 150px;
+      height: 64px;
+      border: 1px solid #d7d8d9;
+      background: #1a1a19;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 20px;
+      letter-spacing: 0.06em;
+      color: rgba(255, 255, 255, 0.8);
+    }
+    #f5-block1 {
+      left: 570px;
+      opacity: 0;
+    }
+    #f5-block2 {
+      left: 780px;
+      opacity: 0;
+    }
+    #f5-block3 {
+      left: 990px;
+      opacity: 0;
+    }
+    #f5-block4 {
+      left: 1200px;
+      border-color: #0ca30c;
+      color: #0ca30c;
+      opacity: 0;
+    }
+  </style>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <script>
+    (function () {
+      window.__timelines = window.__timelines || {};
+      var tl = gsap.timeline({ paused: true });
+      window.__timelines["05-admit"] = tl;
+
+      // Scene 1 (0.0-1.0s) — verdict flips HALT->ADMIT on the word "Admit."
+      // Badge flip = the final check-off; first green in the film; impact moment.
+      tl.fromTo("#f5-flipwrap", { rotationY: 0 }, { rotationY: 180, duration: 0.46, ease: "power3.inOut" }, 0.1);
+      tl.fromTo("#f5-card", { scale: 1 }, { scale: 1.014, duration: 0.1, ease: "power2.out" }, 0.44);
+      tl.fromTo("#f5-card", { scale: 1.014 }, { scale: 1, duration: 0.24, ease: "power2.inOut" }, 0.54);
+      tl.fromTo("#f5-ripple", { opacity: 0.9, scale: 1 }, { opacity: 0, scale: 1.05, duration: 0.62, ease: "power2.out" }, 0.44);
+      tl.fromTo("#f5-check", { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.34, ease: "power2.out" }, 0.6);
+      tl.fromTo("#f5-sub", { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.32, ease: "power2.out" }, 0.64);
+
+      // Scene 2 (1.0-2.6s) — content hash shrinks + docks into the mono chain;
+      // connectors self-draw; chain extends one (green) block on "signed into".
+      tl.fromTo("#f5-chainlabel", { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.3, ease: "power2.out" }, 1.0);
+      tl.fromTo("#f5-block1", { opacity: 0 }, { opacity: 1, duration: 0.24, ease: "power1.out" }, 1.02);
+      tl.fromTo("#f5-chip", { x: 0, y: 0, scale: 1 }, { x: -107, y: 165, scale: 0.66, duration: 0.44, ease: "power3.inOut" }, 1.06);
+      tl.to("#f5-block1", { borderColor: "#0ca30c", duration: 0.2, ease: "power1.out" }, 1.46);
+      tl.fromTo("#f5-block1", { scale: 1.06 }, { scale: 1, duration: 0.2, ease: "power2.out" }, 1.46);
+      tl.fromTo("#f5-block2", { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.34, ease: "back.out(2.2)" }, 1.6);
+      tl.fromTo("#f5-c12", { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.26, ease: "power2.inOut" }, 1.64);
+      tl.fromTo("#f5-block3", { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.34, ease: "back.out(2.2)" }, 1.8);
+      tl.fromTo("#f5-c23", { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.26, ease: "power2.inOut" }, 1.84);
+      tl.fromTo("#f5-c34", { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.24, ease: "power2.inOut" }, 2.14);
+      tl.fromTo("#f5-block4", { opacity: 0, x: 30, scale: 0.85 }, { opacity: 1, x: 0, scale: 1, duration: 0.38, ease: "back.out(2.6)" }, 2.24);
+
+      // Scene 3 (2.6-4.245s) — everything holds STILL; no jitter; hold to cut.
+    })();
+  </script>
+</template>

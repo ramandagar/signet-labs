@@ -1,0 +1,942 @@
+<template>
+  <div id="root" data-composition-id="05b-resume" data-width="1920" data-height="1080">
+    <style>
+      @font-face {
+        font-family: "Barlow";
+        font-style: normal;
+        font-weight: 900;
+        font-display: block;
+        src: url("assets/fonts/barlow-latin-900-normal.woff2") format("woff2"),
+          url("assets/fonts/Barlow-900.woff2") format("woff2"),
+          url("assets/fonts/Barlow-Black.woff2") format("woff2");
+      }
+      @font-face {
+        font-family: "IBM Plex Mono";
+        font-style: normal;
+        font-weight: 400;
+        font-display: block;
+        src: url("assets/fonts/ibm-plex-mono-latin-400-normal.woff2") format("woff2"),
+          url("assets/fonts/IBMPlexMono-400.woff2") format("woff2"),
+          url("assets/fonts/IBMPlexMono-Regular.woff2") format("woff2");
+      }
+      @font-face {
+        font-family: "IBM Plex Mono";
+        font-style: normal;
+        font-weight: 500;
+        font-display: block;
+        src: url("assets/fonts/ibm-plex-mono-latin-500-normal.woff2") format("woff2"),
+          url("assets/fonts/IBMPlexMono-500.woff2") format("woff2"),
+          url("assets/fonts/IBMPlexMono-Medium.woff2") format("woff2");
+      }
+      @font-face {
+        font-family: "IBM Plex Mono";
+        font-style: normal;
+        font-weight: 600;
+        font-display: block;
+        src: url("assets/fonts/ibm-plex-mono-latin-600-normal.woff2") format("woff2"),
+          url("assets/fonts/IBMPlexMono-600.woff2") format("woff2"),
+          url("assets/fonts/IBMPlexMono-SemiBold.woff2") format("woff2");
+      }
+
+      #root {
+        position: relative;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        container-type: size;
+        color: #ffffff;
+        font-family: "Barlow", sans-serif;
+      }
+
+      /* full-bleed ground rides on a clip layer, never #root */
+      .f05-bg {
+        position: absolute;
+        inset: 0;
+        background-color: #1a1a19;
+        background-image: radial-gradient(circle, rgba(255, 255, 255, 0.055) 1.3px, transparent 1.3px);
+        background-size: 54px 54px;
+        background-position: 27px 27px;
+      }
+      .f05-stage {
+        position: absolute;
+        inset: 0;
+      }
+
+      /* ghost display word — type as texture, behind the card */
+      .f05-ghost {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 196px;
+        z-index: 1;
+        text-align: center;
+        font-family: "Barlow", sans-serif;
+        font-weight: 900;
+        font-size: 22cqw;
+        line-height: 0.88;
+        letter-spacing: -0.04em;
+        color: #ffffff;
+        opacity: 0;
+        user-select: none;
+      }
+
+      /* slide chrome — hairline bars, mono */
+      .f05-chrome {
+        position: absolute;
+        left: 110px;
+        right: 110px;
+        height: 44px;
+        z-index: 5;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-family: "IBM Plex Mono", monospace;
+        font-weight: 500;
+        font-size: 0.95cqw;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: #ffffff;
+      }
+      .f05-chrome-top {
+        top: 56px;
+        border-bottom: 1px solid #d7d8d9;
+      }
+      .f05-chrome-bot {
+        top: 802px;
+        border-top: 1px solid #d7d8d9;
+        color: #afb3b7;
+      }
+      .f05-kicker {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        color: #3987e5;
+      }
+      .f05-kicker::before {
+        content: "";
+        width: 36px;
+        height: 2px;
+        background: #3987e5;
+      }
+      .f05-num {
+        color: #afb3b7;
+      }
+      .f05-counter {
+        color: #ffffff;
+      }
+
+      /* two offset hairline outlines behind the card */
+      .f05-depth {
+        position: absolute;
+        width: 1040px;
+        height: 600px;
+        border: 1px solid #d7d8d9;
+        z-index: 2;
+        opacity: 0;
+      }
+      .f05-d1 {
+        left: 454px;
+        top: 184px;
+      }
+      .f05-d2 {
+        left: 468px;
+        top: 198px;
+      }
+
+      /* the session card */
+      .f05-card {
+        position: absolute;
+        left: 440px;
+        top: 170px;
+        width: 1040px;
+        height: 600px;
+        z-index: 3;
+        background: #1a1a19;
+        border: 1px solid #d7d8d9;
+        overflow: hidden;
+      }
+      .f05-head {
+        position: absolute;
+        left: 44px;
+        right: 44px;
+        top: 0;
+        height: 92px;
+        z-index: 2;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 1px solid #d7d8d9;
+      }
+      .f05-typed {
+        display: flex;
+        align-items: baseline;
+        font-family: "IBM Plex Mono", monospace;
+        font-weight: 600;
+        font-size: 1.5cqw;
+        white-space: nowrap;
+      }
+      .f05-typed .t1,
+      .f05-typed .t4 {
+        color: #ffffff;
+      }
+      .f05-typed .t2 {
+        color: #3987e5;
+      }
+      .f05-typed .t3 {
+        color: #afb3b7;
+      }
+      .f05-caret {
+        display: inline-block;
+        width: 13px;
+        height: 30px;
+        margin-left: 8px;
+        background: #3987e5;
+        opacity: 0;
+      }
+      .f05-status {
+        position: relative;
+        width: 190px;
+        height: 36px;
+        flex: 0 0 auto;
+      }
+      .f05-status span {
+        position: absolute;
+        right: 0;
+        top: 0;
+        height: 36px;
+        line-height: 36px;
+        font-family: "IBM Plex Mono", monospace;
+        font-weight: 600;
+        font-size: 0.95cqw;
+        letter-spacing: 0.14em;
+        color: #3987e5;
+        opacity: 0;
+      }
+      .f05-status .dead {
+        color: #d03b3b;
+      }
+      .f05-status .done {
+        color: #0ca30c;
+      }
+
+      /* checkpoint seam — the restore sweep under the header */
+      .f05-restorebar {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 91px;
+        height: 3px;
+        background: #3987e5;
+        transform-origin: 0 50%;
+        transform: scaleX(0);
+        z-index: 3;
+      }
+
+      /* step rail */
+      .f05-raillabel {
+        position: absolute;
+        left: 44px;
+        top: 114px;
+        z-index: 2;
+        font-family: "IBM Plex Mono", monospace;
+        font-weight: 500;
+        font-size: 0.72cqw;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: rgba(175, 179, 183, 0.72);
+        opacity: 0;
+      }
+      .f05-rail {
+        position: absolute;
+        left: 44px;
+        right: 44px;
+        top: 148px;
+        height: 72px;
+        z-index: 2;
+        display: flex;
+        justify-content: space-between;
+      }
+      .f05-railline {
+        position: absolute;
+        left: 6px;
+        right: 6px;
+        top: 35.5px;
+        height: 1px;
+        background: rgba(255, 255, 255, 0.14);
+      }
+      .f05-cell {
+        position: relative;
+        width: 72px;
+        height: 72px;
+        opacity: 0;
+      }
+      .f05-cell svg {
+        position: absolute;
+        left: 8px;
+        top: 8px;
+        transform-origin: 50% 50%;
+      }
+      .f05-base-c {
+        fill: #1a1a19;
+        stroke: rgba(255, 255, 255, 0.26);
+        stroke-width: 1.5;
+      }
+      .f05-stepnum {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: "IBM Plex Mono", monospace;
+        font-weight: 600;
+        font-size: 20px;
+        color: #afb3b7;
+      }
+      .f05-cell.hot .f05-stepnum {
+        color: #3987e5;
+      }
+      .f05-arc {
+        opacity: 0;
+      }
+      .f05-arc.on {
+        opacity: 1;
+      }
+      .f05-arc-c {
+        fill: none;
+        stroke: #3987e5;
+        stroke-width: 3.5;
+        stroke-linecap: round;
+        stroke-dasharray: 36 115;
+      }
+      .f05-disc-c {
+        fill: #0ca30c;
+      }
+      .f05-tickp {
+        fill: none;
+        stroke: #ffffff;
+        stroke-width: 4.5;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .f05-disc.w .f05-disc-c {
+        fill: #ffffff;
+      }
+      .f05-disc.w .f05-tickp {
+        stroke: #1a1a19;
+      }
+
+      /* meter chip — frozen at the crash, never re-spent */
+      .f05-meterrow {
+        position: absolute;
+        left: 44px;
+        top: 264px;
+        width: 420px;
+        height: 72px;
+        z-index: 2;
+        opacity: 0;
+      }
+      .f05-chip {
+        position: absolute;
+        inset: 0;
+        border: 1px solid #d7d8d9;
+        display: flex;
+        align-items: center;
+        gap: 26px;
+        padding: 0 26px;
+      }
+      .f05-chiplabel {
+        font-family: "IBM Plex Mono", monospace;
+        font-weight: 500;
+        font-size: 0.95cqw;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: #afb3b7;
+      }
+      .f05-chipval {
+        font-family: "IBM Plex Mono", monospace;
+        font-weight: 600;
+        font-size: 1.4cqw;
+        color: #ffffff;
+        white-space: nowrap;
+      }
+      .f05-chipval .dim {
+        color: #afb3b7;
+        font-weight: 400;
+      }
+      .f05-metertick {
+        margin-left: auto;
+        opacity: 0;
+      }
+      .f05-metertick path {
+        fill: none;
+        stroke: #0ca30c;
+        stroke-width: 4;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .f05-meterbox {
+        position: absolute;
+        left: -6px;
+        top: -6px;
+        width: 432px;
+        height: 84px;
+        overflow: visible;
+      }
+      .f05-meterbox rect {
+        fill: none;
+        stroke: #3987e5;
+        stroke-width: 2.5;
+      }
+
+      /* receipt line — the restore readout */
+      .f05-receipt {
+        position: absolute;
+        left: 44px;
+        top: 392px;
+        height: 44px;
+        z-index: 2;
+        display: flex;
+        align-items: center;
+        font-family: "IBM Plex Mono", monospace;
+        font-weight: 600;
+        font-size: 1.5cqw;
+        white-space: nowrap;
+      }
+      .f05-receipt .r1 {
+        color: #ffffff;
+      }
+      .f05-receipt .r2 {
+        color: #3987e5;
+      }
+      .f05-receipt .r3 {
+        color: rgba(255, 255, 255, 0.4);
+        font-weight: 400;
+      }
+      .f05-receipt .r4 {
+        color: #0ca30c;
+      }
+      .f05-caret2 {
+        display: inline-block;
+        width: 13px;
+        height: 30px;
+        margin-left: 8px;
+        background: #3987e5;
+        opacity: 0;
+      }
+
+      /* meta strip */
+      .f05-meta {
+        position: absolute;
+        left: 44px;
+        right: 44px;
+        top: 512px;
+        height: 88px;
+        z-index: 2;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-top: 1px solid #d7d8d9;
+        font-family: "IBM Plex Mono", monospace;
+        font-weight: 500;
+        font-size: 0.95cqw;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: #afb3b7;
+      }
+      .f05-meta-r {
+        opacity: 0;
+      }
+
+      /* one scanning shimmer pass — machine working */
+      .f05-sheen {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        width: 230px;
+        z-index: 4;
+        opacity: 0;
+        background: linear-gradient(
+          105deg,
+          transparent 0%,
+          rgba(57, 135, 229, 0.13) 44%,
+          rgba(57, 135, 229, 0.2) 50%,
+          rgba(57, 135, 229, 0.13) 56%,
+          transparent 100%
+        );
+      }
+
+      /* crash overlay — rides above the dimmed card, dies at the relight */
+      .f05-crash {
+        position: absolute;
+        left: 440px;
+        top: 170px;
+        width: 1040px;
+        height: 600px;
+        z-index: 4;
+        pointer-events: none;
+      }
+      .f05-xwrap {
+        position: absolute;
+        left: 390px;
+        top: 152px;
+        width: 260px;
+        height: 260px;
+        opacity: 0;
+      }
+      .f05-xrot {
+        position: absolute;
+        inset: 0;
+        transform: rotate(-6deg);
+      }
+      .f05-xrot path {
+        fill: none;
+        stroke: #d03b3b;
+        stroke-width: 30;
+        stroke-linecap: square;
+      }
+      .f05-exit {
+        position: absolute;
+        left: 44px;
+        top: 392px;
+        height: 44px;
+        display: flex;
+        align-items: center;
+        font-family: "IBM Plex Mono", monospace;
+        font-weight: 600;
+        font-size: 1.5cqw;
+        color: #d03b3b;
+        white-space: nowrap;
+        opacity: 0;
+      }
+
+      /* card edge brightens — accent trace above the card */
+      .f05-edge {
+        position: absolute;
+        left: 440px;
+        top: 170px;
+        width: 1040px;
+        height: 600px;
+        z-index: 6;
+        pointer-events: none;
+      }
+      .f05-edge rect {
+        fill: none;
+        stroke: #3987e5;
+        stroke-width: 3;
+      }
+    </style>
+
+    <div class="clip f05-bg" data-start="0" data-duration="8.64" data-track-index="0"></div>
+
+    <div class="clip f05-stage" data-start="0" data-duration="8.64" data-track-index="1">
+      <div class="f05-ghost" id="f05-ghost">resume</div>
+
+      <div class="f05-chrome f05-chrome-top" id="f05-chrome-top">
+        <span class="f05-kicker">session · runtime state</span>
+        <span class="f05-num">no. 05</span>
+      </div>
+
+      <div class="f05-depth f05-d1" id="f05-d1"></div>
+      <div class="f05-depth f05-d2" id="f05-d2"></div>
+
+      <div class="f05-card" id="f05-card">
+        <div class="f05-head">
+          <div class="f05-typed">
+            <span class="t1" id="f05-t1"></span><span class="t2" id="f05-t2"></span><span class="t3" id="f05-t3"></span><span class="t4" id="f05-t4"></span>
+            <span class="f05-caret" id="f05-caret"></span>
+          </div>
+          <div class="f05-status">
+            <span id="f05-st-run">running</span>
+            <span class="dead" id="f05-st-dead">dead</span>
+            <span id="f05-st-live">resumed</span>
+            <span class="done" id="f05-st-done">done</span>
+          </div>
+        </div>
+
+        <div class="f05-restorebar" id="f05-restorebar"></div>
+
+        <div class="f05-raillabel" id="f05-raillabel">steps 01–09</div>
+
+        <div class="f05-rail" id="f05-rail">
+          <div class="f05-railline"></div>
+          <div class="f05-cell">
+            <svg viewBox="0 0 56 56" width="56" height="56"><circle class="f05-base-c" cx="28" cy="28" r="24" /></svg>
+            <span class="f05-stepnum">1</span>
+            <svg class="f05-arc" viewBox="0 0 56 56" width="56" height="56"><circle class="f05-arc-c" cx="28" cy="28" r="24" /></svg>
+            <svg class="f05-disc w" viewBox="0 0 56 56" width="56" height="56"><circle class="f05-disc-c" cx="28" cy="28" r="24" /><path class="f05-tickp" d="M17 28.5 L25 36 L39 21" /></svg>
+          </div>
+          <div class="f05-cell">
+            <svg viewBox="0 0 56 56" width="56" height="56"><circle class="f05-base-c" cx="28" cy="28" r="24" /></svg>
+            <span class="f05-stepnum">2</span>
+            <svg class="f05-arc" viewBox="0 0 56 56" width="56" height="56"><circle class="f05-arc-c" cx="28" cy="28" r="24" /></svg>
+            <svg class="f05-disc w" viewBox="0 0 56 56" width="56" height="56"><circle class="f05-disc-c" cx="28" cy="28" r="24" /><path class="f05-tickp" d="M17 28.5 L25 36 L39 21" /></svg>
+          </div>
+          <div class="f05-cell">
+            <svg viewBox="0 0 56 56" width="56" height="56"><circle class="f05-base-c" cx="28" cy="28" r="24" /></svg>
+            <span class="f05-stepnum">3</span>
+            <svg class="f05-arc" viewBox="0 0 56 56" width="56" height="56"><circle class="f05-arc-c" cx="28" cy="28" r="24" /></svg>
+            <svg class="f05-disc w" viewBox="0 0 56 56" width="56" height="56"><circle class="f05-disc-c" cx="28" cy="28" r="24" /><path class="f05-tickp" d="M17 28.5 L25 36 L39 21" /></svg>
+          </div>
+          <div class="f05-cell">
+            <svg viewBox="0 0 56 56" width="56" height="56"><circle class="f05-base-c" cx="28" cy="28" r="24" /></svg>
+            <span class="f05-stepnum">4</span>
+            <svg class="f05-arc" viewBox="0 0 56 56" width="56" height="56"><circle class="f05-arc-c" cx="28" cy="28" r="24" /></svg>
+            <svg class="f05-disc w" viewBox="0 0 56 56" width="56" height="56"><circle class="f05-disc-c" cx="28" cy="28" r="24" /><path class="f05-tickp" d="M17 28.5 L25 36 L39 21" /></svg>
+          </div>
+          <div class="f05-cell">
+            <svg viewBox="0 0 56 56" width="56" height="56"><circle class="f05-base-c" cx="28" cy="28" r="24" /></svg>
+            <span class="f05-stepnum">5</span>
+            <svg class="f05-arc" viewBox="0 0 56 56" width="56" height="56"><circle class="f05-arc-c" cx="28" cy="28" r="24" /></svg>
+            <svg class="f05-disc w" viewBox="0 0 56 56" width="56" height="56"><circle class="f05-disc-c" cx="28" cy="28" r="24" /><path class="f05-tickp" d="M17 28.5 L25 36 L39 21" /></svg>
+          </div>
+          <div class="f05-cell">
+            <svg viewBox="0 0 56 56" width="56" height="56"><circle class="f05-base-c" cx="28" cy="28" r="24" /></svg>
+            <span class="f05-stepnum">6</span>
+            <svg class="f05-arc" viewBox="0 0 56 56" width="56" height="56"><circle class="f05-arc-c" cx="28" cy="28" r="24" /></svg>
+            <svg class="f05-disc w" viewBox="0 0 56 56" width="56" height="56"><circle class="f05-disc-c" cx="28" cy="28" r="24" /><path class="f05-tickp" d="M17 28.5 L25 36 L39 21" /></svg>
+          </div>
+          <div class="f05-cell hot" id="f05-cell-6">
+            <svg viewBox="0 0 56 56" width="56" height="56"><circle class="f05-base-c" cx="28" cy="28" r="24" /></svg>
+            <span class="f05-stepnum">7</span>
+            <svg class="f05-arc on" id="f05-arc-6" viewBox="0 0 56 56" width="56" height="56"><circle class="f05-arc-c" cx="28" cy="28" r="24" /></svg>
+            <svg class="f05-disc" id="f05-disc-6" viewBox="0 0 56 56" width="56" height="56"><circle class="f05-disc-c" cx="28" cy="28" r="24" /><path class="f05-tickp" d="M17 28.5 L25 36 L39 21" /></svg>
+          </div>
+          <div class="f05-cell" id="f05-cell-7">
+            <svg viewBox="0 0 56 56" width="56" height="56"><circle class="f05-base-c" cx="28" cy="28" r="24" /></svg>
+            <span class="f05-stepnum">8</span>
+            <svg class="f05-arc" id="f05-arc-7" viewBox="0 0 56 56" width="56" height="56"><circle class="f05-arc-c" cx="28" cy="28" r="24" /></svg>
+            <svg class="f05-disc" id="f05-disc-7" viewBox="0 0 56 56" width="56" height="56"><circle class="f05-disc-c" cx="28" cy="28" r="24" /><path class="f05-tickp" d="M17 28.5 L25 36 L39 21" /></svg>
+          </div>
+          <div class="f05-cell" id="f05-cell-8">
+            <svg viewBox="0 0 56 56" width="56" height="56"><circle class="f05-base-c" cx="28" cy="28" r="24" /></svg>
+            <span class="f05-stepnum">9</span>
+            <svg class="f05-arc" id="f05-arc-8" viewBox="0 0 56 56" width="56" height="56"><circle class="f05-arc-c" cx="28" cy="28" r="24" /></svg>
+            <svg class="f05-disc" id="f05-disc-8" viewBox="0 0 56 56" width="56" height="56"><circle class="f05-disc-c" cx="28" cy="28" r="24" /><path class="f05-tickp" d="M17 28.5 L25 36 L39 21" /></svg>
+          </div>
+        </div>
+
+        <div class="f05-meterrow" id="f05-meterrow">
+          <div class="f05-chip">
+            <span class="f05-chiplabel" id="f05-chiplabel">meter</span>
+            <span class="f05-chipval"><span id="f05-amt"></span><span class="dim"> / $2.00</span></span>
+            <svg class="f05-metertick" id="f05-metertick" viewBox="0 0 28 28" width="28" height="28">
+              <path id="f05-metertick-p" d="M6 14.5 L11.5 20 L22 7" />
+            </svg>
+          </div>
+          <svg class="f05-meterbox" viewBox="0 0 432 84" preserveAspectRatio="none">
+            <rect id="f05-meterbox-rect" x="2" y="2" width="428" height="80" />
+          </svg>
+        </div>
+
+        <div class="f05-receipt">
+          <span class="r1" id="f05-r1"></span><span class="r2" id="f05-r2"></span><span class="r3" id="f05-r3"></span><span class="r4" id="f05-r4"></span>
+          <span class="f05-caret2" id="f05-caret2"></span>
+        </div>
+
+        <div class="f05-meta">
+          <span id="f05-meta-l">session 0x5f2c91</span>
+          <span class="f05-meta-r" id="f05-meta-r">relaunch 2</span>
+        </div>
+
+        <div class="f05-sheen" id="f05-sheen"></div>
+      </div>
+
+      <div class="f05-crash" id="f05-crash">
+        <div class="f05-xwrap" id="f05-xwrap">
+          <div class="f05-xrot">
+            <svg viewBox="0 0 200 200" width="260" height="260">
+              <path d="M44 44 L156 156" />
+              <path d="M156 44 L44 156" />
+            </svg>
+          </div>
+        </div>
+        <div class="f05-exit" id="f05-exit"><span id="f05-exit-txt"></span></div>
+      </div>
+
+      <svg class="f05-edge" id="f05-edge" viewBox="0 0 1040 600" preserveAspectRatio="none">
+        <rect id="f05-edge-rect" x="1.5" y="1.5" width="1037" height="597" />
+      </svg>
+
+      <div class="f05-chrome f05-chrome-bot" id="f05-chrome-bot">
+        <span>session · crash / resume</span>
+        <span class="f05-counter" id="f05-counter">steps 6/9</span>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script>
+      (function () {
+        var D = 8.64;
+        var GREEN = "#0ca30c";
+        var ACCENT = "#3987e5";
+        var DIM = "#afb3b7";
+
+        var tl = gsap.timeline({ paused: true });
+        window.__timelines = window.__timelines || {};
+        window.__timelines["05b-resume"] = tl;
+
+        var $ = function (id) {
+          return document.getElementById(id);
+        };
+
+        /* ── setup: stroke draws measured, never guessed ── */
+        var ticks = [];
+        document.querySelectorAll(".f05-tickp").forEach(function (p) {
+          var len = p.getTotalLength() * 1.02;
+          p.style.strokeDasharray = String(len);
+          p.style.strokeDashoffset = String(len);
+          ticks.push(p);
+        });
+        var meterTick = $("f05-metertick-p");
+        var meterTickLen = meterTick.getTotalLength() * 1.02;
+        meterTick.style.strokeDasharray = String(meterTickLen);
+        meterTick.style.strokeDashoffset = String(meterTickLen);
+        var meterBox = $("f05-meterbox-rect");
+        var meterBoxLen = meterBox.getTotalLength() * 1.02;
+        meterBox.style.strokeDasharray = String(meterBoxLen);
+        meterBox.style.strokeDashoffset = String(meterBoxLen);
+        var edgeRect = $("f05-edge-rect");
+        var edgeLen = edgeRect.getTotalLength() * 1.02;
+        edgeRect.style.strokeDasharray = String(edgeLen);
+        edgeRect.style.strokeDashoffset = String(edgeLen);
+
+        /* green discs (steps 7–9) hidden until their flip */
+        [6, 7, 8].forEach(function (i) {
+          gsap.set("#f05-disc-" + i, { opacity: 0 });
+        });
+
+        /* ── discrete text sequences (deterministic token streams) ── */
+        function textAt(seq, t) {
+          for (var i = seq.length - 1; i >= 0; i--) {
+            if (t >= seq[i].t) return seq[i].s;
+          }
+          return "";
+        }
+        function typeSeq(str, t0, step) {
+          return str.split("").map(function (c, i) {
+            return { t: t0 + i * step, s: str.slice(0, i + 1) };
+          });
+        }
+        var SEQ1 = typeSeq("session.run(", 0.45, 0.055);
+        var SEQ2 = typeSeq('claim: "', 1.15, 0.05);
+        var SEQ3 = typeSeq('"meter_intact"', 1.55, 0.04);
+        var SEQ4 = [{ t: 2.08, s: ")" }];
+        var METER = [
+          { t: 0.72, s: "$1.38" },
+          { t: 1.02, s: "$1.39" },
+          { t: 1.32, s: "$1.40" },
+          { t: 1.66, s: "$1.41" },
+          { t: 1.98, s: "$1.42" },
+        ];
+        var EXIT = typeSeq("exit 1 · step 7 interrupted", 2.95, 0.032);
+        var R1 = typeSeq("resumed at step ", 4.6, 0.05);
+        var R2 = [{ t: 5.4, s: "7" }];
+        var R3 = [{ t: 5.55, s: " · " }];
+        var R4 = typeSeq("meter intact", 5.75, 0.055);
+        var COUNTER = [
+          { t: 5.55, s: 7 },
+          { t: 6.2, s: 8 },
+          { t: 6.85, s: 9 },
+        ];
+
+        var t1 = $("f05-t1"),
+          t2 = $("f05-t2"),
+          t3 = $("f05-t3"),
+          t4 = $("f05-t4"),
+          caret = $("f05-caret"),
+          caret2 = $("f05-caret2"),
+          amt = $("f05-amt"),
+          exitTxt = $("f05-exit-txt"),
+          counter = $("f05-counter");
+        var r1e = $("f05-r1"),
+          r2e = $("f05-r2"),
+          r3e = $("f05-r3"),
+          r4e = $("f05-r4");
+        var arcs = [6, 7, 8].map(function (i) {
+          return $("f05-arc-" + i).querySelector("circle");
+        });
+        /* rotation windows — the spinner runs only while its step is live */
+        var WINS = [
+          [
+            [0.35, 2.2],
+            [4.35, 5.42],
+          ],
+          [[5.45, 6.07]],
+          [[6.1, 6.72]],
+        ];
+
+        /* one linear driver carries every discrete state — pure functions of t */
+        var drv = { t: 0 };
+        tl.to(
+          drv,
+          {
+            t: D,
+            duration: D,
+            ease: "none",
+            onUpdate: function () {
+              var t = drv.t;
+              t1.textContent = textAt(SEQ1, t);
+              t2.textContent = textAt(SEQ2, t);
+              t3.textContent = textAt(SEQ3, t);
+              t4.textContent = textAt(SEQ4, t);
+              caret.style.opacity =
+                t >= 0.35 && t < 2.14 ? (Math.sin((t / 0.7) * Math.PI * 2) > 0 ? "1" : "0") : "0";
+              amt.textContent = textAt(METER, t);
+              exitTxt.textContent = textAt(EXIT, t);
+              r1e.textContent = textAt(R1, t);
+              r2e.textContent = textAt(R2, t);
+              r3e.textContent = textAt(R3, t);
+              r4e.textContent = textAt(R4, t);
+              caret2.style.opacity =
+                t >= 4.5 && t < 6.45 ? (Math.sin((t / 0.7) * Math.PI * 2) > 0 ? "1" : "0") : "0";
+              var n = 6;
+              for (var i = COUNTER.length - 1; i >= 0; i--) {
+                if (t >= COUNTER[i].t) {
+                  n = COUNTER[i].s;
+                  break;
+                }
+              }
+              counter.textContent = "steps " + n + "/9";
+              counter.style.color = n >= 9 ? GREEN : "#ffffff";
+              for (var a = 0; a < WINS.length; a++) {
+                for (var w = 0; w < WINS[a].length; w++) {
+                  var win = WINS[a][w];
+                  if (t >= win[0] && t < win[1]) {
+                    arcs[a].setAttribute("transform", "rotate(" + (((t - win[0]) * 300) % 360) + " 28 28)");
+                    break;
+                  }
+                }
+              }
+            },
+          },
+          0
+        );
+
+        /* ── Scene 1 (0.0–2.2): card seats mid-work, header types, meter ticks up ── */
+        tl.fromTo("#f05-chrome-top", { y: 12, opacity: 0 }, { y: 0, opacity: 1, duration: 0.32, ease: "power3.out" }, 0);
+        tl.fromTo("#f05-chrome-bot", { y: 12, opacity: 0 }, { y: 0, opacity: 1, duration: 0.32, ease: "power3.out" }, 0.06);
+        tl.fromTo("#f05-card", { y: -36, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power3.out" }, 0.05);
+        tl.fromTo("#f05-ghost", { opacity: 0 }, { opacity: 0.05, duration: 0.6, ease: "power1.out" }, 0.1);
+        tl.fromTo("#f05-d1", { opacity: 0 }, { opacity: 0.8, duration: 0.3, ease: "power1.out" }, 0.18);
+        tl.fromTo("#f05-d2", { opacity: 0 }, { opacity: 0.5, duration: 0.3, ease: "power1.out" }, 0.28);
+        tl.fromTo("#f05-raillabel", { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power1.out" }, 0.3);
+
+        var cells = document.querySelectorAll(".f05-cell");
+        cells.forEach(function (cell, i) {
+          var land = 0.35 + i * 0.07;
+          tl.fromTo(cell, { y: 18, opacity: 0 }, { y: 1, opacity: 1, duration: 0.35, ease: "power3.out" }, land);
+          if (i < 6) {
+            /* pre-seated done steps: white discs, ticks drawn in behind the build */
+            tl.to(ticks[i], { strokeDashoffset: 0, duration: 0.22, ease: "power2.out" }, land + 0.18);
+          }
+        });
+        tl.fromTo("#f05-meterrow", { y: 16, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: "power3.out" }, 0.7);
+        tl.fromTo("#f05-st-run", { opacity: 0, x: 10 }, { opacity: 1, x: 0, duration: 0.3, ease: "power3.out" }, 1.0);
+
+        /* the one shimmer pass of the working state */
+        tl.fromTo("#f05-sheen", { x: -260 }, { x: 1330, duration: 0.8, ease: "none" }, 1.05);
+        tl.fromTo("#f05-sheen", { opacity: 0 }, { opacity: 0.9, duration: 0.2, ease: "power1.out" }, 1.08);
+        tl.to("#f05-sheen", { opacity: 0, duration: 0.22, ease: "power1.in" }, 1.63);
+
+        /* ── Scene 2 (2.2–4.0): dies — flicker, dim to 20%, red X stamp, hard stop ── */
+        tl.to("#f05-card", { opacity: 0.45, duration: 0.05, ease: "none" }, 2.2);
+        tl.to("#f05-card", { opacity: 1, duration: 0.05, ease: "none" }, 2.25);
+        tl.to("#f05-card", { opacity: 0.2, duration: 0.14, ease: "power2.in" }, 2.3);
+        tl.to("#f05-st-run", { scale: 0.6, opacity: 0, duration: 0.18, ease: "power2.in" }, 2.42);
+
+        /* the stamp slams in over the dimmed card */
+        tl.fromTo("#f05-xwrap", { scale: 1.8, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.22, ease: "power4.in" }, 2.48);
+        tl.to("#f05-card", { x: -3, duration: 0.05, ease: "none" }, 2.72);
+        tl.to("#f05-card", { x: 2, duration: 0.05, ease: "none" }, 2.77);
+        tl.to("#f05-card", { x: 0, duration: 0.09, ease: "power2.out" }, 2.82);
+        tl.fromTo(
+          "#f05-st-dead",
+          { scale: 0.6, opacity: 0 },
+          { scale: 1, opacity: 1, duration: 0.35, ease: "back.out(1.7)" },
+          2.78
+        );
+        tl.fromTo("#f05-exit", { opacity: 0 }, { opacity: 1, duration: 0.2, ease: "power1.out" }, 2.88);
+        /* 3.0–4.0: stillness — meter frozen at $1.42, spinner dead */
+
+        /* ── Scene 3 (4.0–6.5): relight from checkpoint — bar sweeps, ticks 7–9 re-arm and complete ── */
+        tl.to("#f05-card", { opacity: 0.6, duration: 0.07, ease: "none" }, 4.0);
+        tl.to("#f05-card", { opacity: 1, duration: 0.12, ease: "power2.out" }, 4.07);
+        tl.to("#f05-xwrap", { scale: 1.55, opacity: 0, duration: 0.24, ease: "power2.in" }, 4.0);
+        tl.to("#f05-exit", { x: -18, opacity: 0, duration: 0.18, ease: "power2.in" }, 4.0);
+        tl.to("#f05-st-dead", { scale: 0.6, opacity: 0, duration: 0.18, ease: "power2.in" }, 4.02);
+        tl.fromTo(
+          "#f05-st-live",
+          { scale: 0.6, opacity: 0 },
+          { scale: 1, opacity: 1, duration: 0.35, ease: "back.out(1.7)" },
+          4.1
+        );
+        tl.fromTo("#f05-restorebar", { scaleX: 0 }, { scaleX: 1, duration: 0.55, ease: "power3.out" }, 4.15);
+        tl.fromTo("#f05-meta-r", { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power1.out" }, 4.2);
+
+        /* restore shimmer */
+        tl.fromTo("#f05-sheen", { x: -260 }, { x: 1330, duration: 0.75, ease: "none" }, 4.35);
+        tl.fromTo("#f05-sheen", { opacity: 0 }, { opacity: 0.9, duration: 0.18, ease: "power1.out" }, 4.38);
+        tl.to("#f05-sheen", { opacity: 0, duration: 0.2, ease: "power1.in" }, 4.92);
+
+        /* step 7 re-arms (its arc relights and spins again) */
+        tl.fromTo("#f05-arc-6", { scale: 0.8 }, { scale: 1, duration: 0.3, ease: "back.out(1.6)" }, 4.35);
+
+        /* badge flips: arc out → green disc + tick in, steps 7/8/9 */
+        var flips = [
+          { idx: 6, rearm: null, arcOut: 5.42, tick: 6, tickAt: 5.69 },
+          { idx: 7, rearm: 5.45, arcOut: 6.07, tick: 7, tickAt: 6.34 },
+          { idx: 8, rearm: 6.1, arcOut: 6.72, tick: 8, tickAt: 6.99 },
+        ];
+        flips.forEach(function (f) {
+          var arc = "#f05-arc-" + f.idx;
+          var disc = "#f05-disc-" + f.idx;
+          var num = "#f05-cell-" + f.idx + " .f05-stepnum";
+          if (f.rearm !== null) {
+            tl.fromTo(arc, { scale: 0.6, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.3, ease: "power3.out" }, f.rearm);
+            tl.to(num, { color: ACCENT, duration: 0.25, ease: "power1.out" }, f.rearm);
+          }
+          tl.to(arc, { scale: 0.55, opacity: 0, duration: 0.22, ease: "power2.in" }, f.arcOut);
+          tl.fromTo(
+            disc,
+            { scale: 0.55, opacity: 0 },
+            { scale: 1, opacity: 1, duration: 0.38, ease: "back.out(1.7)" },
+            f.arcOut + 0.12
+          );
+          tl.to(ticks[f.tick], { strokeDashoffset: 0, duration: 0.3, ease: "power2.out" }, f.tickAt);
+        });
+
+        /* ── Scene 4 (6.5–8.5): completed card reads on — hold, jitter, meter intact ── */
+        tl.to("#f05-st-live", { scale: 0.6, opacity: 0, duration: 0.18, ease: "power2.in" }, 6.95);
+        tl.fromTo(
+          "#f05-st-done",
+          { scale: 0.6, opacity: 0 },
+          { scale: 1, opacity: 1, duration: 0.35, ease: "back.out(1.7)" },
+          7.03
+        );
+
+        /* the meter never moved — receipt draws around it */
+        tl.to(meterBox, { strokeDashoffset: 0, duration: 0.45, ease: "power2.out" }, 7.15);
+        tl.to("#f05-chiplabel", { color: GREEN, duration: 0.3, ease: "power1.out" }, 7.15);
+        tl.fromTo("#f05-metertick", { opacity: 0 }, { opacity: 1, duration: 0.15, ease: "power1.out" }, 7.3);
+        tl.to(meterTick, { strokeDashoffset: 0, duration: 0.25, ease: "power2.out" }, 7.33);
+
+        /* subtle jitter — finite, discrete */
+        tl.to("#f05-card", { x: 1.4, duration: 0.06, ease: "none" }, 7.55);
+        tl.to("#f05-card", { x: -1, duration: 0.06, ease: "none" }, 7.61);
+        tl.to("#f05-card", { x: 0.6, duration: 0.06, ease: "none" }, 7.67);
+        tl.to("#f05-card", { x: 0, duration: 0.08, ease: "power2.out" }, 7.73);
+        tl.to("#f05-card", { x: -1.2, duration: 0.06, ease: "none" }, 8.05);
+        tl.to("#f05-card", { x: 0.8, duration: 0.06, ease: "none" }, 8.11);
+        tl.to("#f05-card", { x: 0, duration: 0.08, ease: "power2.out" }, 8.17);
+
+        /* family resolve: accent edge trace draws, ghost lifts */
+        tl.to(edgeRect, { strokeDashoffset: 0, duration: 0.8, ease: "power2.out" }, 7.7);
+        tl.to("#f05-ghost", { opacity: 0.1, y: -10, duration: 0.7, ease: "power2.out" }, 7.95);
+        var discEls = ["#f05-disc-6", "#f05-disc-7", "#f05-disc-8"];
+        tl.to(discEls, { scale: 1.1, duration: 0.16, ease: "power2.out" }, 8.2);
+        tl.to(discEls, { scale: 1, duration: 0.3, ease: "power2.inOut" }, 8.36);
+      })();
+    </script>
+  </div>
+</template>

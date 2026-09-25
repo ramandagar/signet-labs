@@ -1,0 +1,252 @@
+<template>
+  <style>
+    @font-face {
+      font-family: "Barlow";
+      font-weight: 900;
+      font-style: normal;
+      font-display: block;
+      src: url("assets/fonts/Barlow-900.woff2") format("woff2");
+    }
+    @font-face {
+      font-family: "Barlow";
+      font-weight: 700;
+      font-style: normal;
+      font-display: block;
+      src: url("assets/fonts/Barlow-700.woff2") format("woff2");
+    }
+    @font-face {
+      font-family: "IBM Plex Mono";
+      font-weight: 500;
+      font-style: normal;
+      font-display: block;
+      src: url("assets/fonts/IBMPlexMono-500.woff2") format("woff2");
+    }
+
+    #root {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      container-type: size;
+      font-family: "Barlow", "Helvetica Neue", Arial, sans-serif;
+    }
+    .clip {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+    }
+
+    /* ── ground: field + faint grid + vignette (3-layer depth) ── */
+    .f01-bg {
+      background: #1a1a19;
+    }
+    .f01-grid {
+      background-image: repeating-linear-gradient(
+          to right,
+          rgba(215, 216, 217, 0.1) 0 1px,
+          transparent 1px 12.5cqw
+        ),
+        repeating-linear-gradient(
+          to bottom,
+          rgba(215, 216, 217, 0.1) 0 1px,
+          transparent 1px 12.5cqw
+        );
+    }
+    .f01-vig {
+      background: radial-gradient(
+        ellipse 78% 68% at 50% 44%,
+        transparent 55%,
+        rgba(0, 0, 0, 0.34) 100%
+      );
+    }
+
+    /* ── stage: content lives in the top 83% (caption keep-out below 900px) ── */
+    .f01-stage {
+      inset: 0 0 16.7cqh 0;
+    }
+    .f01-layer {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+    }
+
+    /* rule stub — the system's only ornament */
+    .f01-stub {
+      width: 36px;
+      height: 2px;
+      background: #3987e5;
+      margin-bottom: 3.2cqh;
+    }
+
+    /* the fixed claim line + swap slot */
+    .f01-claim {
+      font-weight: 900;
+      font-size: 4.5cqw;
+      line-height: 1;
+      letter-spacing: -0.03em;
+      white-space: nowrap;
+      color: #ffffff;
+    }
+    .f01-w {
+      display: inline-block;
+      margin-right: 0.26em;
+      color: #afb3b7;
+    }
+    .f01-slot {
+      position: relative;
+      display: inline-block;
+    }
+    .f01-sizer {
+      visibility: hidden;
+    }
+    .f01-tok {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      text-align: center;
+      white-space: nowrap;
+      color: #ffffff;
+      opacity: 0;
+    }
+    .f01-chk {
+      display: inline-block;
+      opacity: 0;
+      margin-left: 0.16em;
+      vertical-align: 1.6cqw;
+      font-family: "IBM Plex Mono", Menlo, monospace;
+      font-weight: 500;
+      font-size: 2.2cqw;
+      line-height: 1;
+      color: #3987e5;
+    }
+    .f01-chk .f01-g {
+      display: inline-block;
+    }
+
+    /* the payoff word — HALT amber per storyboard */
+    .f01-says {
+      font-weight: 900;
+      font-size: 13cqw;
+      line-height: 0.88;
+      letter-spacing: -0.04em;
+      color: #fab219;
+    }
+    .f01-dot {
+      display: inline-block;
+    }
+  </style>
+
+  <div data-hf-id="hf-15hn" id="root" data-composition-id="01-says" data-width="1920" data-height="1080">
+    <!-- ground -->
+    <div data-hf-id="hf-0qxo" class="clip f01-bg" data-start="0" data-duration="5.163" data-track-index="0">
+      <div data-hf-id="hf-hbzc" class="f01-grid"></div>
+      <div data-hf-id="hf-okzq" class="f01-vig"></div>
+    </div>
+
+    <!-- content -->
+    <div data-hf-id="hf-9tby" class="clip f01-stage" data-start="0" data-duration="5.163" data-track-index="1">
+      <div data-hf-id="hf-xaz7" class="f01-layer" id="f01-line">
+        <div data-hf-id="hf-2lp6" class="f01-stub" id="f01-stub"></div>
+        <div data-hf-id="hf-cuak" class="f01-claim"><span data-hf-id="hf-5wij" class="f01-w">your</span> <span data-hf-id="hf-1kha" class="f01-w">ai</span>
+          <span data-hf-id="hf-vce9" class="f01-w">agent</span> <span data-hf-id="hf-on1c" class="f01-w">says</span>
+          <span data-hf-id="hf-baa1" class="f01-slot"><span data-hf-id="hf-8f6r" class="f01-sizer">payments sent</span><span data-hf-id="hf-em9i" class="f01-tok" id="f01-tok0">tests passed</span><span data-hf-id="hf-6kh7" class="f01-tok" id="f01-tok1">payments sent</span><span data-hf-id="hf-y6sm" class="f01-tok" id="f01-tok2">shipped</span></span><span data-hf-id="hf-alvv" class="f01-chk" id="f01-chk"><span data-hf-id="hf-n11q" class="f01-g" id="f01-g">✓</span></span>
+        </div>
+      </div>
+
+      <div data-hf-id="hf-f8kd" class="f01-layer" id="f01-word">
+        <div data-hf-id="hf-pt5k" class="f01-says">says<span data-hf-id="hf-4xxp" class="f01-dot" id="f01-dot">.</span></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <script>
+    (function () {
+      const DUR = 5.163;
+
+      // ── discrete-text-sequence: hard-cut swap states at VO cues ──
+      const SEQ = [
+        { t: 0.0, tok: -1, chk: false },
+        { t: 1.02, tok: 0, chk: true }, // "tests passed"
+        { t: 1.86, tok: 1, chk: true }, // "payments sent"
+        { t: 2.66, tok: 2, chk: true }, // "shipped"
+        { t: 3.22, tok: -1, chk: false }, // line collapses
+      ];
+      const toks = [0, 1, 2].map((i) => document.getElementById("f01-tok" + i));
+      const chk = document.getElementById("f01-chk");
+      const stateAt = (time) => {
+        for (let i = SEQ.length - 1; i >= 0; i--) if (time >= SEQ[i].t) return SEQ[i];
+        return SEQ[0];
+      };
+
+      const tl = gsap.timeline({ paused: true });
+      window.__timelines = window.__timelines || {};
+      window.__timelines["01-says"] = tl;
+
+      // driver — single source of truth for the discrete states (seek-safe)
+      const drv = { t: 0 };
+      tl.to(
+        drv,
+        {
+          t: DUR,
+          duration: DUR,
+          ease: "none",
+          onUpdate: () => {
+            const s = stateAt(drv.t);
+            for (let i = 0; i < toks.length; i++)
+              toks[i].style.opacity = i === s.tok ? "1" : "0";
+            chk.style.opacity = s.chk && s.tok >= 0 ? "1" : "0";
+          },
+        },
+        0
+      );
+
+      // Scene 1 — "your ai agent says" per-word staggered fade/blur, smooth settle
+      tl.fromTo(
+        "#f01-line .f01-w",
+        { opacity: 0, y: 26, filter: "blur(12px)" },
+        { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.5, ease: "power2.out", stagger: 0.08 },
+        0.04
+      );
+      tl.fromTo(
+        "#f01-stub",
+        { scaleX: 0 },
+        { scaleX: 1, duration: 0.34, ease: "power2.out", transformOrigin: "50% 50%" },
+        0.72
+      );
+
+      // Scene 2 — ✓ punctuation pops (swap itself is the instant driver cut)
+      [1.06, 1.9, 2.7].forEach((t) => {
+        tl.fromTo(
+          "#f01-g",
+          { scale: 0 },
+          { scale: 1, duration: 0.28, ease: "back.out(2.4)" },
+          t
+        );
+      });
+
+      // Scene 3 — line collapses, "says." slams dead-center, smooth, holds still
+      tl.to(
+        "#f01-line",
+        { opacity: 0, scale: 0.94, filter: "blur(9px)", duration: 0.22, ease: "power2.in" },
+        3.22
+      );
+      tl.fromTo(
+        "#f01-word",
+        { opacity: 0, scale: 1.5, filter: "blur(10px)" },
+        { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.38, ease: "power3.out" },
+        3.3
+      );
+      // final-token punctuation snap — the period lands a beat late
+      tl.fromTo(
+        "#f01-dot",
+        { opacity: 0, scale: 0 },
+        { opacity: 1, scale: 1, duration: 0.26, ease: "back.out(2.6)", transformOrigin: "20% 70%" },
+        3.92
+      );
+    })();
+  </script>
+</template>

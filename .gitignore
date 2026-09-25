@@ -1,0 +1,16 @@
+__pycache__/
+*.pyc
+demo.db
+var.db
+*.egg-info/
+# video build artifacts (source comps stay)
+videos/*/renders/
+videos/*/snapshots/
+videos/*/node_modules/
+videos/*/.hyperframes/frame-packets/
+videos/*/capture/
+videos/*/assets/voice/
+videos/*/assets/audio/cc0-source.mp3
+videos/*/index.html.bak
+*.egg-info/
+.pytest_cache/

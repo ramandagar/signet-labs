@@ -1,0 +1,620 @@
+<template>
+  <style>
+    @font-face {
+      font-family: "Barlow";
+      src: url("assets/fonts/Barlow-700.woff2") format("woff2");
+      font-weight: 700;
+      font-display: block;
+    }
+    @font-face {
+      font-family: "Barlow";
+      src: url("assets/fonts/Barlow-900.woff2") format("woff2");
+      font-weight: 900;
+      font-display: block;
+    }
+    @font-face {
+      font-family: "IBM Plex Mono";
+      src: url("assets/fonts/IBMPlexMono-500.woff2") format("woff2");
+      font-weight: 500;
+      font-display: block;
+    }
+    @font-face {
+      font-family: "IBM Plex Mono";
+      src: url("assets/fonts/IBMPlexMono-700.woff2") format("woff2");
+      font-weight: 700;
+      font-display: block;
+    }
+    /* Broadside dark register: #1A1A19 ground, white ink, single blue accent; amber HALT per storyboard. */
+    #root {
+      position: absolute;
+      inset: 0;
+      width: 1920px;
+      height: 1080px;
+      overflow: hidden;
+      container-type: size;
+      color: #ffffff;
+      font-family: "Barlow", "Archivo Black", sans-serif;
+    }
+    .pos-bg {
+      position: absolute;
+      inset: 0;
+      background: #1a1a19;
+    }
+    .pos-stage {
+      position: absolute;
+      inset: 0;
+    }
+    .pos-kicker {
+      position: absolute;
+      left: 5.47cqw;
+      top: 3.23cqw;
+      font-family: "IBM Plex Mono", monospace;
+      font-weight: 500;
+      font-size: 1.35cqw;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #3987e5;
+    }
+    .pos-rule {
+      position: absolute;
+      left: 5.47cqw;
+      top: 5.2cqw;
+      width: 1.875cqw;
+      height: 2px;
+      background: #3987e5;
+    }
+    /* Scene 1 — asymmetric 60/40 upper-third */
+    .pos-head {
+      position: absolute;
+      left: 5.47cqw;
+      top: 9.17cqw;
+      width: 89cqw;
+      height: 20cqw;
+    }
+    .pos-hero {
+      position: absolute;
+      left: 0;
+      top: 0;
+      font-size: 7.7cqw;
+      font-weight: 900;
+      line-height: 0.9;
+      letter-spacing: -0.03em;
+      text-transform: lowercase;
+      color: #ffffff;
+      white-space: nowrap;
+    }
+    .pos-phrase {
+      position: absolute;
+      left: 56.5cqw;
+      top: 0.73cqw;
+      width: 33cqw;
+    }
+    .pos-pl {
+      display: block;
+      font-size: 4.06cqw;
+      font-weight: 700;
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+      text-transform: lowercase;
+      color: #ffffff;
+      white-space: nowrap;
+    }
+    .pos-word {
+      display: inline-block;
+      margin-right: 0.32em;
+      will-change: transform, opacity;
+    }
+    .pos-word.pos-acc {
+      color: #3987e5;
+    }
+    /* Scene 2 — the rail */
+    .pos-railsvg {
+      position: absolute;
+      left: 15cqw;
+      top: 22.92cqw;
+      width: 70cqw;
+      height: 12.5cqw;
+      overflow: visible;
+    }
+    .pos-railsvg path {
+      fill: none;
+      stroke: #3987e5;
+      stroke-linecap: butt;
+    }
+    .pos-conn {
+      stroke-width: 3.5;
+    }
+    .pos-gateouter {
+      stroke-width: 5;
+    }
+    .pos-echo {
+      stroke-width: 3;
+      opacity: 0;
+    }
+    .pos-gateinner {
+      fill: #3987e5;
+      fill-opacity: 0;
+      stroke: none;
+    }
+    .pos-cluster {
+      position: absolute;
+      top: 25.42cqw;
+      width: 12.5cqw;
+      height: 7.03cqw;
+    }
+    .pos-agent {
+      left: 13.54cqw;
+    }
+    .pos-action {
+      left: 75.1cqw;
+    }
+    .pos-nlabel {
+      position: absolute;
+      top: 0;
+      width: 100%;
+      text-align: center;
+      font-family: "IBM Plex Mono", monospace;
+      font-weight: 500;
+      font-size: 1.35cqw;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #ffffff;
+    }
+    .pos-glabel {
+      position: absolute;
+      left: 43.75cqw;
+      top: 25.42cqw;
+      width: 12.5cqw;
+      text-align: center;
+      font-family: "IBM Plex Mono", monospace;
+      font-weight: 500;
+      font-size: 1.35cqw;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #3987e5;
+    }
+    .pos-nd {
+      position: absolute;
+      left: 5.57cqw;
+      top: 3.07cqw;
+      width: 1.354cqw;
+      height: 1.354cqw;
+      background: #ffffff;
+    }
+    /* Scene 3 — HALT badge (accent declaration block) */
+    .pos-halt {
+      position: absolute;
+      left: 58.33cqw;
+      top: 26.25cqw;
+      width: 15.625cqw;
+      height: 5.83cqw;
+    }
+    .pos-haltcore {
+      position: absolute;
+      inset: 0;
+      background: #fab219;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .pos-halttxt {
+      font-family: "IBM Plex Mono", monospace;
+      font-weight: 700;
+      font-size: 2.4cqw;
+      letter-spacing: 0.18em;
+      padding-left: 0.18em;
+      text-transform: uppercase;
+      color: #1a1a19;
+    }
+    /* Scene 4 — token-typed recovery stream */
+    .pos-recovery {
+      position: absolute;
+      left: 32.29cqw;
+      top: 35.52cqw;
+      width: 40cqw;
+      height: 5cqw;
+    }
+    .pos-rline {
+      position: absolute;
+      left: 0;
+      white-space: nowrap;
+      font-family: "IBM Plex Mono", monospace;
+      font-weight: 500;
+      font-size: 1.56cqw;
+      letter-spacing: 0.02em;
+      color: #ffffff;
+    }
+    .pos-rl1 {
+      top: 0;
+    }
+    .pos-rl2 {
+      top: 3.13cqw;
+    }
+    .pos-rk {
+      color: #afb3b7;
+    }
+    .pos-rcur {
+      display: inline-block;
+      width: 0.75cqw;
+      height: 1.72cqw;
+      margin-left: 0.28cqw;
+      vertical-align: -0.22cqw;
+      background: #3987e5;
+      opacity: 0;
+    }
+  </style>
+
+  <div data-hf-id="hf-3ea0" id="root" data-composition-id="03-proof-or-stop" data-width="1920" data-height="1080">
+    <div data-hf-id="hf-787j" class="clip pos-bg" data-start="0" data-duration="11.883" data-track-index="0"></div>
+
+    <div data-hf-id="hf-fujh" class="clip pos-stage" data-start="0" data-duration="11.883" data-track-index="1">
+      <div data-hf-id="hf-29pc" class="pos-kicker">No. 03 / Proof or Stop</div>
+      <div data-hf-id="hf-izzl" class="pos-rule"></div>
+
+      <div data-hf-id="hf-ywq1" class="pos-head">
+        <div data-hf-id="hf-ljeh" class="pos-hero">var-runtime</div>
+        <div data-hf-id="hf-kru8" class="pos-phrase">
+          <span data-hf-id="hf-oqxi" class="pos-pl"><span data-hf-id="hf-c6e3" class="pos-word pos-acc">intercepts</span></span>
+          <span data-hf-id="hf-2gca" class="pos-pl"><span data-hf-id="hf-e45p" class="pos-word">every</span> <span data-hf-id="hf-120b" class="pos-word">critical</span></span>
+          <span data-hf-id="hf-2unb" class="pos-pl"><span data-hf-id="hf-igms" class="pos-word">action</span></span>
+        </div>
+      </div>
+
+      <svg data-hf-id="hf-eztj" class="pos-railsvg" viewBox="0 0 1344 240" xmlns="http://www.w3.org/2000/svg">
+        <path data-hf-id="hf-wpbq" class="pos-echo" d="M 672 74 L 718 120 L 672 166 L 626 120 Z" />
+        <g data-hf-id="hf-lxes" class="pos-gate">
+          <path data-hf-id="hf-774y" class="pos-gateouter pos-draw" d="M 672 74 L 718 120 L 672 166 L 626 120 Z" />
+          <path data-hf-id="hf-x40m" class="pos-gateinner" d="M 672 105 L 687 120 L 672 135 L 657 120 Z" />
+        </g>
+        <path data-hf-id="hf-u9ce" class="pos-conn pos-draw pos-pa" d="M 114 120 L 620 120" />
+        <path data-hf-id="hf-bb53" class="pos-conn pos-draw pos-pb1" d="M 724 120 L 828 120" />
+        <path data-hf-id="hf-5w64" class="pos-conn pos-draw pos-pb2" d="M 1136 120 L 1272 120" />
+      </svg>
+
+      <div data-hf-id="hf-d3zv" class="pos-glabel">Gate</div>
+
+      <div data-hf-id="hf-8h5l" class="pos-cluster pos-agent">
+        <div data-hf-id="hf-4aso" class="pos-nlabel">Agent</div>
+        <div data-hf-id="hf-lejp" class="pos-nd"></div>
+      </div>
+
+      <div data-hf-id="hf-vd30" class="pos-cluster pos-action">
+        <div data-hf-id="hf-pid5" class="pos-nlabel">Action</div>
+        <div data-hf-id="hf-gyt5" class="pos-nd"></div>
+      </div>
+
+      <div data-hf-id="hf-o4q6" class="pos-halt">
+        <div data-hf-id="hf-hxbz" class="pos-haltcore"><span data-hf-id="hf-ykku" class="pos-halttxt">Halt</span></div>
+      </div>
+
+      <div data-hf-id="hf-k5oa" class="pos-recovery">
+        <div data-hf-id="hf-xkcz" class="pos-rline pos-rl1">
+          <span data-hf-id="hf-bhr6" class="pos-rk">recovery:</span> <span data-hf-id="hf-rikf" class="pos-rv1"></span><span data-hf-id="hf-39ql" class="pos-rcur pos-c1"></span>
+        </div>
+        <div data-hf-id="hf-owh4" class="pos-rline pos-rl2">
+          <span data-hf-id="hf-eh28" class="pos-rk">strategy:</span> <span data-hf-id="hf-iuok" class="pos-rv2"></span><span data-hf-id="hf-77um" class="pos-rcur pos-c2"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var root = document.querySelector('[data-composition-id="03-proof-or-stop"]');
+      if (!root || typeof gsap === "undefined") return;
+      window.__timelines = window.__timelines || {};
+
+      var q = function (s) {
+        return root.querySelector(s);
+      };
+      var qa = function (s) {
+        return Array.prototype.slice.call(root.querySelectorAll(s));
+      };
+
+      // svg-path-draw: measured dash setup, never guessed lengths.
+      qa(".pos-draw").forEach(function (p) {
+        var len = p.getTotalLength() * 1.02;
+        p.setAttribute("data-len", String(len));
+        p.style.strokeDasharray = String(len);
+        p.style.strokeDashoffset = String(len);
+      });
+
+      var D = 11.883;
+      var tl = gsap.timeline({ paused: true });
+
+      var stage = q(".pos-stage");
+      var head = q(".pos-head");
+      var hero = q(".pos-hero");
+      var words = qa(".pos-word");
+      var agent = q(".pos-agent");
+      var action = q(".pos-action");
+      var agentNd = q(".pos-agent .pos-nd");
+      var actionNd = q(".pos-action .pos-nd");
+      var glabel = q(".pos-glabel");
+      var gate = q(".pos-gate");
+      var echo = q(".pos-echo");
+      var gateInner = q(".pos-gateinner");
+      var pb2 = q(".pos-pb2");
+      var halt = q(".pos-halt");
+      var haltCore = q(".pos-haltcore");
+      var recovery = q(".pos-recovery");
+
+      function draw(pathEl, at, dur) {
+        var len = parseFloat(pathEl.getAttribute("data-len"));
+        tl.fromTo(
+          pathEl,
+          { strokeDashoffset: len },
+          { strokeDashoffset: 0, duration: dur, ease: "power2.out" },
+          at,
+        );
+      }
+
+      // Macro: one slow push underneath every beat.
+      tl.fromTo(
+        stage,
+        { scale: 1 },
+        { scale: 1.018, duration: D, ease: "none", transformOrigin: "50% 52%" },
+        0,
+      );
+
+      // Chrome.
+      tl.fromTo(
+        q(".pos-kicker"),
+        { x: -14, opacity: 0 },
+        { x: 0, opacity: 1, duration: 0.45, ease: "power3.out" },
+        0.15,
+      );
+      tl.fromTo(
+        q(".pos-rule"),
+        { scaleX: 0 },
+        { scaleX: 1, duration: 0.5, ease: "power2.out", transformOrigin: "left center" },
+        0.3,
+      );
+
+      // Scene 1 (0.0-2.6) — per-word staggered, distinct entrance per word.
+      tl.fromTo(
+        hero,
+        { scale: 1.32, filter: "blur(10px)", opacity: 0 },
+        { scale: 1, filter: "blur(0px)", opacity: 1, duration: 0.5, ease: "power4.out" },
+        0.12,
+      );
+      tl.fromTo(
+        words[0],
+        { x: -60, opacity: 0 },
+        { x: 0, opacity: 1, duration: 0.45, ease: "expo.out" },
+        0.95,
+      );
+      tl.fromTo(
+        words[1],
+        { y: 40, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.45, ease: "circ.out" },
+        1.32,
+      );
+      tl.fromTo(
+        words[2],
+        { filter: "blur(8px)", scale: 1.06, opacity: 0 },
+        { filter: "blur(0px)", scale: 1, opacity: 1, duration: 0.45, ease: "power3.out" },
+        1.68,
+      );
+      tl.fromTo(
+        words[3],
+        { x: 60, opacity: 0 },
+        { x: 0, opacity: 1, duration: 0.42, ease: "expo.out" },
+        2.02,
+      );
+
+      // Handoff — headline recedes, rail takes the field.
+      tl.fromTo(
+        head,
+        { scale: 1, y: 0, opacity: 1 },
+        { scale: 0.9, y: -10, opacity: 0.5, duration: 0.75, ease: "power3.inOut" },
+        2.55,
+      );
+
+      // Scene 2 (2.6-5.5) — rail self-draws, segments staggered ~70-80%.
+      tl.fromTo(
+        agentNd,
+        { scale: 0.5, opacity: 0 },
+        { scale: 1, opacity: 1, duration: 0.4, ease: "power3.out" },
+        2.6,
+      );
+      tl.fromTo(
+        q(".pos-agent .pos-nlabel"),
+        { y: 12, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.4, ease: "power3.out" },
+        2.68,
+      );
+      draw(q(".pos-pa"), 2.95, 0.75);
+      tl.fromTo(
+        gate,
+        { scale: 0.6, opacity: 0 },
+        { scale: 1, opacity: 1, duration: 0.4, ease: "power3.out", transformOrigin: "50% 50%" },
+        3.18,
+      );
+      draw(q(".pos-gateouter"), 3.42, 0.6);
+      tl.fromTo(
+        glabel,
+        { y: 12, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.4, ease: "power3.out" },
+        3.7,
+      );
+      tl.fromTo(
+        gateInner,
+        { fillOpacity: 0 },
+        { fillOpacity: 1, duration: 0.35, ease: "power1.out" },
+        4.05,
+      );
+      draw(q(".pos-pb1"), 4.15, 0.45);
+      draw(pb2, 4.45, 0.5);
+      tl.fromTo(
+        actionNd,
+        { scale: 0.5, opacity: 0 },
+        { scale: 1, opacity: 1, duration: 0.4, ease: "power3.out" },
+        4.9,
+      );
+      tl.fromTo(
+        q(".pos-action .pos-nlabel"),
+        { y: 12, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.4, ease: "power3.out" },
+        4.98,
+      );
+
+      // Scene 3 (5.5-8.2) — gate blooms, HALT slams, action dims.
+      tl.fromTo(
+        gate,
+        { scale: 1 },
+        { scale: 1.24, duration: 0.55, ease: "power3.out", transformOrigin: "50% 50%" },
+        5.6,
+      );
+      tl.fromTo(
+        echo,
+        { scale: 1, opacity: 0.85 },
+        {
+          scale: 2.3,
+          opacity: 0,
+          duration: 0.85,
+          ease: "power2.out",
+          transformOrigin: "50% 50%",
+          immediateRender: false,
+        },
+        5.6,
+      );
+      tl.fromTo(
+        haltCore,
+        { scale: 1.55, filter: "blur(12px)", opacity: 0 },
+        { scale: 1, filter: "blur(0px)", opacity: 1, duration: 0.42, ease: "power4.out" },
+        6.12,
+      );
+      tl.fromTo(
+        action,
+        { opacity: 1 },
+        { opacity: 0.3, duration: 0.55, ease: "power2.inOut", immediateRender: false },
+        6.32,
+      );
+      tl.fromTo(
+        pb2,
+        { opacity: 1 },
+        { opacity: 0.3, duration: 0.55, ease: "power2.inOut", immediateRender: false },
+        6.36,
+      );
+
+      // Scene 4 (8.2-11.9) — recovery streams, token-typed.
+      tl.fromTo(
+        recovery,
+        { y: 18, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.45, ease: "power3.out" },
+        8.3,
+      );
+
+      var seq1 = [
+        [8.45, "re"],
+        [8.58, "recovery:"],
+        [8.74, "recovery: re"],
+        [8.88, "recovery: re_run"],
+        [9.02, "recovery: re_run_tests"],
+      ];
+      var seq2 = [
+        [9.88, "st"],
+        [10.0, "strategy:"],
+        [10.14, "strategy: ret"],
+        [10.28, "strategy: retry"],
+      ];
+      function textAt(seq, t) {
+        for (var i = seq.length - 1; i >= 0; i--) {
+          if (t >= seq[i][0]) return seq[i][1];
+        }
+        return "";
+      }
+      var v1 = q(".pos-rv1");
+      var v2 = q(".pos-rv2");
+      var c1 = q(".pos-c1");
+      var c2 = q(".pos-c2");
+      var d1 = { t: 8.4 };
+      var d2 = { t: 9.85 };
+      tl.to(
+        d1,
+        {
+          t: 9.1,
+          duration: 0.7,
+          ease: "none",
+          onUpdate: function () {
+            v1.textContent = textAt(seq1, d1.t);
+          },
+        },
+        8.4,
+      );
+      tl.to(
+        d2,
+        {
+          t: 10.35,
+          duration: 0.5,
+          ease: "none",
+          onUpdate: function () {
+            v2.textContent = textAt(seq2, d2.t);
+          },
+        },
+        9.85,
+      );
+      var bl = { p: 0 };
+      tl.to(
+        bl,
+        {
+          p: Math.PI * 2 * 5,
+          duration: 3.4,
+          ease: "none",
+          onUpdate: function () {
+            var on = Math.sin(bl.p) > 0 ? 1 : 0;
+            c1.style.opacity = d2.t < 9.86 ? on : 0;
+            c2.style.opacity = on;
+          },
+        },
+        8.35,
+      );
+
+      // "tries again" — the action re-arms.
+      tl.fromTo(
+        action,
+        { opacity: 0.3 },
+        { opacity: 1, duration: 0.5, ease: "power2.inOut", immediateRender: false },
+        10.65,
+      );
+      tl.fromTo(
+        pb2,
+        { opacity: 0.3 },
+        { opacity: 1, duration: 0.5, ease: "power2.inOut", immediateRender: false },
+        10.69,
+      );
+      tl.fromTo(
+        actionNd,
+        { scale: 1 },
+        { scale: 1.16, duration: 0.16, ease: "power2.out", immediateRender: false },
+        10.68,
+      );
+      tl.fromTo(
+        actionNd,
+        { scale: 1.16 },
+        { scale: 1, duration: 0.22, ease: "power2.inOut", immediateRender: false },
+        10.84,
+      );
+
+      // Hold with sanctioned subtle jitter on the badge (finite, floored).
+      var half = 0.21;
+      var holdStart = 6.75;
+      var holdDur = D - holdStart;
+      tl.fromTo(
+        halt,
+        { x: 0 },
+        {
+          x: 1.1,
+          duration: half,
+          ease: "sine.inOut",
+          yoyo: true,
+          repeat: Math.max(0, Math.floor(holdDur / half) - 1),
+        },
+        holdStart,
+      );
+
+      window.__timelines["03-proof-or-stop"] = tl;
+    })();
+  </script>
+</template>

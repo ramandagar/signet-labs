@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>var-runtime — Your agent says done. Prove it.</title>
+<meta name="description" content="The Verifiable Agent Runtime: Proof-or-Stop for autonomous agents. Evidence gates, signed identity, cost governance, durable execution, tamper-evident attestation.">
+<meta property="og:title" content="var-runtime — Your agent says done. Prove it.">
+<meta property="og:description" content="An open-source runtime that gates every critical agent action on mechanically verifiable evidence. Fresh, bound, signed — or the lifecycle stops.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://var-runtime.dev/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Your agent says done. Prove it.">
+<meta name="twitter:description" content="The Verifiable Agent Runtime — Proof-or-Stop. Zero dependencies, MIT.">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="stylesheet" href="/app/style.css">
+<style>
+  .hero { text-align: center; padding: 84px 22px 60px; }
+  .hero h1 { font-size: clamp(34px, 6vw, 62px); margin: 0 0 14px; letter-spacing: -0.02em; }
+  .hero h1 em { font-style: normal; color: var(--series-1); }
+  .hero p.lead { color: var(--ink-2); font-size: 19px; max-width: 640px; margin: 0 auto 30px; }
+  .waitlist { display: flex; gap: 8px; justify-content: center; max-width: 440px; margin: 0 auto; }
+  .waitlist input { flex: 1; }
+  .feats { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 14px; }
+  .feat h3 { margin: 8px 0 6px; font-size: 15px; }
+  .feat p { color: var(--ink-2); margin: 0; font-size: 13.5px; }
+  .feat .n { color: var(--series-1); font-family: ui-monospace, Menlo, monospace; font-size: 12px; }
+  .snippet { text-align: left; background: var(--page); border: 1px solid var(--grid);
+             border-radius: 10px; padding: 18px; overflow-x: auto; margin: 26px auto 0; max-width: 720px; }
+  .snippet .c { color: var(--ink-muted); }
+  .snippet .k { color: var(--series-1); }
+  .snippet .s { color: var(--good); }
+  .pricing { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px; }
+  .price { text-align: left; }
+  .price .amt { font-size: 30px; font-weight: 700; margin: 6px 0; }
+  .price ul { color: var(--ink-2); padding-left: 18px; font-size: 13px; margin: 8px 0 14px; }
+  .price .tag { color: var(--series-1); font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+  section.block { max-width: 1080px; margin: 0 auto; padding: 40px 22px; }
+  section.block > h2 { font-size: 24px; margin: 0 0 18px; }
+  .okmsg { color: var(--good); margin-top: 10px; font-size: 13px; }
+</style>
+</head>
+<body class="viz-root" data-theme="dark">
+<div class="hero">
+  <div class="brand" style="margin-bottom:26px"><span class="logo">◈</span> var-runtime</div>
+  <h1>Your agent says <em>done</em>.<br>Prove it.</h1>
+  <p class="lead">The Verifiable Agent Runtime intercepts every critical action and demands
+     mechanically verifiable evidence before your lifecycle advances.
+     <b>No evidence, no advance. Proof-or-Stop.</b></p>
+  <form class="waitlist" onsubmit="return joinWaitlist(event)">
+    <input id="wlEmail" type="email" required placeholder="you@company.com">
+    <button>Join the waitlist</button>
+  </form>
+  <p class="okmsg" id="wlMsg" hidden></p>
+  <p class="dim" style="margin-top:10px">Double opt-in. No scraped lists, ever.</p>
+</div>
+
+<section class="block">
+  <h2>Six guarantees, one runtime</h2>
+  <div class="feats">
+    <div class="panel feat"><div class="n">01 · EVIDENCE GATE</div><h3>Proof-or-Stop</h3>
+      <p>Claims like <i>tests_passed</i> or <i>payment_sent</i> are ADMITted only with evidence that is fresh, bound to the exact target, hash-intact, and signature-valid. Otherwise: HALT, with machine-readable recovery.</p></div>
+    <div class="panel feat"><div class="n">02 · IDENTITY BROKER</div><h3>Signed identity, end to end</h3>
+      <p>Every tool call carries a signed envelope — principal, agent, scoped permissions, approval chain, expiry — in the MCP <code>_meta</code>. Per-user authorization and auditing, finally standard.</p></div>
+    <div class="panel feat"><div class="n">03 · COST GOVERNOR</div><h3>Agent economics</h3>
+      <p>Token, USD, and wall-clock budgets per session. Stakes-based model routing: irreversible work earns the flagship model, reversible work goes cheap. Hard stop, degrade, or escalate.</p></div>
+    <div class="panel feat"><div class="n">04 · DURABLE STATE</div><h3>Crash → resume</h3>
+      <p>Checkpoints after every tool call and LLM response. A crashed session resumes at the exact step it died — state and meter intact. No re-execution, no re-payment.</p></div>
+    <div class="panel feat"><div class="n">05 · SERF</div><h3>Errors machines can use</h3>
+      <p>Every failure classified into a six-category taxonomy with a recovery strategy and backoff plan. Agents self-correct instead of parsing error strings.</p></div>
+    <div class="panel feat"><div class="n">06 · ATTESTATION</div><h3>Tamper-evident history</h3>
+      <p>Every event hashed into a chain with linked batch signatures. Edit one row in the database and verification names the exact broken entry. Auditors verify offline.</p></div>
+  </div>
+  <div class="snippet mono">rt = <span class="k">VerifiableRuntime</span>(store=<span class="s">"var.db"</span>, proofs=<span class="s">"proofs.json"</span>)
+s  = rt.start_session(principal_id=<span class="s">"alice@co"</span>, permissions=[<span class="s">"run:tests"</span>],
+                     budget=Budget(max_usd=<span class="s">2.00</span>))
+rt.call_tool(s, <span class="s">"run_tests"</span>, ci, permission=<span class="s">"run:tests"</span>)  <span class="c"># identity-injected, metered, attested</span>
+d  = rt.gate_claim(s, {<span class="s">"claim"</span>: <span class="s">"tests_passed"</span>, <span class="s">"target"</span>: {<span class="s">"commit_sha"</span>: sha}})
+<span class="c"># d.decision == "ADMIT" — or HALT with d.error.recovery telling the agent what to do next</span></div>
+</section>
+
+<section class="block">
+  <h2>Pricing</h2>
+  <div class="pricing">
+    <div class="panel price"><div class="tag">Free</div><div class="amt">$0</div>
+      <ul><li>Full runtime, MIT licensed</li><li>Local state + gate</li><li>Community support</li></ul>
+      <a href="https://github.com/"><button>Self-host</button></a></div>
+    <div class="panel price"><div class="tag">Pro</div><div class="amt">$49/mo</div>
+      <ul><li>Hosted runtime</li><li>100K gate decisions/mo</li><li>Cost dashboard + alerts</li></ul>
+      <button onclick="upgrade('pro')">Upgrade</button></div>
+    <div class="panel price"><div class="tag">Team</div><div class="amt">$499/mo</div>
+      <ul><li>1M gate decisions/mo</li><li>RBAC + audit export</li><li>Priority support</li></ul>
+      <button onclick="upgrade('team')">Upgrade</button></div>
+    <div class="panel price"><div class="tag">Enterprise</div><div class="amt">Custom</div>
+      <ul><li>Air-gapped deploy</li><li>SOC 2, 24/7 SLA</li><li>Dedicated support</li></ul>
+      <a href="mailto:enterprise@var-runtime.dev"><button>Talk to us</button></a></div>
+  </div>
+</section>
+
+<footer>var-runtime · Proof-or-Stop · zero dependencies · <a href="/app">console</a> · <a href="/privacy">privacy</a> · <a href="/terms">terms</a></footer>
+<script>
+async function joinWaitlist(e) {
+  e.preventDefault();
+  const email = document.getElementById("wlEmail").value;
+  const msg = document.getElementById("wlMsg");
+  const r = await fetch("/v1/waitlist", { method: "POST",
+    headers: {"Content-Type": "application/json"}, body: JSON.stringify({email}) });
+  const b = await r.json();
+  msg.hidden = false;
+  msg.textContent = r.ok && b.status !== "already_confirmed"
+    ? "✓ Check your inbox — click the confirmation link to join."
+    : b.error?.message || "You're already on the list.";
+  return false;
+}
+async function upgrade(plan) {
+  const key = localStorage.getItem("var_key");
+  if (!key) { location.href = "/app"; return; }
+  const r = await fetch("/v1/billing/checkout", { method: "POST",
+    headers: {"Content-Type": "application/json", "Authorization": "Bearer " + key},
+    body: JSON.stringify({plan}) });
+  const b = await r.json();
+  if (b.checkout_url) location.href = b.checkout_url;
+  else alert(b.error?.message || "billing not configured");
+}
+</script>
+</body>
+</html>

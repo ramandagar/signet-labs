@@ -1,0 +1,539 @@
+<template>
+  <div id="root" data-composition-id="03b-install" data-width="1920" data-height="1080">
+    <style>
+      @font-face {
+        font-family: "Barlow";
+        src: url("assets/fonts/Barlow-900.woff2") format("woff2");
+        font-weight: 900;
+        font-style: normal;
+      }
+      @font-face {
+        font-family: "IBM Plex Mono";
+        src: url("assets/fonts/IBMPlexMono-400.woff2") format("woff2");
+        font-weight: 400;
+        font-style: normal;
+      }
+      @font-face {
+        font-family: "IBM Plex Mono";
+        src: url("assets/fonts/IBMPlexMono-500.woff2") format("woff2");
+        font-weight: 500;
+        font-style: normal;
+      }
+      @font-face {
+        font-family: "IBM Plex Mono";
+        src: url("assets/fonts/IBMPlexMono-700.woff2") format("woff2");
+        font-weight: 700;
+        font-style: normal;
+      }
+
+      #root {
+        position: relative;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+      }
+
+      /* tokens: frame.md (corrected) — dark register: "cream" #1A1A19 ground, "ink-black" #FFFFFF text,
+         "fire-orange" #3987E5 accent, hairlines #D7D8D9. Green #0CA30C = pass/admit semantic,
+         amber #fab219 = halt semantic (same diegetic statuses as 02-not-evidence). */
+      .in-bkg {
+        position: absolute;
+        inset: 0;
+        background: #1a1a19;
+      }
+      .in-stage {
+        position: absolute;
+        inset: 0;
+      }
+
+      /* catalogue chrome (decorative, sequential per frame.md) */
+      .in-cat {
+        position: absolute;
+        left: 106px;
+        top: 74px;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+      .in-cat-rule {
+        width: 36px;
+        height: 2px;
+        background: #3987e5;
+      }
+      .in-cat-num {
+        font-family: "IBM Plex Mono", "Courier New", monospace;
+        font-weight: 500;
+        font-size: 14px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.55);
+      }
+
+      /* terminal cutout — flat stacked-sheet edges (same family as 02-not-evidence) */
+      .in-stack {
+        position: absolute;
+        left: 106px;
+        top: 236px;
+        width: 1000px;
+      }
+      .in-edge {
+        position: absolute;
+        border: 1px solid rgba(215, 216, 217, 0.22);
+      }
+      .in-edge1 {
+        left: 12px;
+        top: 12px;
+        right: -12px;
+        bottom: -12px;
+      }
+      .in-edge2 {
+        left: 24px;
+        top: 24px;
+        right: -24px;
+        bottom: -24px;
+        border-color: rgba(215, 216, 217, 0.1);
+      }
+      .in-term {
+        position: relative;
+        background: #101010;
+        border: 1px solid rgba(215, 216, 217, 0.25);
+        overflow: hidden;
+      }
+      .in-tbar {
+        position: relative;
+        height: 46px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 0 22px;
+        border-bottom: 1px solid rgba(215, 216, 217, 0.16);
+      }
+      .in-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.2);
+      }
+      .in-stat {
+        margin-left: auto;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: #0ca30c;
+      }
+      .in-body {
+        padding: 26px 34px 30px;
+      }
+      .in-row {
+        font-family: "IBM Plex Mono", "Courier New", monospace;
+        font-size: 30px;
+        line-height: 1.2;
+        min-height: 36px;
+        white-space: nowrap;
+      }
+      .in-row + .in-row {
+        margin-top: 21px;
+      }
+      .in-ps1 {
+        font-weight: 400;
+        color: rgba(255, 255, 255, 0.45);
+        margin-right: 16px;
+      }
+      .in-cmdtxt {
+        font-weight: 500;
+        color: #ffffff;
+      }
+      .in-r1txt {
+        font-weight: 400;
+        color: rgba(255, 255, 255, 0.72);
+      }
+      .in-r2a {
+        font-weight: 700;
+        color: #fab219;
+        margin-right: 12px;
+      }
+      .in-r2b {
+        font-weight: 500;
+        color: #fab219;
+      }
+      .in-r2 {
+        transform-origin: left center;
+      }
+      .in-r3a {
+        font-weight: 400;
+        color: rgba(255, 255, 255, 0.62);
+        margin-right: 12px;
+      }
+      .in-r3b {
+        display: inline-block;
+        font-weight: 700;
+        color: #0ca30c;
+        transform-origin: left center;
+      }
+      .in-r4txt {
+        font-weight: 500;
+        color: #0ca30c;
+        margin-right: 14px;
+      }
+      .in-check {
+        width: 24px;
+        height: 24px;
+        display: inline-block;
+        vertical-align: -3px;
+      }
+      .in-caret {
+        display: inline-block;
+        width: 0.55em;
+        height: 1.05em;
+        margin-left: 6px;
+        background: currentColor;
+        opacity: 0;
+      }
+      .in-cmd .in-caret {
+        color: #ffffff;
+      }
+
+      /* single-pass shimmer sweep, clipped to the terminal */
+      .in-shimmer {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        width: 240px;
+        background: linear-gradient(
+          100deg,
+          rgba(255, 255, 255, 0) 0%,
+          rgba(255, 255, 255, 0.045) 42%,
+          rgba(57, 135, 229, 0.13) 50%,
+          rgba(255, 255, 255, 0.045) 58%,
+          rgba(255, 255, 255, 0) 100%
+        );
+      }
+
+      /* snippet card — same stacked-sheet family, pins right in scene 3 */
+      .in-cards {
+        position: absolute;
+        left: 1174px;
+        top: 236px;
+        width: 640px;
+      }
+      .in-cardsurf {
+        position: relative;
+        background: #101010;
+        border: 1px solid rgba(215, 216, 217, 0.25);
+        min-height: 366px;
+        box-sizing: border-box;
+      }
+      .in-cardhead {
+        height: 46px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 26px;
+        border-bottom: 1px solid rgba(215, 216, 217, 0.16);
+      }
+      .in-cardfile {
+        font-family: "IBM Plex Mono", "Courier New", monospace;
+        font-weight: 500;
+        font-size: 14px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.55);
+      }
+      .in-cardmeta {
+        font-family: "IBM Plex Mono", "Courier New", monospace;
+        font-weight: 500;
+        font-size: 14px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: #3987e5;
+      }
+      .in-code {
+        padding: 26px 30px 30px;
+      }
+      .in-cl {
+        font-family: "IBM Plex Mono", "Courier New", monospace;
+        font-weight: 400;
+        font-size: 25px;
+        line-height: 1.44;
+        color: rgba(255, 255, 255, 0.82);
+        white-space: nowrap;
+      }
+      .in-cl + .in-cl {
+        margin-top: 22px;
+      }
+      .in-k {
+        font-weight: 700;
+        color: #3987e5;
+      }
+      .in-fn {
+        font-weight: 500;
+        color: #3987e5;
+      }
+      .in-str {
+        color: rgba(255, 255, 255, 0.55);
+      }
+      .in-var {
+        color: rgba(255, 255, 255, 0.55);
+      }
+      .in-ok {
+        font-weight: 500;
+        color: #0ca30c;
+      }
+      .in-gc {
+        position: relative;
+        font-weight: 500;
+        color: #3987e5;
+      }
+      .in-gcu {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: -5px;
+        height: 3px;
+        background: #3987e5;
+        transform-origin: left center;
+      }
+
+      /* display moment — low-center, lands on "five lines, zero dependencies" */
+      .in-display {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 676px;
+        text-align: center;
+        font-family: "Barlow", Arial, sans-serif;
+        font-weight: 900;
+        font-size: 82px;
+        line-height: 1;
+        letter-spacing: -0.035em;
+        color: #ffffff;
+        white-space: nowrap;
+      }
+      .in-dw {
+        color: #3987e5;
+      }
+    </style>
+
+    <div class="clip in-bkg" data-start="0" data-duration="8.256" data-track-index="0"></div>
+
+    <div class="clip in-stage" data-start="0" data-duration="8.256" data-track-index="1">
+      <div class="in-cat">
+        <span class="in-cat-rule"></span>
+        <span class="in-cat-num">no. 03b</span>
+      </div>
+
+      <div class="in-stack">
+        <div class="in-edge in-edge2"></div>
+        <div class="in-edge in-edge1"></div>
+        <div class="in-term">
+          <div class="in-tbar">
+            <span class="in-dot"></span>
+            <span class="in-dot"></span>
+            <span class="in-dot"></span>
+            <span class="in-stat"></span>
+          </div>
+          <div class="in-body">
+            <div class="in-row in-cmd"><span class="in-ps1">$</span><span class="in-cmdtxt"></span><span class="in-caret"></span></div>
+            <div class="in-row in-r1"><span class="in-r1txt"></span></div>
+            <div class="in-row in-r2"><span class="in-r2a"></span><span class="in-r2b"></span></div>
+            <div class="in-row in-r3"><span class="in-r3a"></span><span class="in-r3b">ADMIT</span></div>
+            <div class="in-row in-r4"><span class="in-r4txt"></span><svg class="in-check" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 12.5l5 5L19.5 6.5" fill="none" stroke="#0ca30c" stroke-width="3.5" stroke-linecap="square" /></svg></div>
+          </div>
+          <div class="in-shimmer"></div>
+        </div>
+      </div>
+
+      <div class="in-cards">
+        <div class="in-edge in-edge2"></div>
+        <div class="in-edge in-edge1"></div>
+        <div class="in-cardsurf">
+          <div class="in-cardhead">
+            <span class="in-cardfile">quickstart.py</span>
+            <span class="in-cardmeta">5 lines</span>
+          </div>
+          <div class="in-code">
+            <div class="in-cl"><span class="in-k">from</span> signet <span class="in-k">import</span> <span class="in-fn">VerifiableRuntime</span></div>
+            <div class="in-cl">rt&nbsp;&nbsp;= <span class="in-fn">VerifiableRuntime</span>()</div>
+            <div class="in-cl">s&nbsp;&nbsp;&nbsp;= rt.<span class="in-fn">start_session</span>(<span class="in-str">"demo"</span>)</div>
+            <div class="in-cl">out = s.<span class="in-gc">gate_claim<span class="in-gcu"></span></span>(tool, args)</div>
+            <div class="in-cl">out.<span class="in-ok">admit</span>()</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="in-display">five lines <span class="in-dw">/ zero deps</span></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script>
+      (function () {
+        var DUR = 8.256;
+        var tl = gsap.timeline({ paused: true });
+        window.__timelines = window.__timelines || {};
+        window.__timelines["03b-install"] = tl;
+
+        var q = function (s) {
+          return document.querySelectorAll("#root " + s);
+        };
+
+        /* discrete text states — reverse-searched every frame (seek-safe) */
+        var SEQ = [
+          {
+            el: q(".in-cmdtxt")[0],
+            s: [
+              [0.5, "p"],
+              [0.58, "py"],
+              [0.65, "pyt"],
+              [0.72, "pyth"],
+              [0.79, "pytho"],
+              [0.86, "python"],
+              [0.93, "python3"],
+              [1.03, "python3 "],
+              [1.1, "python3 d"],
+              [1.17, "python3 de"],
+              [1.24, "python3 dem"],
+              [1.31, "python3 demo"],
+              [1.4, "python3 demo."],
+              [1.52, "python3 demo.p"],
+              [1.64, "python3 demo.py"],
+            ],
+          },
+          {
+            el: q(".in-r1txt")[0],
+            s: [
+              [2.55, "session"],
+              [2.7, "session s_7f"],
+              [2.8, "session s_7fx31"],
+              [2.9, "session s_7fx31 started"],
+            ],
+          },
+          {
+            el: q(".in-r2a")[0],
+            s: [[3.15, "HALT"]],
+          },
+          {
+            el: q(".in-r2b")[0],
+            s: [
+              [3.32, "EVIDENCE"],
+              [3.45, "EVIDENCE_STALE"],
+              [3.6, "EVIDENCE_STALE (847s"],
+              [3.72, "EVIDENCE_STALE (847s > 300s)"],
+            ],
+          },
+          {
+            el: q(".in-r3a")[0],
+            s: [
+              [4.15, "re-run"],
+              [4.3, "re-run -"],
+              [4.38, "re-run ->"],
+            ],
+          },
+          {
+            el: q(".in-r4txt")[0],
+            s: [
+              [4.75, "chain"],
+              [4.92, "chain verified"],
+            ],
+          },
+        ];
+
+        function textAt(states, t) {
+          for (var i = states.length - 1; i >= 0; i--) {
+            if (t >= states[i][0]) return states[i][1];
+          }
+          return "";
+        }
+
+        var driver = { t: 0 };
+        tl.to(
+          driver,
+          {
+            t: DUR,
+            duration: DUR,
+            ease: "none",
+            onUpdate: function () {
+              for (var i = 0; i < SEQ.length; i++) {
+                SEQ[i].el.textContent = textAt(SEQ[i].s, driver.t);
+              }
+            },
+          },
+          0
+        );
+
+        /* caret blink — deterministic sin square wave on the timeline */
+        function blink(el, t0, t1) {
+          gsap.set(el, { opacity: 0 });
+          var o = { p: 0 };
+          var cycles = Math.max(1, Math.round((t1 - t0) / 0.7));
+          tl.to(
+            o,
+            {
+              p: Math.PI * 2 * cycles,
+              duration: t1 - t0,
+              ease: "none",
+              onUpdate: function () {
+                el.style.opacity = Math.sin(o.p) > 0 ? "1" : "0";
+              },
+            },
+            t0
+          );
+          if (t1 < DUR) tl.set(el, { opacity: 0 }, t1);
+        }
+        blink(q(".in-caret")[0], 0.48, 1.85);
+
+        /* scene 1 — terminal + chrome + typed command + shimmer beat */
+        tl.fromTo(".in-stack", { opacity: 0, y: 26 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 0.05);
+        tl.fromTo(".in-cat", { opacity: 0, x: -14 }, { opacity: 1, x: 0, duration: 0.45, ease: "power2.out" }, 0.25);
+        tl.fromTo(".in-shimmer", { x: -280 }, { x: 1320, duration: 0.6, ease: "power2.inOut" }, 1.82);
+
+        /* scene 2 — the real lifecycle streams, each row on its own beat */
+        tl.fromTo(".in-r1", { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.2, ease: "power1.out" }, 2.55);
+        tl.fromTo(".in-r2", { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.2, ease: "power1.out" }, 3.15);
+        tl.fromTo(".in-stat", { backgroundColor: "#0ca30c" }, { backgroundColor: "#fab219", duration: 0.3, ease: "power1.inOut" }, 3.2);
+        tl.to(".in-r2", { scale: 1.014, duration: 0.1, ease: "power1.out" }, 3.74);
+        tl.to(".in-r2", { scale: 1, duration: 0.12, ease: "power1.inOut" }, 3.84);
+        tl.fromTo(".in-r3", { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.2, ease: "power1.out" }, 4.15);
+        tl.fromTo(
+          ".in-r3b",
+          { opacity: 0, scale: 0.6 },
+          { opacity: 1, scale: 1, duration: 0.3, ease: "back.out(2.2)" },
+          4.48
+        );
+        tl.fromTo(".in-stat", { backgroundColor: "#fab219" }, { backgroundColor: "#0ca30c", duration: 0.3, ease: "power1.inOut" }, 4.55);
+        tl.fromTo(".in-r4", { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.2, ease: "power1.out" }, 4.75);
+        tl.fromTo(
+          ".in-check",
+          { opacity: 0, scale: 0.4 },
+          { opacity: 1, scale: 1, duration: 0.2, ease: "back.out(3)", transformOrigin: "50% 50%" },
+          5.08
+        );
+
+        /* display moment — lands on the "five lines, zero dependencies" beat */
+        tl.fromTo(".in-display", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.65, ease: "power3.out" }, 2.95);
+        tl.fromTo(".in-dw", { opacity: 0, x: -22 }, { opacity: 1, x: 0, duration: 0.5, ease: "power2.out" }, 3.12);
+
+        /* scene 3 — terminal slides left, snippet card pins beside it */
+        tl.fromTo(".in-stack", { x: 354 }, { x: 0, duration: 0.65, ease: "power3.inOut" }, 5.45);
+        tl.fromTo(".in-cards", { opacity: 0, x: 70 }, { opacity: 1, x: 0, duration: 0.6, ease: "power4.out" }, 5.5);
+        var clStarts = [5.75, 5.9, 6.05, 6.2, 6.35];
+        var cls = q(".in-cl");
+        for (var i = 0; i < cls.length; i++) {
+          tl.fromTo(cls[i], { opacity: 0, x: 12 }, { opacity: 1, x: 0, duration: 0.28, ease: "power2.out" }, clStarts[i]);
+        }
+        /* accent underline draws under gate_claim on "the gate does the rest" */
+        tl.fromTo(".in-gcu", { scaleX: 0 }, { scaleX: 1, duration: 0.45, ease: "power2.inOut" }, 6.95);
+
+        /* macro camera drift under the whole shot */
+        tl.fromTo(
+          ".in-stage",
+          { scale: 1 },
+          { scale: 1.014, duration: DUR, ease: "sine.inOut", transformOrigin: "50% 42%" },
+          0
+        );
+
+        tl.seek(0);
+      })();
+    </script>
+  </div>
+</template>

@@ -1,0 +1,39 @@
+{
+  "claims": {
+    "tests_passed": {
+      "evidence_type": "ci_test_result",
+      "source": "ci_pipeline",
+      "max_age_seconds": 300,
+      "must_bind_to": ["commit_sha"],
+      "recovery": "re_run_tests"
+    },
+    "code_reviewed": {
+      "evidence_type": "human_approval",
+      "source": "approval_log",
+      "approver_role": "reviewer",
+      "max_age_seconds": 86400,
+      "must_bind_to": ["pr_number"]
+    },
+    "deploy_to_production": {
+      "evidence_type": "human_approval",
+      "source": "approval_log",
+      "approver_role": "senior_engineer",
+      "max_age_seconds": 3600,
+      "must_bind_to": ["deployment_id"],
+      "min_confidence": 0.9
+    },
+    "payment_sent": {
+      "evidence_type": "payment_receipt",
+      "source": "ledger",
+      "max_age_seconds": 600,
+      "must_bind_to": ["payment_id", "payee"],
+      "recovery": "check_ledger_then_retry"
+    },
+    "identity_verified": {
+      "evidence_type": "identity_attestation",
+      "source": "idp",
+      "max_age_seconds": 300,
+      "must_bind_to": ["subject"]
+    }
+  }
+}

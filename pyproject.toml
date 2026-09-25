@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "var-runtime"
+version = "0.1.0"
+description = "Verifiable Agent Runtime — Proof-or-Stop control layer for autonomous agents"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+
+[project.scripts]
+var = "cli:main"
+
+[tool.setuptools]
+packages = ["var_runtime"]

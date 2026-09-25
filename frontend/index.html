@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VAR — Runtime Console</title>
+<link rel="stylesheet" href="/app/style.css">
+</head>
+<body class="viz-root" data-theme="dark">
+<header>
+  <div class="brand"><span class="logo">◈</span> var<span class="dim">/runtime console</span></div>
+  <div class="conn">
+    <input id="baseUrl" value="" placeholder="http://localhost:8788" spellcheck="false">
+    <input id="apiKey" type="password" placeholder="var_live_…" spellcheck="false">
+    <button id="loadBtn">Connect</button>
+  </div>
+</header>
+
+<main id="disconnected" class="panel">
+  <h2>Connect to your runtime</h2>
+  <p>Point this console at a VAR API instance and paste an API key
+     (<code>var_live_…</code>). Keys are created by your admin
+     (<code>POST /v1/keys</code>) and stay in this browser.</p>
+</main>
+
+<main id="app" hidden>
+  <section class="tiles">
+    <div class="tile"><div class="label">sessions</div><div class="value" id="tSessions">–</div><div class="sub" id="tSessionsSub"></div></div>
+    <div class="tile"><div class="label">gate decisions</div><div class="value" id="tGates">–</div>
+      <div class="sub"><span class="chip good">✓ <b id="tAdmits">–</b> admit</span> <span class="chip warn">⏸ <b id="tHalts">–</b> halt</span></div></div>
+    <div class="tile"><div class="label">tokens metered</div><div class="value" id="tTokens">–</div><div class="sub" id="tTokensSub"></div></div>
+    <div class="tile"><div class="label">usd metered</div><div class="value" id="tUsd">–</div><div class="sub">live metering across sessions</div></div>
+  </section>
+
+  <section class="grid">
+    <div class="card">
+      <h3>Tool latency <span class="dim">p50 / p99 ms · lower is better</span></h3>
+      <div id="perfChart" class="chart"></div>
+      <div class="legend" id="perfLegend"></div>
+    </div>
+    <div class="card">
+      <h3>Budget <span class="dim" id="budgetSession"></span></h3>
+      <div id="budgetBox"><p class="dim">Select a session.</p></div>
+      <h3 style="margin-top:22px">Usage</h3>
+      <div id="usageBox" class="usage"></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h3>Sessions</h3>
+    <table class="tbl" id="sessionTable">
+      <thead><tr><th>session</th><th>agent</th><th>principal</th><th>steps</th>
+        <th>events</th><th>gate ✓/⏸</th><th>chain</th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </section>
+
+  <section class="card" id="detailCard" hidden>
+    <h3 id="detailTitle"></h3>
+    <div class="detailcols">
+      <div><h4>Gate decisions</h4><div id="gateFeed" class="feed"></div></div>
+      <div><h4>Attestation</h4><div id="verifyBox"></div>
+           <h4 style="margin-top:18px">Identity envelope</h4>
+           <pre id="envBox" class="mono dim"></pre></div>
+    </div>
+  </section>
+</main>
+
+<div id="tooltip" class="tooltip" hidden></div>
+<footer>var-runtime · Proof-or-Stop · <a href="/">landing</a></footer>
+<script src="/app/app.js"></script>
+</body>
+</html>

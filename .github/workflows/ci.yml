@@ -1,0 +1,22 @@
+name: ci
+on:
+  push: { branches: [main] }
+  pull_request:
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix: { python: ["3.11", "3.12", "3.13"] }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "${{ matrix.python }}" }
+      - name: Core feature checks
+        run: python3 test_runtime.py
+      - name: Launch-stack checks (API, billing, MCP, SDK)
+        run: python3 test_launch.py
+      - name: Gate evaluation scenarios
+        run: python3 evals/gate_evals.py
+      - name: Demo runs end to end
+        run: python3 demo.py
