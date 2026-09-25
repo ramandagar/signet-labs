@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>var-runtime — Complete Architecture</title>
+<style>
+:root{
+  --page:#0d0d0d; --surface:#1a1a19; --surface2:#222221; --ink:#ffffff; --ink2:#c3c2b7;
+  --muted:#898781; --grid:#2c2c2a; --hairline:rgba(255,255,255,.10);
+  --blue:#3987e5; --blue-dim:#1c5cab; --green:#0ca30c; --amber:#fab219; --red:#d03b3b;
+  --mono:ui-monospace,SFMono-Regular,Menlo,monospace;
+  --sans:system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--page);color:var(--ink);font:14.5px/1.6 var(--sans)}
+a{color:var(--blue);text-decoration:none}
+a:hover{text-decoration:underline}
+code{font-family:var(--mono);font-size:.86em;background:#000;border:1px solid var(--grid);border-radius:4px;padding:1px 6px;color:var(--ink2)}
+h1,h2,h3,h4{line-height:1.2;margin:0 0 .4em;font-weight:700;letter-spacing:-.01em}
+h2{font-size:26px;margin-top:0}
+h3{font-size:16px}
+p{color:var(--ink2)}
+.wrap{max-width:1180px;margin:0 auto;padding:0 28px}
+nav{position:sticky;top:0;z-index:50;background:rgba(13,13,13,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--hairline)}
+nav .wrap{display:flex;align-items:center;gap:18px;height:52px;overflow-x:auto;scrollbar-width:none}
+nav .wrap::-webkit-scrollbar{display:none}
+nav .logo{font-weight:800;white-space:nowrap}
+nav .logo span{color:var(--blue)}
+nav a.nl{color:var(--muted);font-size:13px;white-space:nowrap}
+nav a.nl:hover{color:var(--ink);text-decoration:none}
+nav a.nl.active{color:var(--blue)}
+section{padding:64px 0;border-bottom:1px solid var(--grid)}
+section:first-of-type{border-top:none}
+.kicker{font-family:var(--mono);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--blue);margin-bottom:10px}
+.badge{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--hairline);border-radius:20px;padding:3px 12px;font-size:12px;color:var(--ink2);margin:0 6px 6px 0}
+.badge b{color:var(--ink)}
+.dot{width:8px;height:8px;border-radius:50%;display:inline-block}
+.dot.g{background:var(--green)} .dot.a{background:var(--amber)} .dot.b{background:var(--blue)}
+.cards{display:grid;gap:14px}
+.card{background:var(--surface);border:1px solid var(--hairline);border-radius:10px;padding:20px 22px}
+.card p{margin:.4em 0 0}
+.card .n{font-family:var(--mono);font-size:11px;letter-spacing:.16em;color:var(--blue);text-transform:uppercase}
+.g2{grid-template-columns:repeat(auto-fit,minmax(340px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.g6{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+table{width:100%;border-collapse:collapse;font-size:13px;font-variant-numeric:tabular-nums}
+th{text-align:left;color:var(--muted);font-weight:500;padding:8px 12px;border-bottom:1px solid #383835}
+td{padding:9px 12px;border-bottom:1px solid var(--grid);color:var(--ink2);vertical-align:top}
+td:first-child{color:var(--ink)}
+.chip{display:inline-flex;align-items:center;gap:5px;border-radius:20px;padding:1px 9px;font-size:11.5px;border:1px solid var(--hairline);color:var(--ink2);white-space:nowrap}
+.chip.g{color:var(--green);border-color:var(--green)}
+.chip.a{color:var(--amber);border-color:var(--amber)}
+.chip.r{color:var(--red);border-color:var(--red)}
+.chip.b{color:var(--blue);border-color:var(--blue)}
+pre{font-family:var(--mono);font-size:12.5px;line-height:1.65;background:#000;border:1px solid var(--grid);border-radius:10px;padding:18px;overflow-x:auto;color:var(--ink2);margin:0}
+pre .k{color:var(--blue)} pre .s{color:var(--green)} pre .c{color:var(--muted)} pre .y{color:var(--amber)}
+.flow{display:flex;flex-direction:column;gap:0;margin:18px 0}
+.fstep{display:grid;grid-template-columns:44px 1fr;gap:16px;position:relative;padding-bottom:26px}
+.fstep:last-child{padding-bottom:0}
+.fstep .num{width:36px;height:36px;border-radius:50%;border:1px solid var(--blue-dim);background:var(--surface);color:var(--blue);font-family:var(--mono);font-size:13px;display:flex;align-items:center;justify-content:center;z-index:2}
+.fstep:not(:last-child)::before{content:"";position:absolute;left:17.5px;top:36px;bottom:0;width:1px;background:linear-gradient(var(--blue-dim),var(--grid))}
+.fstep h4{margin:6px 0 4px;font-size:14.5px}
+.fstep p{margin:0;font-size:13.5px}
+.fstep .tag{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.hero{padding:88px 0 64px;background:
+  radial-gradient(1200px 500px at 15% -10%, rgba(57,135,229,.16), transparent 60%),
+  radial-gradient(800px 400px at 90% 0%, rgba(12,163,12,.07), transparent 60%)}
+.hero h1{font-size:clamp(34px,5.4vw,58px);letter-spacing:-.025em}
+.hero h1 em{font-style:normal;color:var(--blue)}
+.hero .sub{font-size:18px;color:var(--ink2);max-width:760px;margin:14px 0 26px}
+.statrow{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-top:34px}
+.stat{background:var(--surface);border:1px solid var(--hairline);border-radius:10px;padding:14px 18px}
+.stat b{display:block;font-size:26px}
+.stat span{color:var(--muted);font-size:12px}
+.archsvg{width:100%;height:auto;display:block;margin:10px 0}
+.legend{display:flex;gap:18px;flex-wrap:wrap;margin-top:12px;font-size:12.5px;color:var(--muted)}
+.legend i{width:10px;height:10px;border-radius:3px;display:inline-block;margin-right:6px;vertical-align:-1px}
+.two{display:grid;grid-template-columns:1.25fr 1fr;gap:22px}
+@media(max-width:940px){.two{grid-template-columns:1fr}}
+.muted{color:var(--muted)}
+.small{font-size:12.5px}
+.oklist{list-style:none;padding:0;margin:0}
+.oklist li{padding:7px 0 7px 28px;position:relative;border-bottom:1px solid var(--grid);color:var(--ink2);font-size:13.5px}
+.oklist li::before{content:"✓";position:absolute;left:4px;color:var(--green);font-weight:700}
+.oklist li.todo::before{content:"○";color:var(--amber)}
+.oklist li.user::before{content:"◆";color:var(--blue)}
+.gate-demo{background:#000;border:1px solid var(--grid);border-radius:10px;padding:16px;font-family:var(--mono);font-size:12.5px;line-height:1.9;overflow-x:auto}
+.gate-demo .admit{color:var(--green);font-weight:700}
+.gate-demo .halt{color:var(--amber);font-weight:700}
+.gate-demo .dim{color:var(--muted)}
+.gate-demo .blue{color:var(--blue)}
+.vid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.vidcard{background:var(--surface);border:1px solid var(--hairline);border-radius:10px;padding:16px 18px}
+.vidcard .n{font-family:var(--mono);font-size:11px;color:var(--blue)}
+.vidcard h4{font-size:14px;margin:6px 0 4px}
+.vidcard p{font-size:12.5px;margin:0}
+footer{text-align:center;color:var(--muted);padding:40px;font-size:12.5px}
+.reveal{opacity:0;transform:translateY(14px);transition:opacity .6s ease,transform .6s ease}
+.reveal.on{opacity:1;transform:none}
+.anchor{scroll-margin-top:70px}
+</style>
+</head>
+<body>
+
+<nav><div class="wrap">
+  <div class="logo">◈ var<span>-runtime</span></div>
+  <a class="nl" href="#thesis">Thesis</a>
+  <a class="nl" href="#architecture">Architecture</a>
+  <a class="nl" href="#lifecycle">Life of a claim</a>
+  <a class="nl" href="#agents">AI &amp; agents</a>
+  <a class="nl" href="#stack">Launch stack</a>
+  <a class="nl" href="#security">Security</a>
+  <a class="nl" href="#testing">Testing</a>
+  <a class="nl" href="#gtm">GTM</a>
+  <a class="nl" href="#videos">Videos</a>
+  <a class="nl" href="#checklist">Launch checklist</a>
+</div></nav>
+
+<header class="hero"><div class="wrap">
+  <div class="kicker">Complete project architecture · top to bottom</div>
+  <h1>Your agent says <em>done</em>.<br>Prove it.</h1>
+  <p class="sub">var-runtime is the Verifiable Agent Runtime — a control layer between any
+  agent framework and its tools. It intercepts every critical action, demands mechanically
+  verifiable evidence, propagates signed identity, meters cost, survives crashes, and attests
+  every decision into a tamper-evident history. <b>Proof-or-Stop.</b></p>
+  <div>
+    <span class="badge"><span class="dot g"></span>25 checks green</span>
+    <span class="badge"><span class="dot b"></span>zero dependencies</span>
+    <span class="badge"><b>MIT</b> core</span>
+    <span class="badge">Python 3.11+ stdlib</span>
+    <span class="badge"><span class="dot a"></span>launch-ready</span>
+  </div>
+  <div class="statrow">
+    <div class="stat"><b>6</b><span>runtime guarantees</span></div>
+    <div class="stat"><b>11</b><span>file counts: core modules</span></div>
+    <div class="stat"><b>13</b><span>adversarial gate evals</span></div>
+    <div class="stat"><b>295 r/s</b><span>load-tested API</span></div>
+    <div class="stat"><b>~2,900</b><span>lines, total</span></div>
+  </div>
+</div></header>
+
+<section id="thesis"><div class="wrap anchor reveal">
+  <div class="kicker">01 — The problem &amp; thesis</div>
+  <h2>Self-reports are not evidence</h2>
+  <div class="two">
+    <div>
+      <p>Every autonomous agent in production makes claims: <i>“tests passed”,
+      “payment sent”, “identity verified.”</i> The log line saying so is not evidence —
+      it's a self-report. Pipelines go green over stale, incomplete, or fabricated work,
+      and the failure surfaces downstream, where it's exponentially more expensive.</p>
+      <p><b>Proof-or-Stop</b> is the admissibility layer: the runtime decides which agent
+      claims a lifecycle may safely act on. Dapr 1.18 and Diagrid Catalyst prove
+      <i>what happened</i> (infrastructure attestation). var-runtime decides
+      <i>whether what happened is admissible</i> — fresh, bound, hash-intact,
+      signature-valid, or the lifecycle stops with machine-readable recovery.</p>
+      <p class="small muted">Validated shape: a gated unattended loop passed 10/10 scenarios
+      with zero false-done outcomes; receipt bundles rejected 18 tamper classes with zero
+      false accepts; gated loops cut visible-pass/hidden-fail from 31/1800 to 2/1800.</p>
+    </div>
+    <div class="card">
+      <h3>The gate's five mechanical checks</h3>
+      <div class="gate-demo">
+<span class="blue">claim</span>  tests_passed @ commit_def456
+<span class="dim">├─ present       </span> evidence artifact exists
+<span class="dim">├─ fresh         </span> age 12s ≤ max 300s
+<span class="dim">├─ bound         </span> commit_def456 == target
+<span class="dim">├─ hash intact   </span> sha256(payload) ✓
+<span class="dim">├─ signed        </span> ci-key-1 (trust anchor) ✓
+<span class="dim">└─ positive      </span> tests: 214 passed, 0 failed
+<span class="admit">→ ADMIT</span>   lifecycle advances
+
+<span class="dim"># any check fails:</span>
+<span class="halt">→ HALT</span>    EVIDENCE_STALE (847s &gt; 300s)
+<span class="dim">  recovery:</span> re_run_tests
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<section id="architecture"><div class="wrap anchor reveal">
+  <div class="kicker">02 — System architecture</div>
+  <h2>One control layer, six guarantees</h2>
+  <svg class="archsvg" viewBox="0 0 1100 640" xmlns="http://www.w3.org/2000/svg" font-family="system-ui,sans-serif">
+    <defs>
+      <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+        <path d="M0,0 L10,5 L0,10 z" fill="#898781"/>
+      </marker>
+      <linearGradient id="varband" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stop-color="#1c5cab" stop-opacity=".25"/><stop offset="1" stop-color="#3987e5" stop-opacity=".08"/>
+      </linearGradient>
+    </defs>
+    <!-- frameworks -->
+    <text x="30" y="30" fill="#898781" font-size="12" font-family="ui-monospace,monospace" letter-spacing="2">AGENT FRAMEWORKS</text>
+    <g font-size="13" fill="#c3c2b7">
+      <rect x="30" y="44" width="240" height="42" rx="8" fill="#1a1a19" stroke="#2c2c2a"/><text x="150" y="70" text-anchor="middle">LangGraph (adapter)</text>
+      <rect x="290" y="44" width="240" height="42" rx="8" fill="#1a1a19" stroke="#2c2c2a"/><text x="410" y="70" text-anchor="middle">CrewAI / OpenAI SDK</text>
+      <rect x="550" y="44" width="240" height="42" rx="8" fill="#1a1a19" stroke="#2c2c2a"/><text x="670" y="70" text-anchor="middle">Any MCP client</text>
+      <rect x="810" y="44" width="260" height="42" rx="8" fill="#1a1a19" stroke="#2c2c2a"/><text x="940" y="70" text-anchor="middle">SDKs (Python / JS)</text>
+    </g>
+    <path d="M550,86 L550,120" stroke="#898781" marker-end="url(#arr)" fill="none"/>
+    <text x="562" y="108" fill="#898781" font-size="11">wrap tool calls · submit claims</text>
+
+    <!-- VAR band -->
+    <rect x="30" y="122" width="1040" height="240" rx="12" fill="url(#varband)" stroke="#3987e5" stroke-opacity=".45"/>
+    <text x="50" y="148" fill="#3987e5" font-size="13" font-weight="700" font-family="ui-monospace,monospace" letter-spacing="2">VERIFIABLE AGENT RUNTIME (VAR)</text>
+    <g font-size="12.5">
+      <rect x="50" y="164" width="190" height="86" rx="8" fill="#222221" stroke="#2c2c2a"/>
+        <text x="145" y="188" text-anchor="middle" fill="#fff" font-weight="600">Evidence Gate</text>
+        <text x="145" y="208" text-anchor="middle" fill="#898781">Proof-or-Stop</text>
+        <text x="145" y="226" text-anchor="middle" fill="#898781">ADMIT / HALT + recovery</text>
+      <rect x="256" y="164" width="190" height="86" rx="8" fill="#222221" stroke="#2c2c2a"/>
+        <text x="351" y="188" text-anchor="middle" fill="#fff" font-weight="600">Identity Broker</text>
+        <text x="351" y="208" text-anchor="middle" fill="#898781">signed envelopes in _meta</text>
+        <text x="351" y="226" text-anchor="middle" fill="#898781">principal · perms · approvals</text>
+      <rect x="462" y="164" width="190" height="86" rx="8" fill="#222221" stroke="#2c2c2a"/>
+        <text x="557" y="188" text-anchor="middle" fill="#fff" font-weight="600">Cost Governor</text>
+        <text x="557" y="208" text-anchor="middle" fill="#898781">budgets · metering</text>
+        <text x="557" y="226" text-anchor="middle" fill="#898781">stakes-based model routing</text>
+      <rect x="668" y="164" width="190" height="86" rx="8" fill="#222221" stroke="#2c2c2a"/>
+        <text x="763" y="188" text-anchor="middle" fill="#fff" font-weight="600">Durable State</text>
+        <text x="763" y="208" text-anchor="middle" fill="#898781">checkpoints every step</text>
+        <text x="763" y="226" text-anchor="middle" fill="#898781">crash → exact-step resume</text>
+      <rect x="874" y="164" width="176" height="86" rx="8" fill="#222221" stroke="#2c2c2a"/>
+        <text x="962" y="188" text-anchor="middle" fill="#fff" font-weight="600">SERF</text>
+        <text x="962" y="208" text-anchor="middle" fill="#898781">6-category error taxonomy</text>
+        <text x="962" y="226" text-anchor="middle" fill="#898781">recovery + backoff plans</text>
+    </g>
+    <g font-size="12.5">
+      <rect x="50" y="262" width="480" height="80" rx="8" fill="#222221" stroke="#2c2c2a"/>
+        <text x="290" y="288" text-anchor="middle" fill="#fff" font-weight="600">Durable State Store — SQLite (dev) · same 4-method contract for Postgres/S3/Redis</text>
+        <text x="290" y="308" text-anchor="middle" fill="#898781">checkpoints · events · tool_stats · api_keys · waitlist · records · usage · customers</text>
+        <text x="290" y="326" text-anchor="middle" fill="#898781">append-only; schema-versioned</text>
+      <rect x="546" y="262" width="504" height="80" rx="8" fill="#222221" stroke="#2c2c2a"/>
+        <text x="798" y="288" text-anchor="middle" fill="#fff" font-weight="600">Attestation &amp; Provenance</text>
+        <text x="798" y="308" text-anchor="middle" fill="#898781">SHA-256 hash chain · linked batch signatures · trust-anchor key registry</text>
+        <text x="798" y="326" text-anchor="middle" fill="#898781">offline-verifiable bundles · tamper names the exact broken entry</text>
+    </g>
+    <path d="M550,362 L550,396" stroke="#898781" marker-end="url(#arr)" fill="none"/>
+    <text x="562" y="384" fill="#898781" font-size="11">identity-injected, metered, classified calls</text>
+
+    <!-- tool layer -->
+    <text x="30" y="420" fill="#898781" font-size="12" font-family="ui-monospace,monospace" letter-spacing="2">TOOL / MCP LAYER</text>
+    <g font-size="13" fill="#c3c2b7">
+      <rect x="30" y="434" width="200" height="42" rx="8" fill="#1a1a19" stroke="#2c2c2a"/><text x="130" y="460" text-anchor="middle">MCP servers</text>
+      <rect x="250" y="434" width="200" height="42" rx="8" fill="#1a1a19" stroke="#2c2c2a"/><text x="350" y="460" text-anchor="middle">GitHub Actions CI</text>
+      <rect x="470" y="434" width="200" height="42" rx="8" fill="#1a1a19" stroke="#2c2c2a"/><text x="570" y="460" text-anchor="middle">REST APIs</text>
+      <rect x="690" y="434" width="200" height="42" rx="8" fill="#1a1a19" stroke="#2c2c2a"/><text x="790" y="460" text-anchor="middle">databases · files</text>
+      <rect x="910" y="434" width="140" height="42" rx="8" fill="#1a1a19" stroke="#2c2c2a"/><text x="980" y="460" text-anchor="middle">anything callable</text>
+    </g>
+    <!-- hosted stack -->
+    <g font-size="12.5">
+      <rect x="30" y="516" width="1040" height="94" rx="10" fill="#222221" stroke="#2c2c2a"/>
+      <text x="50" y="542" fill="#0ca30c" font-size="12" font-family="ui-monospace,monospace" letter-spacing="2">HOSTED LAUNCH STACK (optional, paid)</text>
+      <text x="70" y="570" fill="#c3c2b7">API server (auth·rate·quota·records)</text>
+      <text x="330" y="570" fill="#c3c2b7">Console + landing + legal</text>
+      <text x="560" y="570" fill="#c3c2b7">Stripe billing (checkout + webhook sigs)</text>
+      <text x="850" y="570" fill="#c3c2b7">MCP server · SDKs · evals</text>
+      <text x="70" y="592" fill="#898781">single-threaded stdlib HTTP · Caddy/nginx TLS in front · N processes to scale · 295 req/s verified</text>
+    </g>
+  </svg>
+  <div class="legend">
+    <span><i style="background:#3987e5"></i>runtime core (MIT)</span>
+    <span><i style="background:#0ca30c"></i>hosted paid stack</span>
+    <span><i style="background:#1a1a19;border:1px solid #2c2c2a"></i>frameworks &amp; tools (yours)</span>
+    <span>arrows = the intercept path — no tool call or claim bypasses the runtime</span>
+  </div>
+</div></section>
+
+<section id="lifecycle"><div class="wrap anchor reveal">
+  <div class="kicker">03 — The life of a claim</div>
+  <h2>End to end, in eight steps</h2>
+  <div class="two">
+    <div class="flow">
+      <div class="fstep"><div class="num">1</div><div><h4>Session starts <span class="tag">identity.py</span></h4>
+        <p>Alice's identity is captured; a signed envelope (principal, agent, scoped permissions, expiry) is issued. Budget declared: $2.00 / 1800s.</p></div></div>
+      <div class="fstep"><div class="num">2</div><div><h4>Agent works <span class="tag">runtime.call_tool</span></h4>
+        <p>Every tool call is wrapped: envelope verified + permission checked → budget guard → envelope injected into MCP <code>_meta</code> → execution timed → SERF classifies failures → performance recorded → event attested → checkpoint.</p></div></div>
+      <div class="fstep"><div class="num">3</div><div><h4>The agent claims done <span class="tag">gate_claim</span></h4>
+        <p><code>{claim: "tests_passed", target: {commit_sha}, confidence}</code> — the gate looks up the proof registry's evidence requirement.</p></div></div>
+      <div class="fstep"><div class="num">4</div><div><h4>Evidence is fetched &amp; verified <span class="tag">evidence.py</span></h4>
+        <p>A registered fetcher (GitHub Actions API, CI webhook, approval log, hosted http_json) returns a signed artifact. Five mechanical checks run.</p></div></div>
+      <div class="fstep"><div class="num">5</div><div><h4>ADMIT or HALT <span class="tag">GateDecision</span></h4>
+        <p>ADMIT advances the lifecycle. HALT returns structured recovery (<code>re_run_tests</code>) — the agent self-corrects deterministically. Human-in-the-loop: <code>deploy_to_production</code> requires a senior-engineer approval, chained into the envelope.</p></div></div>
+      <div class="fstep"><div class="num">6</div><div><h4>Cost governance <span class="tag">cost.py</span></h4>
+        <p>Every LLM call metered (tokens/USD); stakes route models — irreversible work → flagship, reversible → fast; ≥80% budget → degrade; over → hard stop.</p></div></div>
+      <div class="fstep"><div class="num">7</div><div><h4>Crash → resume <span class="tag">state.py</span></h4>
+        <p>Process dies mid-PR. <code>runtime.resume(session_id)</code> reloads the last checkpoint: messages, tool results, meter totals, approvals. No re-execution, no re-payment.</p></div></div>
+      <div class="fstep"><div class="num">8</div><div><h4>Attestation &amp; audit <span class="tag">attestation.py</span></h4>
+        <p>Every event hashed into a chain, batch signatures linked to the previous signature. Audit query: “every action on behalf of Alice.” Export bundle verifies offline.</p></div></div>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:14px">
+        <h3>The 8-step demo runs in ~2s</h3>
+<pre><span class="c">$ python3 demo.py</span>
+STEP 1  session s_5f2c91 · budget $2.00
+STEP 3  tool calls — envelope verified, metered, attested
+STEP 4  fresh → <span class="k">ADMIT</span> · stale → <span class="y">HALT</span> EVIDENCE_STALE
+        wrong sha → <span class="y">HALT</span> EVIDENCE_UNBOUND · re-run → <span class="k">ADMIT</span>
+STEP 6  crash → resumed at step 7 · meter intact
+STEP 7  chain verified · 17 events · offline bundle ✓
+STEP 8  deploy → <span class="y">HALT</span> (no approval) → bob approves → <span class="k">ADMIT</span></pre>
+      </div>
+      <div class="card">
+        <h3>HALT is a feature</h3>
+        <p>Every HALT carries a machine-readable recovery instruction — the difference
+        between an agent that retries blindly and one that deterministically
+        self-corrects. 13 adversarial scenarios (stale, unbound, tampered payload,
+        forged signature, negative result, wrong approver role, low confidence…)
+        each produce exactly one correct verdict. <code>evals/gate_evals.py</code></p>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<section id="agents"><div class="wrap anchor reveal">
+  <div class="kicker">04 — AI &amp; agent integration</div>
+  <h2>How agents plug in</h2>
+  <div class="cards g3" style="margin-bottom:22px">
+    <div class="card"><div class="n">embedded (any framework)</div><h3>Wrap tool calls</h3>
+      <p>The runtime wraps plain callables — LangGraph nodes, CrewAI tools, OpenAI SDK
+      function calls all route through <code>call_tool</code>. Identity injection,
+      metering, SERF, attestation come free.</p></div>
+    <div class="card"><div class="n">langgraph adapter</div><h3>Gated nodes</h3>
+      <p><code>gated_node(rt, session, "tests_passed", target_fn)</code> wraps a graph node
+      so its output must pass the gate before the graph advances — HALT raises
+      <code>GateHalted</code> with structured recovery for a correction node.
+      <code>attach_checkpointer</code> bridges durable state (lazy import).</p></div>
+    <div class="card"><div class="n">var as MCP server</div><h3>7 tools over stdio</h3>
+      <p>Any MCP client (Claude Desktop, Cursor) gets <code>var_start_session</code>,
+      <code>var_gate_claim</code>, <code>var_submit_evidence</code>,
+      <code>var_record_approval</code>, <code>var_session_usage</code>,
+      <code>var_verify_session</code>, <code>var_audit_session</code>. Identity
+      envelopes ride <code>tools/call</code> <code>_meta</code> — the propagation
+      primitive MCP itself lacks.</p></div>
+  </div>
+  <div class="two">
+    <div>
+      <h3>Five lines to first gated claim</h3>
+<pre>rt = <span class="k">VerifiableRuntime</span>(store=<span class="s">"var.db"</span>, proofs=<span class="s">"proofs.json"</span>)
+s  = rt.start_session(principal_id=<span class="s">"alice@co"</span>, permissions=[<span class="s">"run:tests"</span>],
+                     budget=Budget(max_usd=<span class="s">2.00</span>))
+rt.call_tool(s, <span class="s">"run_tests"</span>, ci, permission=<span class="s">"run:tests"</span>)  <span class="c"># wrapped: identity, meter, attest</span>
+d  = rt.gate_claim(s, {<span class="s">"claim"</span>: <span class="s">"tests_passed"</span>, <span class="s">"target"</span>: {<span class="s">"commit_sha"</span>: sha}})
+<span class="c"># d.decision == "ADMIT" — or HALT with d.error.recovery</span></pre>
+    </div>
+    <div>
+      <h3>Where the "AI" is (and isn't)</h3>
+      <p><b>The gate is not a model.</b> Evidence verification is deterministic
+      machinery — hashes, signatures, freshness arithmetic — so verdicts are
+      replayable and identical every run. LLMs live where they belong: in the
+      agent frameworks above the runtime, and in the <i>agents' own judgment</i>
+      about what to claim. The runtime's only trust decision — admissibility —
+      is mechanical by design. Stakes-based model routing (flagship vs fast) is
+      the one place model choice is governed, and it's declarative policy.</p>
+      <p class="small muted">No network calls, no clocks inside verification paths
+      (<code>GateEngine.now</code> is injectable), no randomness — render/replay
+      safe.</p>
+    </div>
+  </div>
+</div></section>
+
+<section id="stack"><div class="wrap anchor reveal">
+  <div class="kicker">05 — Launch stack</div>
+  <h2>Everything around the core</h2>
+  <div class="cards g2" style="margin-bottom:20px">
+    <div class="card"><div class="n">hosted API — server.py</div>
+      <table>
+        <tr><th>route</th><th>what</th></tr>
+        <tr><td><code>POST /v1/sessions</code></td><td>start session → id + signed envelope</td></tr>
+        <tr><td><code>POST …/gate</code></td><td>Proof-or-Stop claim evaluation (quota-metered)</td></tr>
+        <tr><td><code>POST …/approvals</code></td><td>human-in-the-loop approval recording</td></tr>
+        <tr><td><code>POST …/meter</code></td><td>LLM metering + stakes routing</td></tr>
+        <tr><td><code>GET …/verify|audit|usage</code></td><td>chain verification · event log · meter</td></tr>
+        <tr><td><code>GET /v1/sessions|perf|proofs</code></td><td>listings for the console</td></tr>
+        <tr><td><code>POST /v1/waitlist</code></td><td>double opt-in (compliant list)</td></tr>
+        <tr><td><code>POST /v1/billing/checkout</code></td><td>Stripe checkout session</td></tr>
+        <tr><td><code>POST /v1/stripe/webhook</code></td><td>HMAC-verified plan upgrades</td></tr>
+        <tr><td><code>GET /v1/records</code></td><td>admin: every request ever served</td></tr>
+      </table>
+      <p class="small muted">API keys <code>var_live_…</code> sha256-hashed at rest, constant-time
+      compare · per-plan rate limits (60/600/6000 rpm) · monthly gate-decision quotas ·
+      every request recorded to <code>api_records</code> · tenant isolation on every session route.</p>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:14px"><div class="n">billing — billing.py</div>
+        <h3>Stripe, stdlib-only</h3>
+        <p>Checkout via Stripe REST (no SDK). Webhooks verified with
+        HMAC-SHA256 over <code>t.payload</code>, 5-minute replay window,
+        constant-time compare. <code>checkout.session.completed</code> upgrades
+        the tenant's keys; failed payment / cancellation downgrades. Test-verified
+        against forged, stale, and tampered signatures.</p>
+        <table>
+          <tr><th>plan</th><th>rate</th><th>gate decisions/mo</th></tr>
+          <tr><td>Free</td><td>60 rpm</td><td>1,000</td></tr>
+          <tr><td>Pro $49</td><td>600 rpm</td><td>100,000</td></tr>
+          <tr><td>Team $499</td><td>6,000 rpm</td><td>1,000,000</td></tr>
+        </table>
+      </div>
+      <div class="card"><div class="n">console + landing — frontend/</div>
+        <h3>Observability UI</h3>
+        <p>Dark console: stat tiles (sessions, gate ✓/⏸, tokens, USD), budget gauge,
+        p50/p99 tool-latency bars, session table with live chain-intact chips, gate-decision
+        feed, envelope inspector. Palette validated for the dark surface (CVD-safe,
+        WCAG AA). Landing: hero, six guarantees, pricing, double-opt-in waitlist.
+        Served by the API at <code>/</code> and <code>/app</code>; privacy + terms live.</p>
+      </div>
+    </div>
+  </div>
+  <div class="cards g3">
+    <div class="card"><div class="n">MCP server</div><h3>mcp_server.py</h3><p>stdio JSON-RPC 2.0 (spec 2025-11-25): initialize · tools/list · tools/call. Full HALT→evidence→ADMIT flow verified over the wire.</p></div>
+    <div class="card"><div class="n">SDKs</div><h3>Python + JS</h3><p><code>VarClient</code> with sessions, gate claims (admitted/recovery accessors), approvals, metering, verify, audit, billing. Both integration-tested against the live HTTP server.</p></div>
+    <div class="card"><div class="n">integrations</div><h3>GitHub Actions</h3><p>Real Checks-API fetcher: evidence only counts when every check for the exact head_sha concluded success within the freshness window. Mocked tests cover pass, fail, and binding.</p></div>
+  </div>
+</div></section>
+
+<section id="security"><div class="wrap anchor reveal">
+  <div class="kicker">06 — Security model</div>
+  <h2>Trust boundaries, mechanically enforced</h2>
+  <div class="cards g2">
+    <div class="card">
+      <h3>What's verified, and how</h3>
+      <table>
+        <tr><th>path</th><th>mechanism</th></tr>
+        <tr><td>Identity envelopes</td><td>JWT-shape, HMAC-SHA256, expiry checked every call; permissions scoped per tool</td></tr>
+        <tr><td>Evidence artifacts</td><td>content hash recompute + producer-key signature via trust-anchor registry</td></tr>
+        <tr><td>Execution history</td><td>SHA-256 chain, batch signatures linked to predecessor; edit/delete names the exact broken entry</td></tr>
+        <tr><td>API keys</td><td>sha256 at rest, constant-time compare, revocable, per-tenant</td></tr>
+        <tr><td>Stripe webhooks</td><td>HMAC over t.payload, 5-min replay window, constant-time</td></tr>
+        <tr><td>Hosted evidence fetch</td><td>https-only URL templates, 10s timeout, 502 on unreachable</td></tr>
+      </table>
+      <p class="small muted">Known ceiling (documented in code): HMAC is symmetric —
+      swap <code>TrustAnchor.sign/verify_sig</code> for Ed25519 when third parties
+      must verify without the signing key; envelope format is unchanged.</p>
+    </div>
+    <div class="card">
+      <h3>Tamper classes caught</h3>
+      <ul class="oklist">
+        <li>stale evidence (age &gt; max_age_seconds)</li>
+        <li>evidence bound to the wrong target (stale-checkout CI)</li>
+        <li>payload edited after signing (hash mismatch)</li>
+        <li>signature from an untrusted key</li>
+        <li>fresh, signed evidence of FAILURE</li>
+        <li>approval by the wrong role / below confidence floor</li>
+        <li>history row edited in the database (chain breaks at entry N)</li>
+        <li>history row deleted (downstream hash mismatch)</li>
+        <li>cross-tenant session access (403) · revoked/forged keys (401/403)</li>
+        <li>quota + rate abuse (402/429)</li>
+      </ul>
+      <p class="small muted">Every one of these has a test or eval case asserting the exact verdict.</p>
+    </div>
+  </div>
+</div></section>
+
+<section id="testing"><div class="wrap anchor reveal">
+  <div class="kicker">07 — Testing &amp; verification</div>
+  <h2>Three suites, 25 checks, zero dependencies</h2>
+  <div class="cards g3" style="margin-bottom:18px">
+    <div class="card"><div class="n">test_runtime.py — 7 checks</div><h3>Core features</h3>
+      <p>Identity sign/verify/tamper/expiry · SERF classification · attestation chains
+      (edit + delete tamper) · state store · budgets/routing/percentiles · gate
+      admit + all reject codes · full end-to-end with resume.</p></div>
+    <div class="card"><div class="n">test_launch.py — 5 checks</div><h3>Launch stack</h3>
+      <p>Webhook signatures · API end-to-end (sessions, gate, approvals, meter,
+      resume, auth, tenant isolation, waitlist, billing, quota, records) ·
+      live HTTP server + Python SDK · MCP stdio protocol · GH fetcher + adapters.</p></div>
+    <div class="card"><div class="n">evals/gate_evals.py — 13 scenarios</div><h3>Adversarial evals</h3>
+      <p>Declarative scenario harness (DeepEval/promptfoo shape, stdlib): every
+      ADMIT path, every HALT code, HITL role checks, tamper regression. Exit 1 on
+      any failure — wired into CI on 3 Python versions.</p></div>
+  </div>
+  <div class="card"><h3>CI matrix — .github/workflows/ci.yml</h3>
+  <p>Pushes and PRs run all three suites plus <code>demo.py</code> on Python 3.11 / 3.12 / 3.13.
+  Load smoke test: 300 concurrent requests, 50 threads → 295 req/s sustained, zero errors,
+  rate limiter verified. Docker image builds the same stdlib-only stack.</p></div>
+</div></section>
+
+<section id="gtm"><div class="wrap anchor reveal">
+  <div class="kicker">08 — Go-to-market</div>
+  <h2>The launch machine</h2>
+  <div class="two">
+    <div>
+      <h3>Compliant by design</h3>
+      <p>No scraped email lists — CAN-SPAM/GDPR exposure and domain blacklisting
+      kill launches. The only list is the double-opt-in waitlist
+      (<code>POST /v1/waitlist</code> → confirmation click), with a 6-email
+      welcome sequence for confirmed addresses only, one-click unsubscribe,
+      real sender identity.</p>
+      <div class="flow">
+        <div class="fstep"><div class="num">D1</div><div><h4>Show HN + Reddit + X thread</h4><p>“Show HN: var-runtime — an open-source runtime that gates AI agents on verifiable proof” + founder first-comment + 10-post thread (one video per post). 48h comment duty.</p></div></div>
+        <div class="fstep"><div class="num">D2</div><div><h4>Communities</h4><p>LangChain / MCP / CrewAI Discords, Temporal community (we complement durable execution), r/MCP — answer first, pitch second.</p></div></div>
+        <div class="fstep"><div class="num">D3</div><div><h4>Directories</h4><p>awesome-mcp-servers PR, MCP registry, GitHub topics, Product Hunt prep (hero video is the 40s demo).</p></div></div>
+        <div class="fstep"><div class="num">W2+</div><div><h4>Content flywheel</h4><p>Manifesto · MCP identity propagation · “13 adversarial scenarios” · durable vs verifiable execution · zero-deps build. Each embeds a video.</p></div></div>
+        <div class="fstep"><div class="num">M2</div><div><h4>5 design partners</h4><p>From waitlist/Discord · white-glove setup · their claim types upstreamed to proofs.json · case study + SOC 2 conversation.</p></div></div>
+      </div>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:14px">
+        <h3>Positioning</h3>
+        <p><b>One line:</b> Your agent says done. Prove it.</p>
+        <p><b>Category:</b> the admissibility layer above durable execution —
+        what Dapr/Catalyst attest, var-runtime decides.</p>
+        <p><b>Enemy:</b> the self-report. <b>Proof:</b> 2-second demo, live console,
+        tamper clip, 13/13 evals, MIT core + hosted tiers.</p>
+        <p><b>Metrics that matter:</b> stars→clones, demo completion,
+        waitlist confirm rate (&gt;60% = hook works), hosted gate decisions (activation).</p>
+      </div>
+      <div class="card">
+        <h3>Business model (open-core)</h3>
+        <table>
+          <tr><th></th><th>price</th><th>includes</th></tr>
+          <tr><td>Free</td><td>$0</td><td>full runtime, MIT, local state</td></tr>
+          <tr><td>Pro</td><td>$49/mo</td><td>hosted · 100K decisions · dashboard</td></tr>
+          <tr><td>Team</td><td>$499/mo</td><td>1M decisions · RBAC · audit export</td></tr>
+          <tr><td>Enterprise</td><td>custom</td><td>air-gapped · SOC 2 · 24/7 SLA</td></tr>
+        </table>
+        <p class="small muted">+$0.001 per gate decision past quota. Moat: proof-registry
+        library, tool-performance registry, exception library, attestation network, community.</p>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<section id="videos"><div class="wrap anchor reveal">
+  <div class="kicker">09 — Video slate</div>
+  <h2>Ten films, one system</h2>
+  <p>Research-backed (Raycast teardown + 2026 AI-launch-film analysis): hook ≤8s,
+    product-in-motion over abstraction, calm ~120 WPM VO, bookended CTA. Dark brand
+    canvas; green appears exactly twice per film; every machine moment is real output.</p>
+  <div class="vid">
+    <div class="vidcard" style="border-color:#0ca30c"><div class="n">01 · DONE ✓</div><h4>Hero launch</h4><p>The full arc: says → not evidence → gate → ADMIT → crash/resume → cost → identity → tamper → bookend. 83s, CC0 score, rendered.</p></div>
+    <div class="vidcard"><div class="n">02</div><h4>60-second install</h4><p>pip-free install → 5 lines → first gated claim.</p></div>
+    <div class="vidcard"><div class="n">03</div><h4>Evidence Gate deep dive</h4><p>The five checks animating: fresh · bound · hash · signed · positive.</p></div>
+    <div class="vidcard"><div class="n">04</div><h4>Identity in _meta</h4><p>Signed envelopes → per-user authorization → live audit query.</p></div>
+    <div class="vidcard"><div class="n">05</div><h4>Crash → resume</h4><p>Durable execution: state and meter intact, no re-payment.</p></div>
+    <div class="vidcard"><div class="n">06</div><h4>Tamper evidence</h4><p>One edited row → verification names the exact broken entry.</p></div>
+    <div class="vidcard"><div class="n">07</div><h4>Cost Governor</h4><p>Budget drain, model routing flip, hard stop at the line.</p></div>
+    <div class="vidcard"><div class="n">08</div><h4>SERF self-correction</h4><p>503 → taxonomy → backoff → success; the agent decides deterministically.</p></div>
+    <div class="vidcard"><div class="n">09</div><h4>Human-in-the-loop</h4><p>Deploy blocked → senior approval → envelope chained → ADMIT.</p></div>
+    <div class="vidcard"><div class="n">10</div><h4>Proof-or-Stop manifesto</h4><p>Typographic close of the slate; bookends the series.</p></div>
+  </div>
+  <p class="small muted" style="margin-top:14px">Video 1 v3 in production: problem-first re-cut with the reference motion language —
+  glass surfaces, rotating word slots, ghost typography, word-by-word reveals, keyword pops.</p>
+</div></section>
+
+<section id="checklist"><div class="wrap anchor reveal">
+  <div class="kicker">10 — Launch checklist</div>
+  <h2>Done vs. what needs you</h2>
+  <div class="cards g2">
+    <div class="card"><h3><span class="chip g">✓ complete</span></h3>
+      <ul class="oklist">
+        <li>Runtime core — 6 guarantees, 25 checks green, 13 evals</li>
+        <li>Hosted API — auth, rate, quota, records, tenant isolation; 295 r/s load-tested</li>
+        <li>Console + landing + privacy/terms + OG meta + favicon</li>
+        <li>Stripe checkout + verified webhooks (test mode)</li>
+        <li>MCP server (7 tools) + Python/JS SDKs + GH Actions fetcher + LangGraph adapter</li>
+        <li>CI on 3 Python versions · Dockerfile · MIT LICENSE · CONTRIBUTING · issue templates</li>
+        <li>GTM kit + copy-ready launch posts + email sequences</li>
+        <li>Hero launch video (83s, CC0 score) — v3 in production</li>
+        <li>git history, clean tree, artifacts ignored</li>
+      </ul>
+    </div>
+    <div class="card"><h3><span class="chip b">◆ needs your accounts</span></h3>
+      <ul class="oklist">
+        <li class="user">Create the GitHub repo → I push (gh auth or remote URL)</li>
+        <li class="user">Stripe live keys + two Prices (Pro $49 / Team $499) → billing goes live</li>
+        <li class="user">Domain + deploy target (Railway skill ready) → TLS + DNS</li>
+        <li class="user">SMTP credentials → real waitlist email</li>
+        <li class="user">Generate prod <code>VAR_SIGNING_KEY</code> into your secret manager</li>
+        <li class="todo">Videos 2–10 (slate approved → production on your go)</li>
+        <li class="todo">SOC 2 readiness (design-partner phase)</li>
+      </ul>
+    </div>
+  </div>
+</div></section>
+
+<footer>var-runtime · Proof-or-Stop · this page is served at <a href="/architecture">/architecture</a> and lives at docs/architecture.html</footer>
+
+<script>
+const io = new IntersectionObserver(es => es.forEach(e => e.isIntersecting && e.target.classList.add("on")), {threshold:.12});
+document.querySelectorAll(".reveal").forEach(el => io.observe(el));
+const links = [...document.querySelectorAll("nav a.nl")];
+const secs = links.map(a => document.querySelector(a.getAttribute("href")));
+const spy = new IntersectionObserver(es => es.forEach(e => {
+  if (e.isIntersecting) links.forEach(l => l.classList.toggle("active", l.getAttribute("href") === "#" + e.target.id));
+}), {rootMargin:"-30% 0px -60% 0px"});
+secs.forEach(s => s && spy.observe(s));
+</script>
+</body>
+</html>

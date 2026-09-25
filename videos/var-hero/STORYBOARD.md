@@ -1,6 +1,6 @@
 ---
 format: 1920x1080
-duration: 83s
+duration: 101s
 message: "Your agent says done. Prove it."
 arc: PAS (pain known and urgent: agents self-report completion)
 audience: engineering leaders running autonomous agents in production
@@ -20,13 +20,19 @@ music: dark-tech minimal ambient, slow build, one impact at the ADMIT moment
   ~49s in the extended cut): flip then HOLD still. 05b–05d are the
   product-in-motion middle (research: Cursor-style grounded demos). F7
   near-still card chain.
+- **Reference motion language** (v3, from the studied launch film): glass
+  pills (frosted translucent surface, 1px light inner rim) for role/claim
+  slots; rotating word slot synced to a highlighted pill; ghost typography
+  watermarks (display ramp at 5-8% opacity) behind key frames; word-by-word
+  fade/slide reveals for narrative lines; ONE keyword color pop per beat;
+  calm premium pacing, no hard kinetic strobing. Dark brand, not mint.
 - **Never** — browser chrome (except terminal), AI gradients, bokeh, bounce,
   front-load-freeze, floating screensaver, infinite loops, randomness.
 - **Caption band** — bottom ~17% clear.
 
 ## Frame 1 — Says.
 
-- scene: Agent claims land as big type — "tests passed", "payment sent", "shipped" — then the word SAYS. lands alone in warning amber
+- scene: Ghost "PROOF" watermark behind; "Your [coding/support/finance] agent says" with a rotating glass role-pill, claims swapping beneath, then SAYS. lands alone in amber
 - duration: 5.163s
 - poster: 4s
 - transition_in: cut
@@ -38,17 +44,71 @@ music: dark-tech minimal ambient, slow build, one impact at the ADMIT moment
 - focal: the swapped claim line (typeset, no asset)
 - sfx: none (BGM accents carry)
 
-Signature: the in-place hard-cut word-swap.
-Scene 1 (0.0–1.0s): bare canvas, 3-layer depth (field + faint grid + vignette);
-"Your AI agent says" enters per-word staggered,
-centered, display ramp, ~50% width; smooth settle, no camera.
-Scene 2 (1.0–3.2s): the tail hard-cut swaps (`discrete-text-sequence`) —
-"tests passed" → "payments sent" → "shipped" — one per VO cue, prefix fixed;
-mono ✓ glyphs punctuate in accent blue.
-Scene 3 (3.2–5.2s): line collapses; "SAYS." slams dead-center in amber
-(beat-slam register, smooth, no bounce); holds still to the cut.
+Signature: the rotating slot + hard-cut word-swap, glass pills.
+Scene 1 (0.0–1.0s): canvas + faint grid + vignette; a GHOST watermark word
+"proof" (display ramp, 6% opacity) seats behind center; "Your" + a glass
+role-pill enters word-by-word — pill 1 "coding agent" frosted-lit.
+Scene 2 (1.0–3.2s): the role-pill rotates (coding → support → finance) with
+the highlight cycling; beneath, the claim tail hard-cut swaps — "tests
+passed" → "payments sent" → "shipped" — one per VO cue; mono ✓ glyphs in
+accent blue punctuate each swap.
+Scene 3 (3.2–5.2s): pills and line collapse; "SAYS." slams dead-center in
+amber (smooth, no bounce) over the ghost watermark; holds still to the cut.
 
-## Frame 2 — Says is not evidence
+## Frame 2 — The 3 a.m. call
+
+- scene: A glass timeline of the failure: Friday merge (green checks) → agent claims done → Saturday 03:11 pager red → 4-hour incident card
+- duration: 9.131s
+- transition_in: cut
+- src: compositions/frames/02-incident.html
+- src: compositions/frames/02-incident.html
+- status: animated
+- voiceover: "It shipped Friday. Green pipeline, agent confident. Saturday, 3 a.m., production breaks — and nobody knows which claim was false."
+- type: pain_point
+- blueprint: spatial-pan-stations (Adapt)
+- focal: the timeline's red incident card
+- roles: timeline = cutout hero, canvas = background
+- sfx: none
+
+Adapt: stations traversed left-to-right (not a wide pan — a seated timeline
+whose cards light in sequence); signature kept: each station lands held as
+the camera micro-pans to it, ending on the knot (the incident).
+Scene 1 (0.0–2.2s): ghost watermark "3:11" seats; a glass timeline rail
+draws across the upper half; first card lands — "friday · merge" with green
+check glyph.
+Scene 2 (2.2–4.4s): second card on its cue — "agent: tests passed ✓" in
+claimed-green; a small confidence chip reads 0.97.
+Scene 3 (4.4–6.6s): rail desaturates; third card slams in critical red —
+"saturday 03:11 · prod down"; pager glyph pulses twice, then stills.
+Scene 4 (6.6–9.0s): fourth card types beneath — "4h incident · 3 engineers
+· cause: stale test evidence"; the rail dims except the red card; hold.
+
+## Frame 3 — Thirty-one
+
+- scene: "1800 steps" as a field of tiny ticks; 31 of them flip amber-red while still reading green — then the 31 count-up lands huge
+- duration: 9.067s
+- transition_in: cut
+- src: compositions/frames/03-thirtyone.html
+- status: animated
+- voiceover: "In unattended loops, thirty-one of every eighteen hundred steps pass when they should fail. And every one costs more, the later you find it."
+- type: pain_point
+- blueprint: dataviz-countup (Reproduce)
+- focal: the 31 numeral
+- roles: tick field = supporting, numeral = cutout hero, canvas = background
+- sfx: none
+
+Signature: numbers are the hero; camera pushes through them.
+Scene 1 (0.0–2.0s): a field of tiny hairline ticks populates in a fast
+stagger (reads as a wall of "steps"); mono label "1,800 steps · unattended
+loop".
+Scene 2 (2.0–4.5s): exactly 31 ticks flip amber while their labels still
+read green — the wrongness is visible, not told; camera begins a slow push.
+Scene 3 (4.5–7.0s): the ticks collapse inward and a Barlow-900 "31" count-up
+lands huge center in amber; subline types: "visible-pass / hidden-fail".
+Scene 4 (7.0–9.0s): one keyword pop — "expensive" flips accent blue; hold
+still to the cut.
+
+## Frame 4 — Says is not evidence
 
 - scene: A green log line "✓ All tests passed" types itself, then desaturates and is struck through by EVIDENCE_STALE — 847s old, bound to the wrong commit
 - duration: 8.661s
@@ -74,7 +134,7 @@ commit_old123 ≠ commit_def456" (`code-typing`); rows stack, amber pills.
 Scene 4 (6.6–8.7s): rows hold; display line lands low-center: "you find out
 downstream"; jitter only; hold to cut.
 
-## Frame 3 — Proof-or-Stop
+## Frame 5 — Proof-or-Stop
 
 - scene: The runtime intercepts: gate object slams HALT in amber between the agent and the action; recovery instructions stream beneath it
 - duration: 11.883s
@@ -98,7 +158,7 @@ Scene 3 (5.5–8.2s): on "stops": GATE blooms, HALT badge slams between gate and
 Scene 4 (8.2–11.9s): recovery streams under the rail, token-typed:
 "recovery: re_run_tests" · "strategy: retry"; hold, subtle jitter, to cut.
 
-## Frame 4 — Five lines
+## Frame 6 — Five lines
 
 - scene: A terminal types `python3 demo.py` and the real 2-second lifecycle streams past; then the 5-line integration snippet pins beside it
 - duration: 8.256s
@@ -122,7 +182,7 @@ Scene 3 (5.5–8.5s): a snippet card pins beside the terminal (five lines of
 the README integration code, blue keywords); one accent underline draws
 under "gate_claim"; hold to cut.
 
-## Frame 5 — The checks run
+## Frame 7 — The checks run
 
 - scene: The actual decision object builds line by line — fresh ✓ · bound:commit_sha ✓ · content_hash ✓ · signed ✓ — each check landing on its own beat
 - duration: 7.104s
@@ -147,7 +207,7 @@ reveals in the back half.
 Scene 3 (5.8–7.1s): rows hold; card edge brightens (keyword-glow register);
 riser crests; hold to cut.
 
-## Frame 6 — ADMIT
+## Frame 8 — ADMIT
 
 - scene: The decision flips to ADMIT in green; the attested hash chain links the event and extends; impact moment
 - duration: 4.245s
@@ -169,7 +229,7 @@ beneath (self-drawing connectors); chain extends one block on "signed into".
 Scene 3 (2.6–4.3s): everything holds STILL — no jitter; stillness reads
 against the riser's release; hold to cut.
 
-## Frame 7 — Crash, resume
+## Frame 9 — Crash, resume
 
 - scene: The process dies mid-run (red X, session card flickers out), relaunches, and restores from checkpoint — "resumed at step 7 · meter intact"
 - duration: 8.64s
@@ -194,7 +254,7 @@ ticks 7-9 re-arm, a restore bar sweeps, "resumed at step 7 · meter intact"
 types in mono; the meter chip still reads $1.42 (unchanged — the point).
 Scene 4 (6.5–8.5s): hold, subtle jitter; the completed card reads on.
 
-## Frame 8 — The meter was always running
+## Frame 10 — The meter was always running
 
 - scene: A budget gauge drains toward the line; the model-route chip flips flagship→fast; at the line, a clean hard-stop card
 - duration: 9.6s
@@ -217,7 +277,7 @@ as the gauge passes 80%; tiny sparkline of token spend ticks beneath.
 Scene 3 (5.0–8.0s): gauge hits the line at 100%; a clean stop card slides
 up: "BUDGET_EXCEEDED — session stopped" in amber; hold; the numbers read.
 
-## Frame 9 — Who is really asking
+## Frame 11 — Who is really asking
 
 - scene: A signed identity envelope (principal, permissions, expiry) slides into a tool call's _meta; the audit query answers below — every action, per user
 - duration: 8.363s
@@ -242,7 +302,7 @@ Scene 3 (5.0–8.5s): the right panel grows an audit table beneath — rows
 land one per beat (agent-1 · run_tests · ADMIT / agent-2 · deploy · HALT);
 hold; the two panels read as cause and record.
 
-## Frame 10 — Tamper with it
+## Frame 12 — Tamper with it
 
 - scene: Someone edits one row of history in the sqlite store — the chain verification names the exact broken entry: "entry 3: hash mismatch"
 - duration: 5.12s
@@ -266,7 +326,7 @@ Scene 3 (3.4–5.1s): verification types back fast, token-streamed: `verify:
 entry 3 — hash mismatch (event modified or entries removed)` in red; entry
 number reads big; hold to cut.
 
-## Frame 11 — Bookend
+## Frame 13 — Bookend
 
 - scene: Hook restated: "Your agent says done." → "Now it proves it." → var-runtime ◈ · open source · Proof-or-Stop
 - duration: 5.696s

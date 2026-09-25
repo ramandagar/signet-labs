@@ -69,6 +69,7 @@ class Api:
                  anchor: TrustAnchor | None = None, proofs: str = "proofs.json",
                  stripe_secret: str | None = None):
         self.static_dir = Path(static_dir)
+        self.docs_dir = Path("docs")
         self.rt = VerifiableRuntime(store_path, anchor=anchor, proofs=proofs)
         self.store, self.db = self.rt.store, self.rt.store.db
         self.db.executescript(_EXTRA_SCHEMA)
@@ -231,7 +232,7 @@ class Api:
         session_id = path.split("/")[3] if path.startswith("/v1/sessions/") and \
             len(path.split("/")) > 3 else None
         try:
-            public = path in ("/", "/healthz", "/privacy", "/terms", "/favicon.svg") or path.startswith(("/app", "/waitlist/confirm", "/v1/waitlist", "/v1/stripe/webhook"))
+            public = path in ("/", "/healthz", "/privacy", "/terms", "/favicon.svg", "/architecture") or path.startswith(("/app", "/waitlist/confirm", "/v1/waitlist", "/v1/stripe/webhook"))
             auth = None if public else self.authenticate(auth_header)
             status, out = self._route(method, path, query, body, auth, stripe_sig)
         except ApiError as e:
@@ -259,6 +260,10 @@ class Api:
 
         if P == "/healthz":
             return 200, {"ok": True, "version": __version__}
+        if P == "/architecture":
+            f = self.docs_dir / "architecture.html"
+            if f.is_file():
+                return 200, ("__raw__", f.read_bytes(), "text/html; charset=utf-8")
         if P in ("", "/") or P.startswith("/app") or P in ("/privacy", "/terms", "/favicon.svg"):
             return self._static(P)
 

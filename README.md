@@ -46,7 +46,7 @@ python3 test_runtime.py    # 7/7 core feature checks
 python3 test_launch.py     # 5/5 launch-stack checks (API, billing, MCP, SDK)
 python3 evals/gate_evals.py  # 13/13 gate evaluation scenarios (CI-able)
 
-python3 -m var_runtime.server --db var.db --port 8788   # hosted API + console
+python3 -m var_runtime.server --db var.db --port 8788   # hosted API + console (+ /architecture map)
 python3 -m var_runtime.mcp_server --db var.db           # VAR as an MCP server
 ```
 

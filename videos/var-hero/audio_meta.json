@@ -1,10 +1,10 @@
 {
  "bgm": {
   "path": "assets/audio/ambient-bed.wav",
-  "duration_s": 83.0,
+  "duration_s": 101.0,
   "mood": "dark ambient (CC0: WinDGeisT \u2014 And Rain Falls Upon The Ruins Of An Ancient Battlefield, archive.org, CC0 1.0)",
   "source": "archive.org CC0 + local riser/impact overlay",
-  "notes": "section 60-143s (energy build); riser 38.7-41.2 into sub-drop impact at the ADMIT flip (41.2s)"
+  "notes": "section 45-146s (energy build); riser 56.8-59.3 into sub-drop impact at the ADMIT flip (59.3s)"
  },
  "bgm_pending": false,
  "voices": [
@@ -90,6 +90,266 @@
   {
    "frame": 2,
    "path": "assets/voice/02.wav",
+   "duration_s": 9.131,
+   "words": [
+    {
+     "id": "w0",
+     "text": "It",
+     "start": 0.04,
+     "end": 0.16
+    },
+    {
+     "id": "w1",
+     "text": "shipped",
+     "start": 0.16,
+     "end": 0.74
+    },
+    {
+     "id": "w2",
+     "text": "Friday.",
+     "start": 0.74,
+     "end": 1.5
+    },
+    {
+     "id": "w3",
+     "text": "Green",
+     "start": 1.54,
+     "end": 1.84
+    },
+    {
+     "id": "w4",
+     "text": "pipeline",
+     "start": 1.94,
+     "end": 2.43
+    },
+    {
+     "id": "w5",
+     "text": "agent",
+     "start": 2.43,
+     "end": 3.06
+    },
+    {
+     "id": "w6",
+     "text": "confident.",
+     "start": 3.06,
+     "end": 3.76
+    },
+    {
+     "id": "w7",
+     "text": "Saturday",
+     "start": 3.8,
+     "end": 4.69
+    },
+    {
+     "id": "w8",
+     "text": "3A,",
+     "start": 4.69,
+     "end": 5.44
+    },
+    {
+     "id": "w9",
+     "text": "M,",
+     "start": 5.44,
+     "end": 5.81
+    },
+    {
+     "id": "w10",
+     "text": "production",
+     "start": 5.81,
+     "end": 6.43
+    },
+    {
+     "id": "w11",
+     "text": "breaks",
+     "start": 6.44,
+     "end": 6.82
+    },
+    {
+     "id": "w12",
+     "text": "and",
+     "start": 6.86,
+     "end": 7.02
+    },
+    {
+     "id": "w13",
+     "text": "nobody",
+     "start": 7.02,
+     "end": 7.43
+    },
+    {
+     "id": "w14",
+     "text": "knows",
+     "start": 7.43,
+     "end": 7.75
+    },
+    {
+     "id": "w15",
+     "text": "which",
+     "start": 7.75,
+     "end": 7.86
+    },
+    {
+     "id": "w16",
+     "text": "claim",
+     "start": 8.36,
+     "end": 8.45
+    },
+    {
+     "id": "w17",
+     "text": "was",
+     "start": 8.45,
+     "end": 8.64
+    },
+    {
+     "id": "w18",
+     "text": "false.",
+     "start": 8.64,
+     "end": 9.24
+    }
+   ]
+  },
+  {
+   "frame": 3,
+   "path": "assets/voice/03.wav",
+   "duration_s": 9.067,
+   "words": [
+    {
+     "id": "w0",
+     "text": "In",
+     "start": 0.04,
+     "end": 0.15
+    },
+    {
+     "id": "w1",
+     "text": "unattended",
+     "start": 0.24,
+     "end": 1.03
+    },
+    {
+     "id": "w2",
+     "text": "loops,",
+     "start": 1.03,
+     "end": 1.56
+    },
+    {
+     "id": "w3",
+     "text": "31",
+     "start": 1.79,
+     "end": 2.12
+    },
+    {
+     "id": "w4",
+     "text": "of",
+     "start": 2.12,
+     "end": 2.28
+    },
+    {
+     "id": "w5",
+     "text": "every",
+     "start": 2.28,
+     "end": 2.68
+    },
+    {
+     "id": "w6",
+     "text": "1,800",
+     "start": 2.68,
+     "end": 3.78
+    },
+    {
+     "id": "w7",
+     "text": "steps",
+     "start": 3.81,
+     "end": 4.18
+    },
+    {
+     "id": "w8",
+     "text": "pass",
+     "start": 4.26,
+     "end": 4.63
+    },
+    {
+     "id": "w9",
+     "text": "when",
+     "start": 4.7,
+     "end": 4.8
+    },
+    {
+     "id": "w10",
+     "text": "they",
+     "start": 4.8,
+     "end": 4.92
+    },
+    {
+     "id": "w11",
+     "text": "should",
+     "start": 4.92,
+     "end": 5.44
+    },
+    {
+     "id": "w12",
+     "text": "fail,",
+     "start": 6.08,
+     "end": 6.13
+    },
+    {
+     "id": "w13",
+     "text": "and",
+     "start": 6.14,
+     "end": 6.23
+    },
+    {
+     "id": "w14",
+     "text": "everyone",
+     "start": 6.24,
+     "end": 6.68
+    },
+    {
+     "id": "w15",
+     "text": "costs",
+     "start": 6.72,
+     "end": 7.07
+    },
+    {
+     "id": "w16",
+     "text": "more",
+     "start": 7.07,
+     "end": 7.39
+    },
+    {
+     "id": "w17",
+     "text": "the",
+     "start": 7.39,
+     "end": 7.63
+    },
+    {
+     "id": "w18",
+     "text": "later",
+     "start": 7.63,
+     "end": 7.99
+    },
+    {
+     "id": "w19",
+     "text": "you",
+     "start": 7.99,
+     "end": 8.46
+    },
+    {
+     "id": "w20",
+     "text": "find",
+     "start": 8.46,
+     "end": 8.58
+    },
+    {
+     "id": "w21",
+     "text": "it.",
+     "start": 8.58,
+     "end": 9
+    }
+   ]
+  },
+  {
+   "frame": 4,
+   "path": "assets/voice/04.wav",
    "duration_s": 8.661,
    "words": [
     {
@@ -221,8 +481,8 @@
    ]
   },
   {
-   "frame": 3,
-   "path": "assets/voice/03.wav",
+   "frame": 5,
+   "path": "assets/voice/05.wav",
    "duration_s": 11.883,
    "words": [
     {
@@ -372,8 +632,8 @@
    ]
   },
   {
-   "frame": 4,
-   "path": "assets/voice/04.wav",
+   "frame": 6,
+   "path": "assets/voice/06.wav",
    "duration_s": 8.256,
    "words": [
     {
@@ -493,8 +753,8 @@
    ]
   },
   {
-   "frame": 5,
-   "path": "assets/voice/05.wav",
+   "frame": 7,
+   "path": "assets/voice/07.wav",
    "duration_s": 7.104,
    "words": [
     {
@@ -608,8 +868,8 @@
    ]
   },
   {
-   "frame": 6,
-   "path": "assets/voice/06.wav",
+   "frame": 8,
+   "path": "assets/voice/08.wav",
    "duration_s": 4.245,
    "words": [
     {
@@ -675,8 +935,8 @@
    ]
   },
   {
-   "frame": 7,
-   "path": "assets/voice/07.wav",
+   "frame": 9,
+   "path": "assets/voice/09.wav",
    "duration_s": 8.64,
    "words": [
     {
@@ -802,8 +1062,8 @@
    ]
   },
   {
-   "frame": 8,
-   "path": "assets/voice/08.wav",
+   "frame": 10,
+   "path": "assets/voice/10.wav",
    "duration_s": 9.6,
    "words": [
     {
@@ -923,8 +1183,8 @@
    ]
   },
   {
-   "frame": 9,
-   "path": "assets/voice/09.wav",
+   "frame": 11,
+   "path": "assets/voice/11.wav",
    "duration_s": 8.363,
    "words": [
     {
@@ -1068,8 +1328,8 @@
    ]
   },
   {
-   "frame": 10,
-   "path": "assets/voice/10.wav",
+   "frame": 12,
+   "path": "assets/voice/12.wav",
    "duration_s": 5.12,
    "words": [
     {
@@ -1147,8 +1407,8 @@
    ]
   },
   {
-   "frame": 11,
-   "path": "assets/voice/11.wav",
+   "frame": 13,
+   "path": "assets/voice/13.wav",
    "duration_s": 5.696,
    "words": [
     {
