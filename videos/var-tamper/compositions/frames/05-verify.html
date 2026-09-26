@@ -1,0 +1,246 @@
+<template>
+  <!-- 05-verify — Frame 5 "The answer": the well runs `var verify-bundle …`, the JSON
+       verdict types verbatim (chain_valid: false in incident red), `exit 1` stamps on the
+       sub-drop at 5.6s, then the frame holds dead still. Broadside dark register. -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <style>
+    @font-face {
+      font-family: 'IBM Plex Mono';
+      src: url('assets/fonts/IBMPlexMono-400.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+      font-display: block;
+    }
+    @font-face {
+      font-family: 'IBM Plex Mono';
+      src: url('assets/fonts/IBMPlexMono-500.woff2') format('woff2');
+      font-weight: 500;
+      font-style: normal;
+      font-display: block;
+    }
+    @font-face {
+      font-family: 'IBM Plex Mono';
+      src: url('assets/fonts/IBMPlexMono-600.woff2') format('woff2');
+      font-weight: 600;
+      font-style: normal;
+      font-display: block;
+    }
+
+    #root {
+      position: absolute;
+      inset: 0;
+      width: 1920px;
+      height: 1080px;
+      overflow: hidden;
+      container-type: size;
+      font-family: 'IBM Plex Mono', monospace;
+      color: #FFFFFF;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* full-bleed ground on its own clip layer — never on #root */
+    .f05-verify-bg {
+      position: absolute;
+      inset: 0;
+      background: #1A1A19;
+    }
+
+    .f05-verify-stage {
+      position: absolute;
+      inset: 0;
+      padding: 140px 106px 0;
+      box-sizing: border-box;
+    }
+
+    /* camera wrapper — the ONE slow push-in decelerates into the stamp, then locks */
+    .f05-verify-world {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transform-origin: 46% 42%;
+    }
+
+    /* chrome row above the well */
+    .f05-verify-chrome {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .f05-verify-chrome-left {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+    .f05-verify-stub {
+      display: block;
+      width: 36px;
+      height: 2px;
+      background: #3987E5;
+    }
+    .f05-verify-kicker,
+    .f05-verify-meta {
+      font-size: 15px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+    .f05-verify-kicker { color: #3987E5; }
+    .f05-verify-meta { color: #AFB3B7; }
+
+    /* the well — flat plane, sharp corners, 1px hairline */
+    .f05-verify-well {
+      margin-top: 30px;
+      border: 1px solid rgba(215, 216, 217, 0.25);
+      padding: 72px 76px;
+      box-sizing: border-box;
+      min-height: 460px;
+    }
+
+    .f05-verify-cmd {
+      font-size: 1.25cqw;
+      line-height: 1.5;
+      white-space: pre;
+      font-weight: 500;
+    }
+    .f05-verify-prompt {
+      color: #3987E5;
+      font-weight: 600;
+      margin-right: 0.7em;
+    }
+
+    .f05-verify-json {
+      margin-top: 40px;
+    }
+    .f05-verify-line {
+      font-size: 1.77cqw;
+      line-height: 1.55;
+      white-space: pre;
+      font-weight: 500;
+    }
+    .f05-verify-key { color: #3987E5; }
+    .f05-verify-false { color: #afb3b7; }
+
+    .f05-verify-caret {
+      display: inline-block;
+      width: 0.55em;
+      height: 1.05em;
+      background: #FFFFFF;
+      vertical-align: -0.15em;
+      margin-left: 1px;
+      opacity: 0;
+    }
+
+    /* exit chip — stamps last, on the sub-drop */
+    .f05-verify-chiprow {
+      margin-top: 46px;
+    }
+    .f05-verify-chip {
+      display: inline-block;
+      opacity: 0;
+      font-size: 1.667cqw;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      color: #afb3b7;
+      border: 1px solid rgba(208, 59, 59, 0.6);
+      background: rgba(208, 59, 59, 0.07);
+      padding: 20px 46px;
+      transform-origin: 50% 50%;
+    }
+  </style>
+
+  <div id="root" data-composition-id="05-verify" data-width="1920" data-height="1080">
+    <div class="clip f05-verify-bg" data-start="0" data-duration="7.5" data-track-index="0"></div>
+    <div class="clip f05-verify-stageclip" data-start="0" data-duration="7.5" data-track-index="1">
+      <div class="f05-verify-stage">
+        <div class="f05-verify-world" id="f05-verify-world">
+          <div class="f05-verify-chrome" id="f05-verify-chrome">
+            <div class="f05-verify-chrome-left">
+              <span class="f05-verify-stub"></span>
+              <span class="f05-verify-kicker">var / verify</span>
+            </div>
+            <div class="f05-verify-meta">17 events &middot; entry 03</div>
+          </div>
+          <div class="f05-verify-well" id="f05-verify-well">
+            <div class="f05-verify-cmd" id="f05-verify-cmd"><span class="f05-verify-prompt">/</span><span id="f05-verify-cmdtext"></span><span class="f05-verify-caret" id="f05-verify-caret-cmd"></span></div>
+            <div class="f05-verify-json">
+              <div class="f05-verify-line" data-layout-allow-overlap=""><span id="f05-verify-l1a"></span><span class="f05-verify-caret" id="f05-verify-caret-l1a"></span><span class="f05-verify-key" id="f05-verify-l1b"></span><span class="f05-verify-caret" id="f05-verify-caret-l1b"></span><span id="f05-verify-l1c"></span><span class="f05-verify-caret" id="f05-verify-caret-l1c"></span><span class="f05-verify-false" id="f05-verify-l1d"></span><span class="f05-verify-caret" id="f05-verify-caret-l1d"></span><span id="f05-verify-l1e"></span><span class="f05-verify-caret" id="f05-verify-caret-l1e"></span></div>
+              <div class="f05-verify-line" data-layout-allow-overlap=""><span id="f05-verify-l2a"></span><span class="f05-verify-caret" id="f05-verify-caret-l2a"></span><span class="f05-verify-key" id="f05-verify-l2b"></span><span class="f05-verify-caret" id="f05-verify-caret-l2b"></span><span id="f05-verify-l2c" data-layout-allow-overlap=""></span><span class="f05-verify-caret" id="f05-verify-caret-l2c"></span></div>
+            </div>
+            <div class="f05-verify-chiprow">
+              <div class="f05-verify-chip" id="f05-verify-chip">exit 1</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (() => {
+      const $ = (id) => document.getElementById(id);
+      const tl = gsap.timeline({ paused: true });
+
+      /* entrances — stage arrives fast on the cut, hero visible well before 0.5s */
+      tl.fromTo('#f05-verify-chrome', { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.35, ease: 'power2.out' }, 0.02);
+      tl.fromTo('#f05-verify-well', { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.45, ease: 'power2.out' }, 0.1);
+
+      /* the shot's one camera move: slow continuous push-in, decelerating to a dead
+         hold exactly as the chip lands at 5.6s */
+      tl.fromTo('#f05-verify-world', { scale: 1 }, { scale: 1.035, duration: 5.6, ease: 'power2.out' }, 0);
+
+      /* discrete-text-sequence typing — zero-duration set per character, seek-safe */
+      const typeSeg = (el, text, t0, per) => {
+        for (let i = 1; i <= text.length; i++) {
+          tl.set(el, { textContent: text.slice(0, i), immediateRender: false }, t0 + i * per);
+        }
+        return t0 + text.length * per;
+      };
+
+      /* Scene 1 — the command types 0.35–2.05s behind the block caret */
+      const CMD = 'var verify-bundle session_bundle.json --key demo.key';
+      tl.set('#f05-verify-caret-cmd', { opacity: 1, immediateRender: false }, 0.3);
+      typeSeg($('f05-verify-cmdtext'), CMD, 0.35, 1.7 / CMD.length);
+      tl.set('#f05-verify-caret-cmd', { opacity: 0, immediateRender: false }, 2.2);
+
+      /* submit beat — the committed line dims as the machine starts answering */
+      tl.to('#f05-verify-cmd', { opacity: 0.45, duration: 0.3, ease: 'power2.inOut' }, 2.2);
+
+      /* Scene 2 — the answer JSON types verbatim, 2.32–5.44s; `false` in incident red */
+      const PER = 0.032;
+      const SEGS = [
+        ['l1a', '{', 0],
+        ['l1b', '"chain_valid"', 0],
+        ['l1c', ': ', 0],
+        ['l1d', 'false', 0],
+        ['l1e', ',', 0.116],
+        ['l2a', '  ', 0],
+        ['l2b', '"error"', 0],
+        ['l2c', ': "entry 3: hash mismatch (event modified or entries removed)"}', 0],
+      ];
+      let t = 2.32;
+      const marks = [];
+      for (const [id, text, gap] of SEGS) {
+        marks.push([id, t]);
+        t = typeSeg($('f05-verify-' + id), text, t, PER) + gap;
+      }
+      marks.push([null, t]);
+      for (let i = 0; i < marks.length - 1; i++) {
+        const [id, on] = marks[i];
+        const off = id === null ? 0 : (i === marks.length - 2 ? 5.6 : marks[i + 1][1]);
+        if (id !== null) {
+          tl.set('#f05-verify-caret-' + id, { opacity: 1, immediateRender: false }, on);
+          tl.set('#f05-verify-caret-' + id, { opacity: 0, immediateRender: false }, off);
+        }
+      }
+
+      /* Scene 3 — `exit 1` stamps on the sub-drop at 5.6s, then the frame holds STILL */
+      tl.fromTo('#f05-verify-chip',
+        { opacity: 0, scale: 2.6 },
+        { opacity: 1, scale: 1, duration: 0.22, ease: 'power3.in', transformOrigin: '50% 50%' },
+        5.38
+      );
+
+      window.__timelines['05-verify'] = tl;
+    })();
+  </script>
+</template>

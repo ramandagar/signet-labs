@@ -1,0 +1,33 @@
+{
+  "provider": "kokoro",
+  "speed": 1,
+  "lines": [
+    {
+      "id": "01",
+      "text": "A log line is not evidence."
+    },
+    {
+      "id": "02",
+      "text": "A self-report is not a fact."
+    },
+    {
+      "id": "03",
+      "text": "No evidence. No advance."
+    },
+    {
+      "id": "04",
+      "text": "Proof-or-Stop. var-runtime."
+    },
+    {
+      "id": "05",
+      "text": "var-runtime — open source. Proof-or-Stop."
+    }
+  ],
+  "bgm": {
+    "mode": "retrieve",
+    "query": "minimal dark ambient, almost silent, one sub-drop under the final law (~18s)",
+    "blob": "No evidence. No advance.",
+    "arc": "manifesto (doors closing, then the name)"
+  },
+  "voice": "am_michael"
+}

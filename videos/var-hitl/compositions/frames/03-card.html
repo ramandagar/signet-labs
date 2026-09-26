@@ -1,0 +1,310 @@
+<template>
+  <!--
+    Frame 03 — "The ask" (var-hitl)
+    Blueprint: device-surface-showcase, adapted — one card, static stage.
+    A Slack-style approval card slides in from the right (one power3.out move)
+    and settles; its rows fill on the voiceover beats (who is asking / what
+    claim / which role must sign); inert hairline approve/deny actions last.
+    Look: frame.md remap — white ink-black ground, card surface #1A1A19,
+    lone accent #3987E5 (structure/keywords only; no green/amber/red),
+    square corners, 1px hairlines, IBM Plex Mono chrome, flat plane.
+    All content stays above y≈880 (caption keep-out owns the bottom 184px).
+  -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+
+  <style>
+    @font-face {
+      font-family: "IBM Plex Mono";
+      src: url("assets/fonts/IBMPlexMono-400.woff2") format("woff2");
+      font-weight: 400;
+      font-style: normal;
+      font-display: block;
+    }
+    @font-face {
+      font-family: "IBM Plex Mono";
+      src: url("assets/fonts/IBMPlexMono-500.woff2") format("woff2");
+      font-weight: 500;
+      font-style: normal;
+      font-display: block;
+    }
+    @font-face {
+      font-family: "IBM Plex Mono";
+      src: url("assets/fonts/IBMPlexMono-600.woff2") format("woff2");
+      font-weight: 600;
+      font-style: normal;
+      font-display: block;
+    }
+
+    /* frame root — styled via #root only (lint: subcomposition_root_styled_by_class) */
+    #root {
+      position: absolute;
+      inset: 0;
+      width: 1920px;
+      height: 1080px;
+      overflow: hidden;
+      container-type: size;
+      font-family: "IBM Plex Mono", monospace;
+    }
+
+    /* full-bleed ground on a dedicated clip layer — never on #root */
+    .card03-ground {
+      position: absolute;
+      inset: 0;
+      background: #ffffff;
+    }
+    .card03-stage {
+      position: absolute;
+      inset: 0;
+    }
+
+    /* slide-chrome — top hairline bar only (bottom bar yields to the caption band) */
+    .card03-chrome {
+      position: absolute;
+      left: 105px;
+      right: 105px;
+      top: 56px;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+    .card03-chrome-label {
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #1a1a19;
+    }
+    .card03-chrome-meta {
+      font-size: 15px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(26, 26, 25, 0.78);
+    }
+    .card03-chrome-rule {
+      position: absolute;
+      left: 105px;
+      right: 105px;
+      top: 102px;
+      height: 1px;
+      background: #d7d8d9;
+    }
+
+    /* the approval card — square, flat, hairline border */
+    .card03-card {
+      position: absolute;
+      left: 650px;
+      top: 214px;
+      width: 700px;
+      background: #1a1a19;
+      border: 1px solid #d7d8d9;
+    }
+    .card03-float {
+      position: relative;
+      padding: 46px 48px 48px;
+    }
+
+    /* card header */
+    .card03-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 24px;
+    }
+    .card03-head-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .card03-head-stub {
+      width: 36px;
+      height: 2px;
+      background: #3987e5;
+    }
+    .card03-head-title {
+      font-size: 19px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #ffffff;
+    }
+    .card03-head-time {
+      font-size: 15px;
+      font-weight: 400;
+      letter-spacing: 0.1em;
+      color: rgba(255, 255, 255, 0.78);
+    }
+
+    /* rows — stat-card idiom: top-border-only blocks */
+    .card03-row {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      padding: 23px 0;
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .card03-key {
+      flex: none;
+      width: 210px;
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #afb3b7;
+    }
+    .card03-val {
+      font-size: 25px;
+      font-weight: 500;
+      letter-spacing: 0;
+      color: #3987e5;
+    }
+
+    /* footer — hairline actions, inert */
+    .card03-footer {
+      display: flex;
+      gap: 16px;
+      margin-top: 34px;
+      padding-top: 30px;
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .card03-btn {
+      flex: 1;
+      height: 62px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+    .card03-btn-approve {
+      border: 1px solid #3987e5;
+      color: #3987e5;
+    }
+    .card03-btn-deny {
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #afb3b7;
+    }
+  </style>
+
+  <div id="root" data-composition-id="03-card" data-width="1920" data-height="1080">
+    <div class="clip card03-ground" data-start="0" data-duration="7.275" data-track-index="0"></div>
+
+    <div class="clip card03-stage" data-start="0" data-duration="7.275" data-track-index="1">
+      <div class="card03-chrome">
+        <span class="card03-chrome-label">03 / the ask</span>
+        <span class="card03-chrome-meta">human in the loop</span>
+      </div>
+      <div class="card03-chrome-rule"></div>
+
+      <div class="card03-card" data-layout-allow-overflow>
+        <div class="card03-float">
+          <div class="card03-head">
+            <div class="card03-head-left">
+              <div class="card03-head-stub"></div>
+              <div class="card03-head-title">approval requested</div>
+            </div>
+            <div class="card03-head-time">now</div>
+          </div>
+
+          <div class="card03-row" id="card03-row-claim">
+            <div class="card03-key">claim</div>
+            <div class="card03-val">deploy_to_production</div>
+          </div>
+          <div class="card03-row" id="card03-row-by">
+            <div class="card03-key">requested_by</div>
+            <div class="card03-val">coder-1</div>
+          </div>
+          <div class="card03-row" id="card03-row-role">
+            <div class="card03-key">role required</div>
+            <div class="card03-val">senior_engineer</div>
+          </div>
+
+          <div class="card03-footer" id="card03-footer">
+            <div class="card03-btn card03-btn-approve" id="card03-btn-approve">approve</div>
+            <div class="card03-btn card03-btn-deny" id="card03-btn-deny">deny</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      function el(id) {
+        return document.getElementById(id);
+      }
+
+      window.__timelines = window.__timelines || {};
+      var tl = gsap.timeline({ paused: true });
+
+      // Scene 1 — establish: the surface slides in from off-canvas right and
+      // settles. ONE power3 move, no overshoot, no spring.
+      tl.fromTo(
+        el("card03-card"),
+        { x: 1360 },
+        { x: 0, duration: 1.05, ease: "power3.out" },
+        0.06
+      );
+
+      // the static tour's always-on micro-drift — finite keyframed breathe,
+      // seek-safe (no repeat / yoyo), ends inside the frame window
+      tl.to(el("card03-float"), {
+        keyframes: [
+          { y: -3, duration: 1.6, ease: "sine.inOut" },
+          { y: 2.5, duration: 1.6, ease: "sine.inOut" },
+          { y: -1.5, duration: 1.5, ease: "sine.inOut" },
+          { y: 0, duration: 1.05, ease: "sine.inOut" }
+        ]
+      }, 1.4);
+
+      // Scene 2-3 — the card is operated on its own face: rows fill top-down
+      // on the voiceover beats (…who is asking, what claim, which role must sign)
+      tl.fromTo(
+        el("card03-row-claim"),
+        { autoAlpha: 0, y: 18 },
+        { autoAlpha: 1, y: 0, duration: 0.5, ease: "power2.out" },
+        2.25
+      );
+      tl.fromTo(
+        el("card03-row-by"),
+        { autoAlpha: 0, y: 18 },
+        { autoAlpha: 1, y: 0, duration: 0.5, ease: "power2.out" },
+        3.1
+      );
+      tl.fromTo(
+        el("card03-row-role"),
+        { autoAlpha: 0, y: 18 },
+        { autoAlpha: 1, y: 0, duration: 0.5, ease: "power2.out" },
+        3.95
+      );
+
+      // commit affordance — the hairline actions arrive last, then HOLD
+      // (inert; no press, no success state — the decision is the next frame's)
+      tl.fromTo(
+        el("card03-footer"),
+        { autoAlpha: 0 },
+        { autoAlpha: 1, duration: 0.4, ease: "power1.out" },
+        5.05
+      );
+      tl.fromTo(
+        el("card03-btn-approve"),
+        { autoAlpha: 0, y: 12 },
+        { autoAlpha: 1, y: 0, duration: 0.45, ease: "power2.out" },
+        5.25
+      );
+      tl.fromTo(
+        el("card03-btn-deny"),
+        { autoAlpha: 0, y: 12 },
+        { autoAlpha: 1, y: 0, duration: 0.45, ease: "power2.out" },
+        5.45
+      );
+
+      // full-span anchor so the sub-composition timeline spans the whole window
+      tl.to({}, { duration: 7.275 }, 0);
+
+      window.__timelines["03-card"] = tl;
+    })();
+  </script>
+</template>

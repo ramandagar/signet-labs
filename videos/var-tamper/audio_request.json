@@ -1,0 +1,41 @@
+{
+  "provider": "kokoro",
+  "speed": 1,
+  "lines": [
+    {
+      "id": "01",
+      "text": "Edit one row of history. Watch it get caught."
+    },
+    {
+      "id": "02",
+      "text": "Seventeen events in the chain — every one hash-linked to the last. Signed by a key only we hold."
+    },
+    {
+      "id": "03",
+      "text": "Now the edit. One statement. One principal, changed — alice becomes mallory."
+    },
+    {
+      "id": "04",
+      "text": "Nothing complains. The record looks perfectly normal. No alarm — not yet."
+    },
+    {
+      "id": "05",
+      "text": "But verification re-walks every hash. Entry three doesn't match anymore."
+    },
+    {
+      "id": "06",
+      "text": "Entry three: hash mismatch — event modified, or entries removed. Named. Located. Undeniable. One edit, one hash, caught — in under a second."
+    },
+    {
+      "id": "07",
+      "text": "Tamper-evident, by construction. var-runtime. Proof-or-Stop."
+    }
+  ],
+  "bgm": {
+    "mode": "retrieve",
+    "query": "dark-tech minimal ambient, slow build, one impact at the verification answer (~33s)",
+    "blob": "Edit one row of history. Watch it get caught.",
+    "arc": "sting (give them the edit, then the receipt)"
+  },
+  "voice": "am_michael"
+}

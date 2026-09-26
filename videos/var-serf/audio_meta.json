@@ -1,0 +1,560 @@
+{
+  "bgm": null,
+  "bgm_pending": false,
+  "voices": [
+    {
+      "frame": 1,
+      "path": "assets/voice/01.wav",
+      "duration_s": 2.795,
+      "words": [
+        {
+          "id": "w0",
+          "text": "Agents",
+          "start": 0.13,
+          "end": 0.45
+        },
+        {
+          "id": "w1",
+          "text": "don't",
+          "start": 0.45,
+          "end": 0.74
+        },
+        {
+          "id": "w2",
+          "text": "fail.",
+          "start": 0.89,
+          "end": 1.21
+        },
+        {
+          "id": "w3",
+          "text": "They're",
+          "start": 1.5,
+          "end": 1.91
+        },
+        {
+          "id": "w4",
+          "text": "classified.",
+          "start": 1.91,
+          "end": 2.72
+        }
+      ]
+    },
+    {
+      "frame": 2,
+      "path": "assets/voice/02.wav",
+      "duration_s": 9.813,
+      "words": [
+        {
+          "id": "w0",
+          "text": "A",
+          "start": 0.08,
+          "end": 0.12
+        },
+        {
+          "id": "w1",
+          "text": "flaky",
+          "start": 0.12,
+          "end": 0.43
+        },
+        {
+          "id": "w2",
+          "text": "dependency",
+          "start": 0.54,
+          "end": 1.31
+        },
+        {
+          "id": "w3",
+          "text": "throws",
+          "start": 1.43,
+          "end": 1.92
+        },
+        {
+          "id": "w4",
+          "text": "503",
+          "start": 1.92,
+          "end": 2.71
+        },
+        {
+          "id": "w5",
+          "text": "service",
+          "start": 2.71,
+          "end": 3.33
+        },
+        {
+          "id": "w6",
+          "text": "unavailable.",
+          "start": 3.33,
+          "end": 4.62
+        },
+        {
+          "id": "w7",
+          "text": "To",
+          "start": 4.74,
+          "end": 4.77
+        },
+        {
+          "id": "w8",
+          "text": "an",
+          "start": 4.77,
+          "end": 4.79
+        },
+        {
+          "id": "w9",
+          "text": "agent,",
+          "start": 4.92,
+          "end": 5.45
+        },
+        {
+          "id": "w10",
+          "text": "that's",
+          "start": 5.45,
+          "end": 5.9
+        },
+        {
+          "id": "w11",
+          "text": "just",
+          "start": 5.9,
+          "end": 6.2
+        },
+        {
+          "id": "w12",
+          "text": "a",
+          "start": 6.2,
+          "end": 6.27
+        },
+        {
+          "id": "w13",
+          "text": "string.",
+          "start": 6.27,
+          "end": 7.02
+        },
+        {
+          "id": "w14",
+          "text": "No",
+          "start": 7.14,
+          "end": 7.21
+        },
+        {
+          "id": "w15",
+          "text": "category,",
+          "start": 7.21,
+          "end": 8.16
+        },
+        {
+          "id": "w16",
+          "text": "no",
+          "start": 8.16,
+          "end": 8.33
+        },
+        {
+          "id": "w17",
+          "text": "plan,",
+          "start": 8.45,
+          "end": 9.01
+        },
+        {
+          "id": "w18",
+          "text": "text.",
+          "start": 9.01,
+          "end": 9.78
+        }
+      ]
+    },
+    {
+      "frame": 3,
+      "path": "assets/voice/03.wav",
+      "duration_s": 9.877,
+      "words": [
+        {
+          "id": "w0",
+          "text": "The",
+          "start": 0.05,
+          "end": 0.26
+        },
+        {
+          "id": "w1",
+          "text": "runtime",
+          "start": 0.26,
+          "end": 0.87
+        },
+        {
+          "id": "w2",
+          "text": "classifies",
+          "start": 0.87,
+          "end": 1.53
+        },
+        {
+          "id": "w3",
+          "text": "it.",
+          "start": 1.53,
+          "end": 1.97
+        },
+        {
+          "id": "w4",
+          "text": "Category,",
+          "start": 1.97,
+          "end": 2.62
+        },
+        {
+          "id": "w5",
+          "text": "dependency,",
+          "start": 2.66,
+          "end": 3.47
+        },
+        {
+          "id": "w6",
+          "text": "strategy,",
+          "start": 3.88,
+          "end": 4.32
+        },
+        {
+          "id": "w7",
+          "text": "fallback,",
+          "start": 4.32,
+          "end": 5.14
+        },
+        {
+          "id": "w8",
+          "text": "or",
+          "start": 5.14,
+          "end": 5.25
+        },
+        {
+          "id": "w9",
+          "text": "retry,",
+          "start": 5.55,
+          "end": 5.72
+        },
+        {
+          "id": "w10",
+          "text": "three",
+          "start": 5.77,
+          "end": 6.27
+        },
+        {
+          "id": "w11",
+          "text": "tries.",
+          "start": 6.27,
+          "end": 7.16
+        },
+        {
+          "id": "w12",
+          "text": "Back",
+          "start": 7.21,
+          "end": 7.44
+        },
+        {
+          "id": "w13",
+          "text": "off",
+          "start": 7.44,
+          "end": 7.65
+        },
+        {
+          "id": "w14",
+          "text": "at",
+          "start": 7.65,
+          "end": 7.79
+        },
+        {
+          "id": "w15",
+          "text": "five,",
+          "start": 7.79,
+          "end": 8.2
+        },
+        {
+          "id": "w16",
+          "text": "15,",
+          "start": 8.21,
+          "end": 8.71
+        },
+        {
+          "id": "w17",
+          "text": "60",
+          "start": 9.12,
+          "end": 9.21
+        },
+        {
+          "id": "w18",
+          "text": "seconds.",
+          "start": 9.21,
+          "end": 9.98
+        }
+      ]
+    },
+    {
+      "frame": 4,
+      "path": "assets/voice/04.wav",
+      "duration_s": 4.267,
+      "words": [
+        {
+          "id": "w0",
+          "text": "The",
+          "start": 0.06,
+          "end": 0.21
+        },
+        {
+          "id": "w1",
+          "text": "agent",
+          "start": 0.21,
+          "end": 0.52
+        },
+        {
+          "id": "w2",
+          "text": "doesn't",
+          "start": 0.58,
+          "end": 1.05
+        },
+        {
+          "id": "w3",
+          "text": "panic",
+          "start": 1.05,
+          "end": 1.4
+        },
+        {
+          "id": "w4",
+          "text": "and",
+          "start": 1.4,
+          "end": 1.61
+        },
+        {
+          "id": "w5",
+          "text": "doesn't",
+          "start": 1.61,
+          "end": 2.08
+        },
+        {
+          "id": "w6",
+          "text": "hammer.",
+          "start": 2.09,
+          "end": 2.6
+        },
+        {
+          "id": "w7",
+          "text": "It",
+          "start": 2.66,
+          "end": 2.76
+        },
+        {
+          "id": "w8",
+          "text": "retries",
+          "start": 2.76,
+          "end": 3.32
+        },
+        {
+          "id": "w9",
+          "text": "on",
+          "start": 3.32,
+          "end": 3.43
+        },
+        {
+          "id": "w10",
+          "text": "schedule.",
+          "start": 3.51,
+          "end": 4.35
+        }
+      ]
+    },
+    {
+      "frame": 5,
+      "path": "assets/voice/05.wav",
+      "duration_s": 5.355,
+      "words": [
+        {
+          "id": "w0",
+          "text": "Same",
+          "start": 0.05,
+          "end": 0.34
+        },
+        {
+          "id": "w1",
+          "text": "call",
+          "start": 0.39,
+          "end": 0.7
+        },
+        {
+          "id": "w2",
+          "text": "next",
+          "start": 0.7,
+          "end": 1
+        },
+        {
+          "id": "w3",
+          "text": "window,",
+          "start": 1.09,
+          "end": 1.72
+        },
+        {
+          "id": "w4",
+          "text": "the",
+          "start": 1.72,
+          "end": 1.9
+        },
+        {
+          "id": "w5",
+          "text": "answer",
+          "start": 1.9,
+          "end": 2.26
+        },
+        {
+          "id": "w6",
+          "text": "comes",
+          "start": 2.26,
+          "end": 2.56
+        },
+        {
+          "id": "w7",
+          "text": "back",
+          "start": 2.56,
+          "end": 2.82
+        },
+        {
+          "id": "w8",
+          "text": "and",
+          "start": 2.82,
+          "end": 2.98
+        },
+        {
+          "id": "w9",
+          "text": "the",
+          "start": 2.98,
+          "end": 3.14
+        },
+        {
+          "id": "w10",
+          "text": "run",
+          "start": 3.14,
+          "end": 3.3
+        },
+        {
+          "id": "w11",
+          "text": "continues,",
+          "start": 3.33,
+          "end": 4.44
+        },
+        {
+          "id": "w12",
+          "text": "uninterrupted.",
+          "start": 4.5,
+          "end": 5.28
+        }
+      ]
+    },
+    {
+      "frame": 6,
+      "path": "assets/voice/06.wav",
+      "duration_s": 4.8,
+      "words": [
+        {
+          "id": "w0",
+          "text": "Six",
+          "start": 0.07,
+          "end": 0.26
+        },
+        {
+          "id": "w1",
+          "text": "categories,",
+          "start": 0.28,
+          "end": 1.36
+        },
+        {
+          "id": "w2",
+          "text": "six",
+          "start": 1.38,
+          "end": 1.63
+        },
+        {
+          "id": "w3",
+          "text": "recovery",
+          "start": 1.63,
+          "end": 2.36
+        },
+        {
+          "id": "w4",
+          "text": "plans,",
+          "start": 2.36,
+          "end": 2.84
+        },
+        {
+          "id": "w5",
+          "text": "no",
+          "start": 2.91,
+          "end": 2.98
+        },
+        {
+          "id": "w6",
+          "text": "string",
+          "start": 2.99,
+          "end": 3.44
+        },
+        {
+          "id": "w7",
+          "text": "parsing",
+          "start": 3.44,
+          "end": 3.85
+        },
+        {
+          "id": "w8",
+          "text": "ever",
+          "start": 4.22,
+          "end": 4.27
+        },
+        {
+          "id": "w9",
+          "text": "again.",
+          "start": 4.27,
+          "end": 4.9
+        }
+      ]
+    },
+    {
+      "frame": 7,
+      "path": "assets/voice/07.wav",
+      "duration_s": 3.883,
+      "words": [
+        {
+          "id": "w0",
+          "text": "errors",
+          "start": 0.13,
+          "end": 0.51
+        },
+        {
+          "id": "w1",
+          "text": "machines",
+          "start": 0.51,
+          "end": 1.19
+        },
+        {
+          "id": "w2",
+          "text": "can",
+          "start": 1.19,
+          "end": 1.42
+        },
+        {
+          "id": "w3",
+          "text": "use,",
+          "start": 1.43,
+          "end": 1.88
+        },
+        {
+          "id": "w4",
+          "text": "VAR",
+          "start": 1.96,
+          "end": 2.12
+        },
+        {
+          "id": "w5",
+          "text": "runtime",
+          "start": 2.12,
+          "end": 2.7
+        },
+        {
+          "id": "w6",
+          "text": "proof-or-stop.",
+          "start": 2.7,
+          "end": 3.88
+        }
+      ]
+    }
+  ],
+  "sfx": []
+}

@@ -1,0 +1,372 @@
+<template id="frame-03-routing" data-composition-id="03-routing" data-width="1920" data-height="1080">
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+
+<style>
+  /* — fonts (project-shipped files only) — */
+  @font-face { font-family: 'Barlow'; src: url('assets/fonts/Barlow-400.woff2') format('woff2'); font-weight: 400; font-style: normal; font-display: block; }
+  @font-face { font-family: 'Barlow'; src: url('assets/fonts/Barlow-600.woff2') format('woff2'); font-weight: 600; font-style: normal; font-display: block; }
+  @font-face { font-family: 'Barlow'; src: url('assets/fonts/Barlow-700.woff2') format('woff2'); font-weight: 700; font-style: normal; font-display: block; }
+  @font-face { font-family: 'Barlow'; src: url('assets/fonts/Barlow-800.woff2') format('woff2'); font-weight: 800; font-style: normal; font-display: block; }
+  @font-face { font-family: 'Barlow'; src: url('assets/fonts/Barlow-900.woff2') format('woff2'); font-weight: 900; font-style: normal; font-display: block; }
+  @font-face { font-family: 'IBM Plex Mono'; src: url('assets/fonts/IBMPlexMono-400.woff2') format('woff2'); font-weight: 400; font-style: normal; font-display: block; }
+  @font-face { font-family: 'IBM Plex Mono'; src: url('assets/fonts/IBMPlexMono-500.woff2') format('woff2'); font-weight: 500; font-style: normal; font-display: block; }
+  @font-face { font-family: 'IBM Plex Mono'; src: url('assets/fonts/IBMPlexMono-600.woff2') format('woff2'); font-weight: 600; font-style: normal; font-display: block; }
+</style>
+
+<style>
+  /* — 03-routing · stakes-based routing · dark register, single blue accent — */
+
+  #root {
+    position: absolute;
+    inset: 0;
+    width: 1920px;
+    height: 1080px;
+    overflow: hidden;
+    font-family: 'Barlow', sans-serif;
+    color: #FFFFFF;
+  }
+
+  .fr03-bg {
+    position: absolute;
+    inset: 0;
+    background: #0F0F0E;
+    container-type: size;
+  }
+
+  .fr03-scene {
+    position: absolute;
+    inset: 0;
+    container-type: size;
+  }
+
+  /* top slide-chrome (bottom bar suppressed — caption band) */
+  .fr03-chrome {
+    position: absolute;
+    top: 2.9cqw;
+    left: 5.5cqw;
+    right: 5.5cqw;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-bottom: 0.7cqw;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+    opacity: 0;
+  }
+  .fr03-chrome-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.73cqw;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.55);
+  }
+
+  /* centered concept head — title slides DOWN (blueprint scene 1) */
+  .fr03-head {
+    position: absolute;
+    top: 6.2cqw;
+    left: 0;
+    right: 0;
+    text-align: center;
+  }
+  .fr03-kicker {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 1.0cqw;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #3987E5;
+    opacity: 0;
+  }
+  .fr03-kicker .fr03-slash { margin-right: 0.5cqw; }
+  .fr03-title {
+    margin: 0.8cqw 0 0;
+    font-family: 'Barlow', sans-serif;
+    font-size: 3.5cqw;
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    text-transform: lowercase;
+    color: #FFFFFF;
+    opacity: 0;
+  }
+  .fr03-accent { color: #3987E5; }
+
+  /* dual side-glow ambient — one whisper of blue per wing */
+  .fr03-glow {
+    position: absolute;
+    width: 42cqw;
+    height: 42cqw;
+    background: radial-gradient(circle, rgba(57, 135, 229, 0.50) 0%, rgba(57, 135, 229, 0) 62%);
+    opacity: 0;
+    will-change: transform, opacity;
+    z-index: 0;
+  }
+  .fr03-glow-l { left: 5.05cqw; top: 7.7cqw; }
+  .fr03-glow-r { right: 5.05cqw; top: 7.7cqw; }
+
+  /* split stage — mirrored book-open entry, settling FLAT (adapt note) */
+  .fr03-stage {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 15.1cqw;
+    height: 27.2cqw;
+    display: flex;
+    justify-content: center;
+    gap: 8.33cqw;
+    perspective: 1600px;
+    z-index: 1;
+  }
+  .fr03-float {
+    position: relative;
+    width: 38.54cqw;
+    height: 100%;
+    transform-style: preserve-3d;
+    will-change: transform;
+  }
+  .fr03-card {
+    position: absolute;
+    inset: 0;
+    background: #1A1A19;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    padding: 2.7cqw 2.7cqw 2.4cqw;
+    display: flex;
+    flex-direction: column;
+    transform-style: preserve-3d;
+    will-change: transform;
+    opacity: 0;
+  }
+  /* flagship card carries the heavier border — reads premium */
+  .fr03-card-l { border: 2px solid #3987E5; }
+
+  .fr03-card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-bottom: 1.15cqw;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.10);
+  }
+  .fr03-call {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 1.05cqw;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    color: rgba(255, 255, 255, 0.85);
+  }
+  .fr03-call .fr03-slash { color: #3987E5; margin-right: 0.45cqw; }
+  .fr03-call-kind {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.73cqw;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #AFB3B7;
+  }
+
+  .fr03-card-body { margin-top: 3.4cqw; }
+  .fr03-route {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 1.15cqw;
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    color: rgba(255, 255, 255, 0.55);
+    opacity: 0;
+  }
+  .fr03-word {
+    margin-top: 0.85cqw;
+    font-family: 'Barlow', sans-serif;
+    font-size: 4.1cqw;
+    font-weight: 800;
+    line-height: 1.0;
+    letter-spacing: -0.03em;
+    text-transform: lowercase;
+    color: #FFFFFF;
+    opacity: 0;
+  }
+  /* the focal — price lines verbatim */
+  .fr03-price {
+    margin-top: 2.1cqw;
+    display: flex;
+    align-items: baseline;
+    gap: 0.55cqw;
+    opacity: 0;
+  }
+  .fr03-price-key {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 1.2cqw;
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    color: rgba(255, 255, 255, 0.50);
+  }
+  .fr03-price-val {
+    font-family: 'Barlow', sans-serif;
+    font-size: 5.4cqw;
+    font-weight: 900;
+    line-height: 1.0;
+    letter-spacing: -0.04em;
+    color: #3987E5;
+  }
+
+  /* stakes tags — sharp rectangles, right-edge anchored (clear of body text) */
+  .fr03-tag {
+    position: absolute;
+    top: 50%;
+    margin-top: -1.35cqw;
+    padding: 0.7cqw 1.25cqw;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.9cqw;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    opacity: 0;
+    will-change: transform;
+  }
+  .fr03-tag-l { right: -3.6cqw; background: #3987E5; color: #0F0F0E; }
+  .fr03-tag-r { right: -3.6cqw; border: 1px solid rgba(255, 255, 255, 0.28); color: rgba(255, 255, 255, 0.72); }
+</style>
+
+<div
+  id="root"
+  data-composition-id="03-routing"
+  data-start="0"
+  data-duration="10.731"
+  data-width="1920"
+  data-height="1080"
+>
+  <div class="clip fr03-bg" data-start="0" data-duration="10.731" data-track-index="0"></div>
+
+  <div class="clip fr03-scene" data-start="0" data-duration="10.731" data-track-index="1">
+    <header class="fr03-chrome" id="fr03-chrome">
+      <span class="fr03-chrome-label">No. 03</span>
+      <span class="fr03-chrome-label">cost per call</span>
+    </header>
+
+    <div class="fr03-head">
+      <div class="fr03-kicker" id="fr03-kicker"><span class="fr03-slash">/</span>model routing</div>
+      <h1 class="fr03-title" id="fr03-title">route by <span class="fr03-accent">stakes</span></h1>
+    </div>
+
+    <div class="fr03-glow fr03-glow-l" id="fr03-glow-l"></div>
+    <div class="fr03-glow fr03-glow-r" id="fr03-glow-r"></div>
+
+    <div class="fr03-stage">
+      <div class="fr03-float fr03-float-l" id="fr03-float-l">
+        <article class="fr03-card fr03-card-l" id="fr03-card-l">
+          <div class="fr03-card-head">
+            <span class="fr03-call"><span class="fr03-slash">/</span>plan_change</span>
+            <span class="fr03-call-kind">call</span>
+          </div>
+          <div class="fr03-card-body">
+            <div class="fr03-route" id="fr03-route-l">routed to :</div>
+            <div class="fr03-word" id="fr03-word-l">flagship</div>
+            <div class="fr03-price" id="fr03-price-l">
+              <span class="fr03-price-key">cost=</span><span class="fr03-price-val">$0.18</span>
+            </div>
+          </div>
+          <div class="fr03-tag fr03-tag-l" id="fr03-tag-l">irreversible</div>
+        </article>
+      </div>
+
+      <div class="fr03-float fr03-float-r" id="fr03-float-r">
+        <article class="fr03-card fr03-card-r" id="fr03-card-r">
+          <div class="fr03-card-head">
+            <span class="fr03-call"><span class="fr03-slash">/</span>pr_description</span>
+            <span class="fr03-call-kind">call</span>
+          </div>
+          <div class="fr03-card-body">
+            <div class="fr03-route" id="fr03-route-r">cheap model:</div>
+            <div class="fr03-word" id="fr03-word-r">fast</div>
+            <div class="fr03-price" id="fr03-price-r">
+              <span class="fr03-price-key">(</span><span class="fr03-price-val">$0.0054</span><span class="fr03-price-key">)</span>
+            </div>
+          </div>
+          <div class="fr03-tag fr03-tag-r" id="fr03-tag-r">reversible</div>
+        </article>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  (function () {
+    var D = 10.731;
+    window.__timelines = window.__timelines || {};
+    var tl = gsap.timeline({ paused: true });
+
+    // — Scene 1 · concept (VO "planning a delicate change?" 0–2.0s) —
+    // title slides DOWN into place; chrome + kicker settle with it
+    tl.fromTo("#fr03-chrome", { opacity: 0, y: -10 }, { opacity: 1, y: 0, duration: 0.55, ease: "power2.out" }, 0.08);
+    tl.fromTo("#fr03-kicker", { opacity: 0, y: -12 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, 0.05);
+    tl.fromTo("#fr03-title", { opacity: 0, y: -48 }, { opacity: 1, y: 0, duration: 0.85, ease: "power3.out" }, 0.10);
+
+    // dual side-glow ambient — blooms to land WITH each card as one beat
+    tl.fromTo("#fr03-glow-l", { opacity: 0, scale: 0.86 }, { opacity: 0.16, scale: 1, duration: 1.0, ease: "power2.out" }, 1.05);
+    tl.fromTo("#fr03-glow-r", { opacity: 0, scale: 0.86 }, { opacity: 0.13, scale: 1, duration: 1.05, ease: "power2.out" }, 1.35);
+
+    // — Scene 2 · signature: mirrored opposite-wing split-tilt entry (settles flat) —
+    tl.fromTo(
+      "#fr03-card-l",
+      { x: -640, rotateY: 34, scale: 0.85, opacity: 0 },
+      { x: 0, rotateY: 0, scale: 1, opacity: 1, duration: 1.10, ease: "power3.out" },
+      0.95
+    );
+    tl.fromTo(
+      "#fr03-card-r",
+      { x: 640, rotateY: -34, scale: 0.85, opacity: 0 },
+      { x: 0, rotateY: 0, scale: 1, opacity: 1, duration: 1.10, ease: "power3.out" },
+      1.30
+    );
+
+    // — left stakes (VO "irreversible work — it routes to the flagship model." 2.0–5.6s) —
+    // tag = the shot's lone overshoot (blueprint punctuation)
+    tl.fromTo("#fr03-tag-l", { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.5, ease: "back.out(1.6)" }, 2.80);
+    tl.fromTo("#fr03-route-l", { y: 16, opacity: 0 }, { y: 0, opacity: 1, duration: 0.55, ease: "power2.out" }, 3.70);
+    tl.fromTo("#fr03-word-l", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.65, ease: "power3.out" }, 4.45);
+    tl.fromTo("#fr03-price-l", { y: 26, opacity: 0 }, { y: 0, opacity: 1, duration: 0.60, ease: "power3.out" }, 5.20);
+
+    // — right stakes (VO "writing a PR description? the fast model… fraction of a cent." 5.6–10.7s) —
+    tl.fromTo("#fr03-tag-r", { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.5, ease: "back.out(1.6)" }, 7.55);
+    tl.fromTo("#fr03-route-r", { y: 16, opacity: 0 }, { y: 0, opacity: 1, duration: 0.55, ease: "power2.out" }, 8.00);
+    tl.fromTo("#fr03-word-r", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.65, ease: "power3.out" }, 8.25);
+    tl.fromTo("#fr03-price-r", { y: 26, opacity: 0 }, { y: 0, opacity: 1, duration: 0.60, ease: "power3.out" }, 9.05);
+
+    // — held spread · phase-opposed idle (left sin t, right −sin t — never synchronized) —
+    // onUpdate phase form: pure function of the timeline clock, seek-safe, no yoyo/repeat.
+    // Amplitude settles to zero over the last 20% so the frame is still before the cut.
+    var floatL = document.getElementById("fr03-float-l");
+    var floatR = document.getElementById("fr03-float-r");
+    var glowL = document.getElementById("fr03-glow-l");
+    var glowR = document.getElementById("fr03-glow-r");
+    var TWO_PI = Math.PI * 2;
+    var CYCLES = 2.5;
+    var IDLE_START = 2.55;
+    var IDLE_DUR = D - IDLE_START;
+    var phase = { p: 0 };
+    tl.to(
+      phase,
+      {
+        p: TWO_PI * CYCLES,
+        duration: IDLE_DUR,
+        ease: "none",
+        onUpdate: function () {
+          var t = phase.p / (TWO_PI * CYCLES);
+          var env = t < 0.8 ? 1 : Math.max(0, (1 - t) / 0.2);
+          var s = Math.sin(phase.p);
+          floatL.style.transform = "translateY(" + (s * 3 * env).toFixed(3) + "px)";
+          floatR.style.transform = "translateY(" + (-s * 3 * env).toFixed(3) + "px)";
+          var g1 = Math.sin(phase.p + 1.1);
+          var g2 = Math.sin(phase.p + 2.3);
+          glowL.style.opacity = String(0.16 + g1 * 0.02 * env);
+          glowL.style.transform = "scale(" + (1 + g1 * 0.012 * env).toFixed(4) + ")";
+          glowR.style.opacity = String(0.13 + g2 * 0.018 * env);
+          glowR.style.transform = "scale(" + (1 + g2 * 0.011 * env).toFixed(4) + ")";
+        },
+      },
+      IDLE_START
+    );
+
+    window.__timelines["03-routing"] = tl;
+  })();
+</script>
+</template>

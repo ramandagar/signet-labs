@@ -1,0 +1,254 @@
+<template>
+  <style>
+    /* fonts shipped with the project */
+    @font-face {
+      font-family: "IBM Plex Mono";
+      src: url("assets/fonts/IBMPlexMono-Regular.woff2") format("woff2");
+      font-weight: 400;
+      font-style: normal;
+      font-display: block;
+    }
+    @font-face {
+      font-family: "IBM Plex Mono";
+      src: url("assets/fonts/IBMPlexMono-Medium.woff2") format("woff2");
+      font-weight: 500;
+      font-style: normal;
+      font-display: block;
+    }
+
+    /* root — styled via #root only */
+    #root {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      container-type: size;
+      font-family: "IBM Plex Mono", monospace;
+    }
+
+    /* full-bleed ground on its own clip, never on #root */
+    .f01-midwork-bg {
+      position: absolute;
+      inset: 0;
+      background: #1a1a19;
+    }
+
+    .f01-midwork-stage {
+      position: absolute;
+      inset: 0;
+    }
+
+    /* ---- the living session card (hero, center stage; anatomy matches 02-death) ---- */
+    .f01-midwork-cardwrap {
+      position: absolute;
+      left: 25cqw;
+      top: 9.9cqw;
+      width: 50cqw;
+    }
+    .f01-midwork-card {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 27.5cqw;
+      box-sizing: border-box;
+      padding: 2.2cqw 2.3cqw;
+      background: #201f1e;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+    }
+    .f01-midwork-cardtop {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.4cqw;
+      padding-bottom: 1.5cqw;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+    }
+    .f01-midwork-hlabel {
+      font-weight: 500;
+      font-size: 1.15cqw;
+      letter-spacing: 0.08em;
+      color: rgba(255, 255, 255, 0.88);
+      white-space: nowrap;
+    }
+    .f01-midwork-chip {
+      display: inline-block;
+      font-weight: 400;
+      font-size: 0.98cqw;
+      letter-spacing: 0.1em;
+      color: #afb3b7;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      padding: 0.44cqw 0.82cqw;
+      white-space: nowrap;
+      font-variant-numeric: tabular-nums;
+    }
+    .f01-midwork-rail {
+      display: flex;
+      gap: 0.75cqw;
+    }
+    .f01-midwork-tick {
+      flex: 1;
+      height: 1.05cqw;
+      background: rgba(255, 255, 255, 0.1);
+    }
+    .f01-midwork-lit {
+      background: #3987e5;
+    }
+    .f01-midwork-half {
+      position: relative;
+    }
+    .f01-midwork-halffill {
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 55%;
+      background: #3987e5;
+    }
+    .f01-midwork-cardmeta {
+      display: block;
+    }
+    .f01-midwork-metarow {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+    .f01-midwork-step {
+      font-weight: 500;
+      font-size: 1.3cqw;
+      letter-spacing: 0.06em;
+      color: #ffffff;
+    }
+    .f01-midwork-amount {
+      font-weight: 400;
+      font-size: 1.3cqw;
+      letter-spacing: 0.04em;
+      color: #afb3b7;
+      font-variant-numeric: tabular-nums;
+    }
+    .f01-midwork-metertrack {
+      margin-top: 1.25cqw;
+      height: 0.42cqw;
+      background: rgba(255, 255, 255, 0.1);
+    }
+    .f01-midwork-meterfill {
+      width: 9.27%;
+      height: 100%;
+      background: #3987e5;
+    }
+  </style>
+
+  <div id="root" data-composition-id="01-midwork" data-width="1920" data-height="1080">
+    <div class="clip f01-midwork-bg" data-start="0" data-duration="3.925" data-track-index="0"></div>
+
+    <div class="clip f01-midwork-stage" data-start="0" data-duration="3.925" data-track-index="1">
+      <div class="f01-midwork-cardwrap" id="f01-midwork-cardwrap">
+        <div class="f01-midwork-card">
+          <div class="f01-midwork-cardtop">
+            <span class="f01-midwork-hlabel">session s_f3c9… · run_tests</span>
+            <span class="f01-midwork-chip" id="f01-midwork-chip"><span id="f01-midwork-chipval">minute 36 / 40</span></span>
+          </div>
+          <div class="f01-midwork-rail">
+            <span class="f01-midwork-tick f01-midwork-lit"></span>
+            <span class="f01-midwork-tick f01-midwork-lit"></span>
+            <span class="f01-midwork-tick f01-midwork-lit"></span>
+            <span class="f01-midwork-tick f01-midwork-lit"></span>
+            <span class="f01-midwork-tick f01-midwork-lit"></span>
+            <span class="f01-midwork-tick f01-midwork-lit"></span>
+            <span class="f01-midwork-tick f01-midwork-half" id="f01-midwork-tick7"><span class="f01-midwork-halffill" id="f01-midwork-halffill"></span></span>
+            <span class="f01-midwork-tick"></span>
+            <span class="f01-midwork-tick"></span>
+          </div>
+          <div class="f01-midwork-cardmeta">
+            <div class="f01-midwork-metarow">
+              <span class="f01-midwork-step">step 6 / 9</span>
+              <span class="f01-midwork-amount">$0.1854 / $2.00</span>
+            </div>
+            <div class="f01-midwork-metertrack">
+              <div class="f01-midwork-meterfill"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var tl = gsap.timeline({ paused: true });
+
+      var BLUE = "#3987e5";
+      var PULSE = "#7db4f2";
+      var PULSE2 = "#5d9ced";
+
+      /* ONE slow continuous zoom under the whole shot (the card is the hero) */
+      tl.fromTo(
+        "#f01-midwork-cardwrap",
+        { scale: 1 },
+        { scale: 1.045, duration: 3.925, ease: "none" },
+        0
+      );
+
+      /* ---- Scene 1 (0–1.5s): a pulse travels the six lit ticks in sequence ---- */
+      tl.fromTo(
+        ".f01-midwork-lit",
+        { backgroundColor: BLUE },
+        { backgroundColor: PULSE, duration: 0.16, ease: "power2.out", stagger: 0.16 },
+        0.12
+      );
+      tl.to(
+        ".f01-midwork-lit",
+        { backgroundColor: BLUE, duration: 0.34, ease: "power2.inOut", stagger: 0.16 },
+        0.28
+      );
+      /* 7th tick arms — "about to fire": its track double-blinks brighter */
+      tl.fromTo(
+        "#f01-midwork-tick7",
+        { backgroundColor: "rgba(255,255,255,0.1)" },
+        { backgroundColor: "rgba(255,255,255,0.22)", duration: 0.26, ease: "power2.out" },
+        1.06
+      );
+      tl.to("#f01-midwork-tick7", { backgroundColor: "rgba(255,255,255,0.13)", duration: 0.18, ease: "power2.inOut" }, 1.38);
+      tl.to("#f01-midwork-tick7", { backgroundColor: "rgba(255,255,255,0.26)", duration: 0.22, ease: "power2.out" }, 1.66);
+      /* a small leading sliver creeps out of the 7th tick */
+      tl.fromTo(
+        "#f01-midwork-halffill",
+        { scaleX: 0 },
+        { scaleX: 0.12, duration: 0.3, ease: "power2.out" },
+        1.52
+      );
+
+      /* ---- Scene 2 (as the VO opens): clock chip pops in and counts to minute 38 / 40 ---- */
+      tl.fromTo(
+        "#f01-midwork-chip",
+        { opacity: 0, scale: 0.5, y: 8 },
+        { opacity: 1, scale: 1, y: 0, duration: 0.5, ease: "back.out(2.1)" },
+        0.45
+      );
+      tl.set("#f01-midwork-chipval", { textContent: "minute 37 / 40" }, 0.78);
+      tl.set("#f01-midwork-chipval", { textContent: "minute 38 / 40" }, 1.12);
+      /* a softer second pulse pass keeps the machine alive through the chip beat */
+      tl.fromTo(
+        ".f01-midwork-lit",
+        { backgroundColor: BLUE },
+        { backgroundColor: PULSE2, duration: 0.13, ease: "power2.out", stagger: 0.12 },
+        1.55
+      );
+      tl.to(
+        ".f01-midwork-lit",
+        { backgroundColor: BLUE, duration: 0.28, ease: "power2.inOut", stagger: 0.12 },
+        1.68
+      );
+
+      /* ---- Scene 3 (VO "The process dies"): the 7th tick fires — and STALLS halfway ---- */
+      tl.to("#f01-midwork-halffill", { scaleX: 0.62, duration: 0.22, ease: "power3.out" }, 2.45);
+      tl.to("#f01-midwork-halffill", { scaleX: 1, duration: 0.52, ease: "power1.out" }, 2.67);
+      /* the armed glow drains as the stall catches */
+      tl.to("#f01-midwork-tick7", { backgroundColor: "rgba(255,255,255,0.15)", duration: 0.34, ease: "power2.out" }, 3.02);
+
+      /* true stillness: nothing tweens from 3.36s to the end of the slot */
+      tl.to({}, { duration: 0.01, ease: "none" }, 3.915);
+
+      window.__timelines["01-midwork"] = tl;
+    })();
+  </script>
+</template>

@@ -1,0 +1,546 @@
+<template>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <style>
+    /* ---- fonts (shipped with project, project-root relative) ---- */
+    @font-face {
+      font-family: "IBM Plex Mono";
+      src: url("assets/fonts/IBMPlexMono-500.woff2") format("woff2");
+      font-weight: 500;
+      font-style: normal;
+      font-display: block;
+    }
+    @font-face {
+      font-family: "IBM Plex Mono";
+      src: url("assets/fonts/IBMPlexMono-600.woff2") format("woff2");
+      font-weight: 600;
+      font-style: normal;
+      font-display: block;
+    }
+
+    /* ---- root (styled via #root only) ---- */
+    #root {
+      position: absolute;
+      inset: 0;
+      width: 1920px;
+      height: 1080px;
+      overflow: hidden;
+    }
+
+    /* ---- full-bleed ground: clip layer on the lowest track ---- */
+    [class~="05-chain-bg"] {
+      position: absolute;
+      inset: 0;
+      background: #1a1a19; /* cream ground — dark register */
+      container-type: size;
+    }
+
+    /* Crouwel vertical hairlines, stopped at the caption keep-out (83%) — same system as the series */
+    [class~="05-chain-grid"] {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 83%;
+      background-image: linear-gradient(90deg, rgba(215, 216, 217, 0.07) 1px, transparent 1px);
+      background-size: 16.6667% 100%;
+    }
+
+    /* ---- content clip ---- */
+    [class~="05-chain-stage"] {
+      position: absolute;
+      inset: 0;
+      container-type: size;
+    }
+
+    /* slide-chrome: top hairline bar, label left / catalogue number right */
+    [class~="05-chain-chrome"] {
+      position: absolute;
+      top: 60px;
+      left: 106px;
+      right: 106px;
+      height: 28px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      padding-bottom: 16px;
+    }
+    [class~="05-chain-chrome-label"],
+    [class~="05-chain-chrome-num"] {
+      font-family: "IBM Plex Mono", monospace;
+      font-weight: 500;
+      font-size: 15px;
+      letter-spacing: 0.14em;
+      color: #afb3b7; /* cream-hint chrome */
+      line-height: 1;
+    }
+    [class~="05-chain-chrome-line"] {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 1px;
+      background: rgba(215, 216, 217, 0.25);
+      transform-origin: left center;
+    }
+
+    /* gentle drift wrapper (hold-alive; separate element so it never fights
+       the cards' entrance tweens on y) */
+    [class~="05-chain-float"] {
+      position: absolute;
+      inset: 0;
+    }
+
+    /* ---- the two cards — split stage, flat plane: hairline border, no radius,
+       no shadow. Left: the signed approval. Right: the identity envelope. ---- */
+    [class~="05-chain-card"] {
+      position: absolute;
+      top: 300px;
+      width: 720px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(215, 216, 217, 0.28);
+    }
+    [class~="05-chain-card-approve"] {
+      left: 140px;
+    }
+    [class~="05-chain-card-envelope"] {
+      left: 1060px;
+    }
+
+    /* header plate — ink block on the dark register (card-family treatment) */
+    [class~="05-chain-head"] {
+      height: 96px;
+      background: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 0 30px;
+    }
+    [class~="05-chain-stub"] {
+      flex: 0 0 auto;
+      width: 36px;
+      height: 2px;
+      background: #3987e5; /* accent — structure only */
+      transform-origin: left center;
+    }
+    [class~="05-chain-headtext"] {
+      display: inline-block;
+      font-family: "IBM Plex Mono", monospace;
+      font-weight: 600;
+      font-size: 30px;
+      line-height: 1;
+      color: #1a1a19;
+      white-space: nowrap;
+    }
+    [class~="05-chain-chip"] {
+      margin-left: auto;
+      font-family: "IBM Plex Mono", monospace;
+      font-weight: 600;
+      font-size: 13px;
+      letter-spacing: 0.14em;
+      color: #1a1a19; /* ink label on the white head plate — blue stays on the border */
+      border: 1px solid rgba(57, 135, 229, 0.55);
+      padding: 6px 12px;
+      white-space: nowrap;
+    }
+    [class~="05-chain-headglyph"] {
+      margin-left: auto;
+      display: block;
+    }
+
+    /* field body */
+    [class~="05-chain-body"] {
+      position: relative;
+      padding: 36px 30px 40px;
+    }
+    [class~="05-chain-row"] {
+      font-family: "IBM Plex Mono", monospace;
+      font-weight: 500;
+      font-size: 28px;
+      line-height: 1.1;
+      color: #ffffff; /* ink values */
+      white-space: nowrap;
+    }
+    [class~="05-chain-k"] {
+      color: #3987e5; /* accent on keywords only */
+    }
+    [class~="05-chain-p"] {
+      color: #afb3b7;
+    }
+
+    /* left card: the signature block (human ink is white; the chain is blue) */
+    [class~="05-chain-sig"] {
+      display: block;
+      width: 420px;
+      height: 104px;
+      overflow: visible;
+    }
+    [class~="05-chain-sigpath"] {
+      fill: none;
+      stroke: #ffffff;
+      stroke-width: 3px;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    [class~="05-chain-signline"] {
+      margin-top: 18px;
+      height: 1px;
+      background: rgba(215, 216, 217, 0.32);
+    }
+    [class~="05-chain-sigrow"] {
+      margin-top: 20px;
+      font-family: "IBM Plex Mono", monospace;
+      font-weight: 500;
+      font-size: 24px;
+      line-height: 1.1;
+      white-space: nowrap;
+    }
+    [class~="05-chain-sigrow-v"] {
+      color: #ffffff;
+      font-weight: 600;
+    }
+    [class~="05-chain-sigrow-r"] {
+      color: #afb3b7;
+    }
+
+    /* right card: the chain row under edit */
+    [class~="05-chain-row-chain"] {
+      margin-top: 24px;
+    }
+    [class~="05-chain-v"] {
+      color: #ffffff;
+      font-weight: 600;
+    }
+    [class~="05-chain-v-b"],
+    [class~="05-chain-v-e"] {
+      color: #3987e5; /* brackets/quotes — chain structure */
+    }
+    [class~="05-chain-ph"] {
+      color: #ffffff;
+    }
+    [class~="05-chain-caret"] {
+      display: inline-block;
+      width: 2px;
+      height: 24px;
+      margin-left: 3px;
+      background: #3987e5;
+      vertical-align: -2px;
+    }
+    /* the proof underline: 1px-plus accent rule under the chain row (last beat) */
+    [class~="05-chain-proofline"] {
+      position: absolute;
+      left: 30px;
+      width: 660px;
+      top: 134px;
+      height: 2px;
+      background: #3987e5;
+      transform-origin: left center;
+    }
+
+    /* ---- the chain overlay: full-frame SVG above both cards (z-order by DOM) ---- */
+    [class~="05-chain-svg"] {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: visible;
+    }
+    [class~="05-chain-path"] {
+      fill: none;
+      stroke: #3987e5; /* 1px blue chain — link/structure */
+      stroke-width: 1px;
+    }
+    [class~="05-chain-link"] {
+      fill: #1a1a19; /* ground fill so the path reads as threaded through links */
+      stroke: #3987e5;
+      stroke-width: 1px;
+    }
+    [class~="05-chain-originring"] {
+      fill: none;
+      stroke: #3987e5;
+      stroke-width: 1px;
+    }
+    [class~="05-chain-origindot"] {
+      fill: #ffffff; /* the human anchor: white ink */
+    }
+    [class~="05-chain-tipdot"] {
+      fill: #3987e5;
+    }
+  </style>
+
+  <div
+    id="root"
+    data-composition-id="05-chain"
+    data-start="0"
+    data-duration="5.291"
+    data-width="1920"
+    data-height="1080"
+  >
+    <!-- track 0: ground + Crouwel grid -->
+    <div class="clip 05-chain-bg" data-start="0" data-duration="5.291" data-track-index="0">
+      <div class="05-chain-grid"></div>
+    </div>
+
+    <!-- track 1: chrome + split-stage cards + chain overlay -->
+    <div class="clip 05-chain-stage" data-start="0" data-duration="5.291" data-track-index="1">
+      <div class="05-chain-chrome" data-layout-allow-overlap="">
+        <span class="05-chain-chrome-label" data-layout-allow-overlap="">APPROVAL CHAIN</span>
+        <span class="05-chain-chrome-num" data-layout-allow-overlap="">NO. 05</span>
+        <div class="05-chain-chrome-line"></div>
+      </div>
+
+      <div class="05-chain-float" data-layout-allow-overlap="">
+        <!-- LEFT: the signed approval card (continuity of the signing) -->
+        <div class="05-chain-card 05-chain-card-approve" data-layout-allow-overlap="">
+          <div class="05-chain-head" data-layout-allow-overlap="">
+            <span class="05-chain-stub"></span>
+            <span class="05-chain-headtext" data-layout-allow-overlap="">approval</span>
+            <span class="05-chain-chip" data-layout-allow-overlap="">SIGNED</span>
+          </div>
+          <div class="05-chain-body" data-layout-allow-overlap="">
+            <svg class="05-chain-sig" viewBox="0 0 420 104" aria-hidden="true" data-layout-allow-overlap="">
+              <path
+                class="05-chain-sigpath"
+                d="M14 74 C 30 22, 58 12, 54 42 C 50 68, 74 36, 96 38 C 116 40, 108 66, 128 62 C 150 57, 156 26, 180 32 C 200 37, 192 62, 214 56 C 240 49, 252 20, 278 36 C 296 47, 310 30, 338 40 C 356 46, 372 34, 402 44"
+              ></path>
+            </svg>
+            <div class="05-chain-signline"></div>
+            <div class="05-chain-sigrow" data-layout-allow-overlap=""
+              ><span class="05-chain-p">approved_by:&nbsp;</span><span class="05-chain-sigrow-v">e.encalada</span><span
+                class="05-chain-p"
+                >&nbsp;·&nbsp;</span
+              ><span class="05-chain-sigrow-r">senior_engineer</span></div>
+          </div>
+        </div>
+
+        <!-- RIGHT: the identity envelope card (continuity of the series envelope) -->
+        <div class="05-chain-card 05-chain-card-envelope" data-layout-allow-overlap="">
+          <div class="05-chain-head" data-layout-allow-overlap="">
+            <span class="05-chain-stub"></span>
+            <span class="05-chain-headtext" data-layout-allow-overlap="">envelope</span>
+            <svg class="05-chain-headglyph" width="34" height="18" viewBox="0 0 34 18" aria-hidden="true" data-layout-allow-overlap="">
+              <ellipse cx="11" cy="9" rx="5.5" ry="8" fill="none" stroke="#3987e5" stroke-width="1.5"></ellipse>
+              <ellipse cx="23" cy="9" rx="5.5" ry="8" fill="none" stroke="#3987e5" stroke-width="1.5"></ellipse>
+            </svg>
+          </div>
+          <div class="05-chain-body" data-layout-allow-overlap="">
+            <div class="05-chain-row" data-layout-allow-overlap=""
+              ><span class="05-chain-k">signer</span><span class="05-chain-p">:&nbsp;</span><span>e.encalada</span></div>
+            <div class="05-chain-row 05-chain-row-chain" data-layout-allow-overlap=""
+              ><span class="05-chain-k">approval_chain</span><span class="05-chain-p">:&nbsp;</span><span
+                class="05-chain-ph">[]</span><span class="05-chain-v 05-chain-v-b"></span><span
+                class="05-chain-v 05-chain-v-n"></span><span class="05-chain-v 05-chain-v-e"></span><span
+                class="05-chain-caret"></span></div>
+            <div class="05-chain-proofline"></div>
+          </div>
+        </div>
+
+        <!-- the chain: 1px blue link drawing from the signature into the envelope field -->
+        <svg class="05-chain-svg" viewBox="0 0 1920 1080" aria-hidden="true" data-layout-allow-overlap="">
+          <path class="05-chain-path" d="M 792 588 C 872 588, 878 502, 966 502 L 1060 502"></path>
+          <ellipse class="05-chain-link" rx="5.5" ry="10" data-idx="0"></ellipse>
+          <ellipse class="05-chain-link" rx="5.5" ry="10" data-idx="1"></ellipse>
+          <ellipse class="05-chain-link" rx="5.5" ry="10" data-idx="2"></ellipse>
+          <circle class="05-chain-originring" cx="792" cy="588" r="9"></circle>
+          <circle class="05-chain-origindot" cx="792" cy="588" r="3.5"></circle>
+          <!-- terminal double link, threaded onto the envelope edge at the chain row -->
+          <ellipse class="05-chain-link" cx="1050" cy="502" rx="6" ry="11"></ellipse>
+          <ellipse class="05-chain-link" cx="1068" cy="502" rx="6" ry="11"></ellipse>
+          <circle class="05-chain-tipdot" cx="0" cy="0" r="4"></circle>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var root =
+        (document.currentScript && document.currentScript.previousElementSibling) ||
+        document.querySelector('[data-composition-id="05-chain"]');
+      var q = function (c) {
+        return root.querySelector('[class~="' + c + '"]');
+      };
+      var qa = function (c) {
+        return root.querySelectorAll('[class~="' + c + '"]');
+      };
+
+      window.__timelines = window.__timelines || {};
+      var tl = gsap.timeline({ paused: true, defaults: { ease: "power3.out" } });
+
+      /* Blueprint: camera-journey, ADAPTED per packet — "one link draw, no camera".
+         The journey IS the link: it travels from the signature (left card) to the
+         envelope field (right card); the travel carries the narrative. No camera
+         legs; only a near-imperceptible hold drift underneath.
+
+         Voiceover pacing (5.291s):
+           "And the approval chains into the signed envelope"  ~0.0-2.6  -> cards in,
+             signature continuity redraw, chain draws 1.05-2.55, terminal link lands 2.55
+           "— the human is now part of the proof"              ~2.7-5.1  -> field types,
+             proof underline + chain pulse 4.1-4.7, then hold. No exit. */
+
+      /* ---- deterministic init for proxy-driven elements (seek-safe: every
+         visible state is a pure function of timeline position) ---- */
+      var path = q("05-chain-path");
+      var plen = path.getTotalLength();
+      path.style.strokeDasharray = String(plen);
+      path.style.strokeDashoffset = String(plen);
+      var tip = q("05-chain-tipdot");
+      var startPt = path.getPointAtLength(0);
+      gsap.set(tip, { x: startPt.x, y: startPt.y, autoAlpha: 0, transformOrigin: "50% 50%" });
+
+      /* mid-chain links: measured ONCE at setup, baked onto the path */
+      var links = root.querySelectorAll('[class~="05-chain-link"][data-idx]');
+      var terminal = root.querySelectorAll('[class~="05-chain-link"]:not([data-idx])');
+      var fracs = [0.22, 0.45, 0.7];
+      Array.prototype.forEach.call(links, function (el, i) {
+        var pt = path.getPointAtLength(fracs[i] * plen);
+        var a = path.getPointAtLength(Math.max(0, fracs[i] * plen - 6));
+        var b = path.getPointAtLength(Math.min(plen, fracs[i] * plen + 6));
+        var ang = (Math.atan2(b.y - a.y, b.x - a.x) * 180) / Math.PI;
+        el.setAttribute("cx", pt.x);
+        el.setAttribute("cy", pt.y);
+        el.setAttribute("transform", "rotate(" + ang.toFixed(2) + " " + pt.x.toFixed(2) + " " + pt.y.toFixed(2) + ")");
+        gsap.set(el, { autoAlpha: 0, scale: 0.3, transformOrigin: "50% 50%" });
+      });
+      var midLinks = Array.prototype.slice.call(links);
+      Array.prototype.forEach.call(terminal, function (el) {
+        gsap.set(el, { autoAlpha: 0, scale: 0.3, transformOrigin: "50% 50%" });
+      });
+      gsap.set(q("05-chain-originring"), { autoAlpha: 0, scale: 0.4, transformOrigin: "50% 50%" });
+      gsap.set(q("05-chain-origindot"), { autoAlpha: 0, scale: 0.4, transformOrigin: "50% 50%" });
+      gsap.set(q("05-chain-caret"), { autoAlpha: 0 });
+      gsap.set(q("05-chain-proofline"), { scaleX: 0 });
+      gsap.set(q("05-chain-ph"), { autoAlpha: 1 });
+
+      /* ---- Scene 1 (0-1.0s): canvas, chrome, both cards rise in staggered;
+         the signature redraws (continuity of the signing); SIGNED stamps. ---- */
+      tl.fromTo(q("05-chain-grid"), { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.out" }, 0);
+      tl.fromTo(q("05-chain-chrome-line"), { scaleX: 0 }, { scaleX: 1, duration: 0.5, ease: "power2.out" }, 0.05);
+      tl.fromTo(q("05-chain-chrome-label"), { autoAlpha: 0, y: -8 }, { autoAlpha: 1, y: 0, duration: 0.4 }, 0.15);
+      tl.fromTo(q("05-chain-chrome-num"), { autoAlpha: 0, y: -8 }, { autoAlpha: 1, y: 0, duration: 0.4 }, 0.22);
+
+      tl.fromTo(q("05-chain-card-approve"), { y: 56, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.6 }, 0.1);
+      tl.fromTo(q("05-chain-card-envelope"), { y: 56, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.6 }, 0.22);
+      tl.fromTo(qa("05-chain-stub")[0], { scaleX: 0 }, { scaleX: 1, duration: 0.4, ease: "power2.out" }, 0.38);
+      tl.fromTo(qa("05-chain-stub")[1], { scaleX: 0 }, { scaleX: 1, duration: 0.4, ease: "power2.out" }, 0.5);
+      tl.fromTo(
+        qa("05-chain-headtext")[0],
+        { clipPath: "inset(-6% 100% -6% -2%)" },
+        { clipPath: "inset(-6% -2% -6% -2%)", duration: 0.5, ease: "power3.out" },
+        0.46
+      );
+      tl.fromTo(
+        qa("05-chain-headtext")[1],
+        { clipPath: "inset(-6% 100% -6% -2%)" },
+        { clipPath: "inset(-6% -2% -6% -2%)", duration: 0.5, ease: "power3.out" },
+        0.58
+      );
+
+      /* signature ink: fast continuity redraw of the already-signed mark */
+      var sig = q("05-chain-sigpath");
+      var sigLen = sig.getTotalLength();
+      sig.style.strokeDasharray = String(sigLen);
+      tl.fromTo(
+        sig,
+        { strokeDashoffset: sigLen },
+        { strokeDashoffset: 0, duration: 0.55, ease: "power1.inOut" },
+        0.3
+      );
+      tl.fromTo(q("05-chain-chip"), { scale: 0.6, autoAlpha: 0 }, { scale: 1, autoAlpha: 1, duration: 0.4, ease: "back.out(1.7)" }, 0.8);
+
+      /* envelope rows: signer row settles; the empty approval_chain row is the target */
+      tl.fromTo(q("05-chain-row"), { autoAlpha: 0, y: 20 }, { autoAlpha: 1, y: 0, duration: 0.5 }, 0.72);
+      tl.fromTo(q("05-chain-headglyph"), { scale: 0.6, autoAlpha: 0 }, { scale: 1, autoAlpha: 1, duration: 0.4, ease: "back.out(1.7)" }, 0.7);
+
+      /* ---- Scene 2 (1.0-2.9s): LEG — the chain link DRAWS from the signature
+         into the envelope's approval_chain field (ease "none" so the mid links
+         materialize exactly as the tip passes them). ---- */
+      tl.fromTo(q("05-chain-originring"), { autoAlpha: 0, scale: 0.4 }, { autoAlpha: 1, scale: 1, duration: 0.35, ease: "back.out(1.8)" }, 0.85);
+      tl.fromTo(q("05-chain-origindot"), { autoAlpha: 0, scale: 0.4 }, { autoAlpha: 1, scale: 1, duration: 0.3, ease: "back.out(1.8)" }, 0.9);
+
+      var draw = { p: 0 };
+      tl.fromTo(tip, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.15 }, 1.05);
+      tl.to(
+        draw,
+        {
+          p: 1,
+          duration: 1.5,
+          ease: "none",
+          onUpdate: function () {
+            var e = draw.p * plen;
+            path.style.strokeDashoffset = String(plen - e);
+            var pt = path.getPointAtLength(e);
+            gsap.set(tip, { x: pt.x, y: pt.y });
+          },
+        },
+        1.05
+      );
+      /* chain links thread on as the tip passes (frac x 1.5 + 1.05) */
+      midLinks.forEach(function (el, i) {
+        tl.fromTo(
+          el,
+          { autoAlpha: 0, scale: 0.3 },
+          { autoAlpha: 1, scale: 1, duration: 0.3, ease: "back.out(2)" },
+          1.05 + fracs[i] * 1.5
+        );
+      });
+      tl.to(tip, { autoAlpha: 0, duration: 0.15 }, 2.45);
+
+      /* the link lands on the envelope edge at the chain row; terminal double link locks */
+      Array.prototype.forEach.call(terminal, function (el, i) {
+        tl.fromTo(
+          el,
+          { autoAlpha: 0, scale: 0.3 },
+          { autoAlpha: 1, scale: 1, duration: 0.35, ease: "back.out(2.2)" },
+          2.55 + i * 0.07
+        );
+      });
+
+      /* ---- Scene 3 (2.7-4.0s): the field types — approval_chain: [] becomes
+         ['senior_engineer']. Deterministic char windows; caret rides inline. ---- */
+      var segB = q("05-chain-v-b"),
+        segN = q("05-chain-v-n"),
+        segE = q("05-chain-v-e"),
+        caret = q("05-chain-caret");
+      tl.to(q("05-chain-ph"), { autoAlpha: 0, duration: 0.06 }, 2.7);
+      tl.fromTo(caret, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.1 }, 2.68);
+
+      function typer(span, str, at, dur) {
+        var proxy = { p: 0 };
+        tl.to(
+          proxy,
+          {
+            p: 1,
+            duration: dur,
+            ease: "none",
+            onUpdate: function () {
+              var n = Math.min(str.length, Math.floor(proxy.p * str.length + 1e-4));
+              var next = str.slice(0, n);
+              if (span.textContent !== next) span.textContent = next;
+            },
+          },
+          at
+        );
+      }
+      typer(segB, "['", 2.75, 0.1); /* accent brackets open */
+      typer(segN, "senior_engineer", 2.85, 0.85); /* the human, white ink */
+      typer(segE, "']", 3.7, 0.1); /* accent brackets close */
+      tl.to(caret, { autoAlpha: 0, duration: 0.12 }, 3.86);
+
+      /* ---- Scene 4 (4.0-5.291s): "the human is now part of the proof" — the
+         proof underline draws under the chain row and the whole chain pulses
+         once; then hold under the drift. No exit. ---- */
+      tl.fromTo(q("05-chain-proofline"), { scaleX: 0 }, { scaleX: 1, duration: 0.4, ease: "power3.out" }, 4.1);
+      var pulseEls = [q("05-chain-originring"), q("05-chain-origindot")].concat(midLinks, Array.prototype.slice.call(terminal));
+      pulseEls.forEach(function (el) {
+        tl.to(el, { opacity: 0.4, duration: 0.25, ease: "power2.out" }, 4.15);
+        tl.to(el, { opacity: 1, duration: 0.3, ease: "power2.in" }, 4.4);
+      });
+
+      /* hold-alive: one gentle pass of drift (single direction, finite, seek-safe) */
+      tl.fromTo(q("05-chain-float"), { y: 0 }, { y: -5, duration: 3.291, ease: "sine.inOut" }, 2.0);
+
+      window.__timelines["05-chain"] = tl;
+    })();
+  </script>
+</template>

@@ -1,0 +1,199 @@
+<template>
+  <style>
+    @font-face {
+      font-family: "Barlow";
+      font-style: normal;
+      font-weight: 900;
+      font-display: block;
+      src: url("assets/fonts/barlow-latin-900-normal.woff2") format("woff2"),
+        url("assets/fonts/Barlow-900.woff2") format("woff2"),
+        url("assets/fonts/Barlow-Black.woff2") format("woff2");
+    }
+
+    #root {
+      position: relative;
+      width: 1920px;
+      height: 1080px;
+      overflow: hidden;
+      container-type: size;
+      color: #ffffff;
+      font-family: "Barlow", sans-serif;
+    }
+
+    /* full-bleed ground — dedicated clip layer, never on #root.
+       hook canvas #0d0d0d per packet scene + faint 1px hairline grid */
+    .s01-ground {
+      position: absolute;
+      inset: 0;
+      background-color: #0d0d0d;
+      background-image: linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
+      background-size: 120px 120px;
+      background-position: 60px 60px;
+    }
+
+    .s01-stageclip {
+      position: absolute;
+      inset: 0;
+    }
+
+    /* ghost numeral watermark — display ramp (13cqw), seats behind center at 6% */
+    .s01-ghost {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 323px;
+      z-index: 1;
+      text-align: center;
+      font-family: "Barlow", sans-serif;
+      font-weight: 900;
+      font-size: 250px;
+      line-height: 1;
+      letter-spacing: -0.04em;
+      color: #ffffff;
+      opacity: 0;
+      user-select: none;
+      will-change: transform;
+    }
+
+    /* the promise line — one line, left-anchored at optical center, lowercase 900 */
+    .s01-line {
+      position: absolute;
+      left: 106px;
+      top: 406px;
+      z-index: 2;
+      white-space: nowrap;
+      font-family: "Barlow", sans-serif;
+      font-weight: 900;
+      font-size: 76px;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      color: #ffffff;
+    }
+
+    /* white clause wrapper ("sixty seconds.") — also the connector's geometry host */
+    .s01-head {
+      position: relative;
+      display: inline-flex;
+    }
+    .s01-w {
+      display: inline-block;
+      will-change: transform;
+    }
+    .s01-w2 {
+      margin-left: 0.26em;
+      color: #afb3b7;
+    }
+
+    /* 1px accent connector — draws from the line's start to the prompt glyph */
+    .s01-conn {
+      position: absolute;
+      left: 0;
+      bottom: 2px;
+      height: 1px;
+      width: calc(100% + 56px);
+      background: #3987e5;
+      opacity: 0;
+      will-change: transform;
+    }
+
+    /* terminal-prompt glyph — authored SVG (chrome of the terminal family) */
+    .s01-glyph {
+      margin-left: 56px;
+      opacity: 0;
+      will-change: transform;
+    }
+
+    /* second clause — accent blue */
+    .s01-clause {
+      display: inline-block;
+      margin-left: 22px;
+      color: #3987e5;
+      will-change: transform;
+    }
+  </style>
+
+  <div
+    id="root"
+    data-composition-id="01-hook"
+    data-start="0"
+    data-duration="3.456"
+    data-width="1920"
+    data-height="1080"
+  >
+    <div class="clip s01-ground" data-start="0" data-duration="3.456" data-track-index="0"></div>
+
+    <div class="clip s01-stageclip" data-start="0" data-duration="3.456" data-track-index="1">
+      <div class="s01-ghost" id="s01-ghost">60</div>
+
+      <div class="s01-line" id="s01-line"
+        ><span class="s01-head"
+          ><span class="s01-w" id="s01-w1">sixty</span
+          ><span class="s01-w s01-w2" id="s01-w2">seconds.</span
+          ><span class="s01-conn" id="s01-conn"></span
+        ></span
+        ><svg class="s01-glyph" id="s01-glyph" width="42" height="50" viewBox="0 0 21 25"
+          ><path d="M3.5 3 L16 12.5 L3.5 22" fill="none" stroke="#3987e5" stroke-width="3.4" /></svg
+        ><span class="s01-clause" id="s01-clause">your first gated claim.</span
+      ></div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <script>
+    (function () {
+      var root = document.querySelector('[data-composition-id="01-hook"]');
+      if (!root || !window.gsap) return;
+      var $ = function (id) {
+        return root.querySelector('#' + id);
+      };
+
+      var tl = gsap.timeline({ paused: true });
+      window.__timelines = window.__timelines || {};
+      window.__timelines['01-hook'] = tl;
+
+      var ghost = $('s01-ghost');
+      var w1 = $('s01-w1');
+      var w2 = $('s01-w2');
+      var conn = $('s01-conn');
+      var glyph = $('s01-glyph');
+      var clause = $('s01-clause');
+
+      /* Scene 1 (0–0.7) — canvas #0d0d0d + faint grid; ghost "60" (display ramp, 6%)
+         seats behind center; nothing else */
+      tl.fromTo(
+        ghost,
+        { opacity: 0, scale: 1.045, y: 12 },
+        { opacity: 0.06, scale: 1, y: 0, duration: 0.6, ease: 'power2.out' },
+        0.05
+      );
+
+      /* Scene 2 (0.7–2.0) — "sixty seconds." builds word-by-word (fade/slide, 12px rise)
+         left-anchored at optical center; "sixty" ink white, "seconds." muted until it
+         lands, then fills white (emphasis snap) */
+      tl.fromTo(w1, { y: 12, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: 'power3.out' }, 0.7);
+      tl.fromTo(
+        w2,
+        { y: 12, opacity: 0, color: '#afb3b7' },
+        { y: 0, opacity: 1, color: '#afb3b7', duration: 0.44, ease: 'power3.out' },
+        1.26
+      );
+      tl.to(w2, { color: '#ffffff', duration: 0.26, ease: 'power2.inOut' }, 1.78);
+
+      /* Scene 3 (2.0–3.456) — 1px blue connector draws from the line's start to the
+         mono prompt glyph, then the second clause lands in accent blue; settle
+         long-tail, hold still to the cut */
+      tl.fromTo(conn, { scaleX: 0, opacity: 1 }, { scaleX: 1, opacity: 1, duration: 0.36, ease: 'power2.inOut' }, 2.02);
+      tl.fromTo(
+        glyph,
+        { scale: 0.3, opacity: 0, transformOrigin: 'left center' },
+        { scale: 1, opacity: 1, duration: 0.34, ease: 'back.out(2)' },
+        2.32
+      );
+      tl.fromTo(clause, { y: 12, opacity: 0 }, { y: 0, opacity: 1, duration: 0.42, ease: 'power3.out' }, 2.66);
+
+      /* hold: last element lands at ~3.08s; frame is dead still to the cut at 3.456s */
+      tl.seek(0);
+    })();
+  </script>
+</template>

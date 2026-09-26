@@ -1,0 +1,41 @@
+{
+  "provider": "kokoro",
+  "speed": 1,
+  "lines": [
+    {
+      "id": "01",
+      "text": "MCP doesn't say who's calling. We do."
+    },
+    {
+      "id": "02",
+      "text": "Every tool call your agent makes carries a signed envelope."
+    },
+    {
+      "id": "03",
+      "text": "Inside: the principal — a real human. The agent — and exactly what it may do. An approval chain. And an expiry."
+    },
+    {
+      "id": "04",
+      "text": "The envelope rides the call itself — in the MCP underscore-meta slot. The call and the identity travel together. No side channel. No trust-me."
+    },
+    {
+      "id": "05",
+      "text": "The server verifies the signature, checks the expiry, enforces the scope — per user, per call. Every call, every time — not once at login."
+    },
+    {
+      "id": "06",
+      "text": "And afterward, the audit trail answers: eight events, acted on behalf of alice. Not \"the agent did it.\" Alice did it."
+    },
+    {
+      "id": "07",
+      "text": "Every call, signed. var-runtime. Proof-or-Stop."
+    }
+  ],
+  "bgm": {
+    "mode": "retrieve",
+    "query": "dark-tech minimal ambient, slow build, one impact at the verified pill (~34s)",
+    "blob": "MCP doesn't say who's calling. We do.",
+    "arc": "mechanism-reveal (build the envelope, dock it, verify it, answer for it)"
+  },
+  "voice": "am_michael"
+}

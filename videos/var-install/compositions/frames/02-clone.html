@@ -1,0 +1,340 @@
+<template>
+  <style>
+    @font-face {
+      font-family: 'IBM Plex Mono';
+      src: url('assets/fonts/IBMPlexMono-400.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+      font-display: block;
+    }
+    @font-face {
+      font-family: 'IBM Plex Mono';
+      src: url('assets/fonts/IBMPlexMono-500.woff2') format('woff2');
+      font-weight: 500;
+      font-style: normal;
+      font-display: block;
+    }
+    @font-face {
+      font-family: 'IBM Plex Mono';
+      src: url('assets/fonts/IBMPlexMono-600.woff2') format('woff2');
+      font-weight: 600;
+      font-style: normal;
+      font-display: block;
+    }
+
+    #root {
+      position: relative;
+      width: 1920px;
+      height: 1080px;
+      overflow: hidden;
+      font-family: 'IBM Plex Mono', monospace;
+    }
+
+    /* full-bleed ground — dedicated clip layer, never on #root */
+    .s02-ground {
+      position: absolute;
+      inset: 0;
+      background: #1a1a19;
+    }
+
+    .s02-stageclip {
+      position: absolute;
+      inset: 0;
+    }
+    .s02-stage {
+      position: absolute;
+      inset: 0;
+    }
+
+    /* the terminal well — same geometry 03-session continues (left 105 / top 170 / 1128x620) */
+    .s02-well {
+      position: absolute;
+      left: 105px;
+      top: 170px;
+      width: 1128px;
+      height: 620px;
+      background: #101010;
+      border: 1px solid rgba(215, 216, 217, 0.24);
+      will-change: transform;
+    }
+    .s02-wellhead {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 56px;
+      padding: 0 40px;
+      border-bottom: 1px solid rgba(215, 216, 217, 0.16);
+    }
+    .s02-welllabel {
+      font-size: 17px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      color: #afb3b7;
+    }
+    .s02-wellstep {
+      font-size: 17px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      color: #3987e5;
+    }
+
+    .s02-stream {
+      padding: 40px 56px 0;
+    }
+    .s02-line {
+      display: flex;
+      align-items: center;
+      height: 84px;
+      font-size: 44px;
+      line-height: 1;
+      white-space: pre;
+    }
+    /* the wrapped URL continuation — same column, slightly stepped down */
+    .s02-line.s02-url {
+      padding-left: 38px;
+      font-size: 36px;
+    }
+    .s02-chev {
+      width: 14px;
+      height: 14px;
+      border-top: 3px solid #3987e5;
+      border-right: 3px solid #3987e5;
+      transform: rotate(45deg);
+      margin-right: 24px;
+      flex: none;
+    }
+    .s02-seg {
+      white-space: pre;
+    }
+    .s02-key {
+      color: #ffffff;
+    }
+    .s02-dim {
+      color: #afb3b7;
+    }
+    .s02-caret {
+      display: inline-block;
+      width: 20px;
+      height: 44px;
+      margin-left: 10px;
+      background: #3987e5;
+      flex: none;
+    }
+    .s02-line.s02-url .s02-caret {
+      height: 36px;
+    }
+    .s02-caret.s02-off {
+      opacity: 0;
+    }
+    .s02-swapped {
+      opacity: 0;
+    }
+
+    /* repo meta chips under the well — mono chrome, hairline borders */
+    .s02-chips {
+      position: absolute;
+      left: 105px;
+      top: 812px;
+      display: flex;
+      gap: 20px;
+    }
+    .s02-chip {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 18px 26px;
+      border: 1px solid rgba(215, 216, 217, 0.28);
+      will-change: transform;
+    }
+    .s02-chipdot {
+      width: 10px;
+      height: 10px;
+      background: #3987e5;
+      flex: none;
+    }
+    .s02-chiptext {
+      font-size: 21px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      color: #ffffff;
+      white-space: nowrap;
+    }
+  </style>
+
+  <div
+    id="root"
+    data-composition-id="02-clone"
+    data-start="0"
+    data-duration="7.019"
+    data-width="1920"
+    data-height="1080"
+  >
+    <div class="clip s02-ground" data-start="0" data-duration="7.019" data-track-index="0"></div>
+
+    <div class="clip s02-stageclip" data-start="0" data-duration="7.019" data-track-index="1">
+      <div class="s02-stage">
+        <div class="s02-well" id="s02-well">
+          <div class="s02-wellhead">
+            <span class="s02-welllabel">SIGNET · VAR INSTALL</span>
+            <span class="s02-wellstep">CLONE + RUN</span>
+          </div>
+          <div class="s02-stream">
+            <!-- command 1: git clone <url> — types across a deliberate terminal wrap -->
+            <div class="s02-cmdwrap s02-swapped" id="s02-cmdwrap">
+              <div class="s02-line"
+                ><span class="s02-chev"></span><span class="s02-seg s02-key" id="s02-l1a"></span
+                ><span class="s02-caret s02-off" id="s02-ca"></span
+              ></div>
+              <div class="s02-line s02-url"
+                ><span class="s02-seg s02-dim" id="s02-l1b"></span
+                ><span class="s02-caret s02-off" id="s02-cb"></span
+              ></div>
+            </div>
+            <!-- command 2: python3 demo.py — hard-cut swap to a fresh prompt -->
+            <div class="s02-line s02-swapped" id="s02-linec"
+              ><span class="s02-chev"></span><span class="s02-seg s02-key" id="s02-l2a"></span
+              ><span class="s02-caret s02-off" id="s02-cc"></span
+            ></div>
+          </div>
+        </div>
+
+        <div class="s02-chips">
+          <div class="s02-chip" id="s02-chip0">
+            <span class="s02-chipdot"></span>
+            <span class="s02-chiptext">MIT</span>
+          </div>
+          <div class="s02-chip" id="s02-chip1">
+            <span class="s02-chipdot"></span>
+            <span class="s02-chiptext">ZERO DEPS</span>
+          </div>
+          <div class="s02-chip" id="s02-chip2">
+            <span class="s02-chipdot"></span>
+            <span class="s02-chiptext">PYTHON 3.11+</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <script>
+    (function () {
+      var root = document.querySelector('[data-composition-id="02-clone"]');
+      if (!root || !window.gsap) return;
+      var $ = function (id) {
+        return root.querySelector('#' + id);
+      };
+
+      var D = 7.019;
+      var well = $('s02-well');
+      var cmdwrap = $('s02-cmdwrap');
+      var linec = $('s02-linec');
+      var cmd_a = $('s02-l1a');
+      var cmd_b = $('s02-l1b');
+      var cmd_c = $('s02-l2a');
+      var carets = { a: $('s02-ca'), b: $('s02-cb'), c: $('s02-cc') };
+
+      // Verbatim commands, typed as smooth character slices (discrete-text-sequence /
+      // context-sensitive-cursor mechanics: one linear driver, every rendered value a pure
+      // function of driver.t — seek-safe both ways; block caret solid while typing).
+      var SEG_A = 'git clone'; // 9 chars  — bright, prompt line
+      var SEG_B = 'https://github.com/signet-labs/var-runtime'; // 42 chars — dim, wrapped line
+      var SEG_C = 'python3 demo.py'; // 15 chars — bright, second prompt
+      var TOTAL_1 = SEG_A.length + SEG_B.length; // 51  (~28 chars/s over the typing window)
+      var TYP0_1 = 1.55,
+        TYP1_1 = 3.41; // typing window, command 1
+      var SWAP = 3.95; // hard-cut: submitted + fresh prompt (after one caret blink beat)
+      var TYP0_2 = 4.05,
+        TYP1_2 = 4.6; // typing window, command 2 (fast)
+      var FREEZE = 6.65; // caret goes solid for the poster tail (03-session convention)
+      var BLINK_HALF = 0.265; // index-math blink, 0.53s period
+
+      var tl = gsap.timeline({ paused: true });
+      window.__timelines = window.__timelines || {};
+      window.__timelines['02-clone'] = tl;
+
+      // Scene 1 — the well rises 24px and fades in as hero; camera then stays locked.
+      tl.fromTo(
+        well,
+        { y: 24, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.9, ease: 'power3.out' },
+        0
+      );
+
+      // Scenes 1-3 — typing driver (pure function of t: text, wrap caret handoff,
+      // submit dim, prompt swap, deterministic square-wave caret blink).
+      var driver = { t: 0 };
+      tl.to(
+        driver,
+        {
+          t: D,
+          duration: D,
+          ease: 'none',
+          onUpdate: function () {
+            var t = driver.t;
+            var blink = Math.floor(t / BLINK_HALF) % 2 === 0 ? 1 : 0.15;
+
+            // command 1 — char budget splits across the wrap boundary
+            var n = 0;
+            if (t >= TYP1_1) n = TOTAL_1;
+            else if (t > TYP0_1) n = Math.floor(((t - TYP0_1) / (TYP1_1 - TYP0_1)) * TOTAL_1);
+            var na = Math.min(n, SEG_A.length);
+            var nb = Math.max(0, Math.min(n - SEG_A.length, SEG_B.length));
+            var ta = SEG_A.substring(0, na);
+            var tb = SEG_B.substring(0, nb);
+            if (cmd_a.textContent !== ta) cmd_a.textContent = ta;
+            if (cmd_b.textContent !== tb) cmd_b.textContent = tb;
+
+            // command 2
+            var nc = 0;
+            if (t >= TYP1_2) nc = SEG_C.length;
+            else if (t > TYP0_2) nc = Math.floor(((t - TYP0_2) / (TYP1_2 - TYP0_2)) * SEG_C.length);
+            var tc = SEG_C.substring(0, nc);
+            if (cmd_c.textContent !== tc) cmd_c.textContent = tc;
+
+            // submit hard-cut: submitted command dims, fresh prompt appears
+            var swapped = t >= SWAP;
+            cmdwrap.style.opacity = swapped ? 0.42 : 1;
+            linec.style.opacity = swapped ? 1 : 0;
+
+            // caret ownership: line A -> wrapped URL line -> second prompt
+            var opA = t >= SWAP ? 0 : na > 0 && na < SEG_A.length ? 1 : blink;
+            var opB =
+              t < TYP0_1 + 0.001 || t >= SWAP || na < SEG_A.length
+                ? 0
+                : nb > 0 && nb < SEG_B.length
+                  ? 1
+                  : blink;
+            var opC = !swapped ? 0 : nc > 0 && nc < SEG_C.length ? 1 : t >= FREEZE ? 1 : blink;
+            carets.a.style.opacity = opA;
+            carets.b.style.opacity = opB;
+            carets.c.style.opacity = opC;
+          }
+        },
+        0
+      );
+
+      // Scene 4 — repo meta chips land under the well, one per beat, spring settle.
+      tl.fromTo(
+        $('s02-chip0'),
+        { y: 26, scale: 0.86, opacity: 0 },
+        { y: 0, scale: 1, opacity: 1, duration: 0.55, ease: 'back.out(1.7)' },
+        5.0
+      );
+      tl.fromTo(
+        $('s02-chip1'),
+        { y: 26, scale: 0.86, opacity: 0 },
+        { y: 0, scale: 1, opacity: 1, duration: 0.55, ease: 'back.out(1.7)' },
+        5.65
+      );
+      tl.fromTo(
+        $('s02-chip2'),
+        { y: 26, scale: 0.86, opacity: 0 },
+        { y: 0, scale: 1, opacity: 1, duration: 0.55, ease: 'back.out(1.7)' },
+        6.3
+      );
+
+      tl.seek(0);
+    })();
+  </script>
+</template>

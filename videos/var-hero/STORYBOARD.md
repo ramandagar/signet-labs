@@ -347,5 +347,5 @@ center, display ramp; near-still hold.
 Scene 2 (1.6–3.2s): hard cut; card 2 "Now it proves it." — same seat, one
 slide-up; "proves" carries the single green tick.
 Scene 3 (3.2–5.7s): hard cut; card 3 the lockup: ◈ var-runtime ·
-github.com/your-org/var-runtime · "Proof-or-Stop." — settles once, holds
+github.com/signet-labs/var-runtime · "Proof-or-Stop." — settles once, holds
 absolutely still to final frame; BGM fades.

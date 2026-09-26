@@ -1,0 +1,586 @@
+<template>
+  <style>
+    @font-face {
+      font-family: "Barlow";
+      font-weight: 900;
+      font-style: normal;
+      font-display: block;
+      src: url("assets/fonts/Barlow-900.woff2") format("woff2");
+    }
+    @font-face {
+      font-family: "Barlow";
+      font-weight: 800;
+      font-style: normal;
+      font-display: block;
+      src: url("assets/fonts/Barlow-800.woff2") format("woff2");
+    }
+    @font-face {
+      font-family: "IBM Plex Mono";
+      font-weight: 400;
+      font-style: normal;
+      font-display: block;
+      src: url("assets/fonts/IBMPlexMono-400.woff2") format("woff2");
+    }
+    @font-face {
+      font-family: "IBM Plex Mono";
+      font-weight: 500;
+      font-style: normal;
+      font-display: block;
+      src: url("assets/fonts/IBMPlexMono-500.woff2") format("woff2");
+    }
+    @font-face {
+      font-family: "IBM Plex Mono";
+      font-weight: 600;
+      font-style: normal;
+      font-display: block;
+      src: url("assets/fonts/IBMPlexMono-600.woff2") format("woff2");
+    }
+
+    #root {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      container-type: size;
+      font-family: "Barlow", "Helvetica Neue", Arial, sans-serif;
+    }
+    .clip {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+    }
+
+    /* ── ground: field + faint grid + vignette ── */
+    .f02-bg {
+      background: #1a1a19;
+    }
+    .f02-grid {
+      background-image: repeating-linear-gradient(
+          to right,
+          rgba(215, 216, 217, 0.08) 0 1px,
+          transparent 1px 12.5cqw
+        ),
+        repeating-linear-gradient(
+          to bottom,
+          rgba(215, 216, 217, 0.08) 0 1px,
+          transparent 1px 12.5cqw
+        );
+    }
+    .f02-vig {
+      background: radial-gradient(
+        ellipse 78% 68% at 50% 44%,
+        transparent 55%,
+        rgba(0, 0, 0, 0.34) 100%
+      );
+    }
+
+    /* content lives in the top 83% (caption keep-out below ~900px) */
+    .f02-stage {
+      inset: 0 0 16.7cqh 0;
+    }
+
+    /* ghost watermark — screen-fixed texture behind the world */
+    .f02-ghost {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 96px;
+      z-index: 1;
+      text-align: center;
+      font-family: "Barlow", sans-serif;
+      font-weight: 900;
+      font-size: 23cqw;
+      line-height: 0.88;
+      letter-spacing: -0.04em;
+      color: #ffffff;
+      opacity: 0;
+      user-select: none;
+    }
+
+    /* the world — virtual camera pans this wrapper only */
+    .f02-world {
+      position: absolute;
+      left: -150px;
+      top: 0;
+      width: 2220px;
+      height: 100%;
+      z-index: 2;
+      will-change: transform;
+    }
+
+    /* slide chrome — hairline bars, mono */
+    .f02-chrome {
+      position: absolute;
+      left: 110px;
+      right: 110px;
+      height: 44px;
+      z-index: 5;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-family: "IBM Plex Mono", Menlo, monospace;
+      font-weight: 500;
+      font-size: 0.95cqw;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #ffffff;
+      opacity: 0;
+    }
+    .f02-chrome-top {
+      top: 56px;
+      border-bottom: 1px solid #d7d8d9;
+    }
+    .f02-chrome-bot {
+      top: 802px;
+      border-top: 1px solid #d7d8d9;
+      color: #afb3b7;
+    }
+    .f02-kicker {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      color: #3987e5;
+    }
+    .f02-kicker::before {
+      content: "";
+      width: 36px;
+      height: 2px;
+      background: #3987e5;
+    }
+    .f02-num {
+      color: #afb3b7;
+    }
+    .f02-counter {
+      color: #ffffff;
+    }
+
+    /* rail — the timeline spine */
+    .f02-railsvg {
+      position: absolute;
+      left: 320px;
+      top: 520px;
+      width: 1760px;
+      height: 80px;
+      overflow: visible;
+    }
+    .f02-rail {
+      stroke: rgba(255, 255, 255, 0.3);
+      stroke-width: 2;
+      stroke-linecap: round;
+    }
+
+    /* stems + nodes */
+    .f02-stem {
+      position: absolute;
+      width: 1px;
+      background: rgba(255, 255, 255, 0.28);
+      transform-origin: 50% 0;
+    }
+    .f02-stem-red {
+      background: rgba(208, 59, 59, 0.55);
+    }
+    .f02-node {
+      position: absolute;
+      top: 553px;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #0ca30c;
+    }
+    .f02-node-red {
+      background: #d03b3b;
+    }
+
+    /* glass cards */
+    .f02-card {
+      position: absolute;
+      padding: 24px 26px;
+      box-sizing: border-box;
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16), 0 24px 60px rgba(0, 0, 0, 0.45);
+      opacity: 0;
+    }
+    .f02-meta {
+      font-family: "IBM Plex Mono", Menlo, monospace;
+      font-weight: 600;
+      font-size: 0.85cqw;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #afb3b7;
+    }
+    .f02-title {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-top: 10px;
+      font-weight: 800;
+      font-size: 1.75cqw;
+      line-height: 1;
+      letter-spacing: -0.01em;
+      color: #ffffff;
+      white-space: nowrap;
+    }
+    .f02-sub {
+      margin-top: 16px;
+      font-family: "IBM Plex Mono", Menlo, monospace;
+      font-weight: 500;
+      font-size: 0.95cqw;
+      letter-spacing: 0.08em;
+      color: #17c117;
+      white-space: nowrap;
+    }
+    .f02-chip {
+      display: inline-block;
+      margin-top: 14px;
+      padding: 6px 12px;
+      border: 1px solid rgba(23, 193, 23, 0.5);
+      font-family: "IBM Plex Mono", Menlo, monospace;
+      font-weight: 500;
+      font-size: 0.95cqw;
+      letter-spacing: 0.08em;
+      color: #17c117;
+      white-space: nowrap;
+      opacity: 0;
+    }
+    .f02-ticksvg {
+      flex: 0 0 auto;
+    }
+
+    /* the red incident card */
+    .f02-card-red {
+      background: rgba(208, 59, 59, 0.16);
+      border-color: rgba(208, 59, 59, 0.6);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14), 0 28px 70px rgba(0, 0, 0, 0.55);
+    }
+    .f02-big {
+      margin-top: 12px;
+      font-weight: 900;
+      font-size: 2.7cqw;
+      line-height: 1;
+      letter-spacing: -0.02em;
+      color: #ffffff;
+      white-space: nowrap;
+    }
+    .f02-alert {
+      margin-top: 8px;
+      font-weight: 900;
+      font-size: 2.05cqw;
+      line-height: 1;
+      letter-spacing: -0.01em;
+      color: #d03b3b;
+      white-space: nowrap;
+    }
+    .f02-bell {
+      position: absolute;
+      top: 20px;
+      right: 22px;
+      width: 46px;
+      height: 46px;
+      overflow: visible;
+    }
+    .f02-bdraw {
+      fill: none;
+      stroke: #d03b3b;
+      stroke-width: 3;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    #f02-bellg,
+    #f02-ring {
+      transform-box: fill-box;
+      transform-origin: 50% 50%;
+    }
+    #f02-ring {
+      fill: none;
+      stroke: #d03b3b;
+      stroke-width: 2;
+      opacity: 0;
+    }
+
+    /* aftermath card — typed */
+    .f02-card-type {
+      left: 1160px;
+      top: 618px;
+      width: 560px;
+      height: 128px;
+    }
+    .f02-l1,
+    .f02-l2 {
+      font-family: "IBM Plex Mono", Menlo, monospace;
+      font-weight: 500;
+      font-size: 1.15cqw;
+      letter-spacing: 0.04em;
+      white-space: nowrap;
+    }
+    .f02-l1 {
+      color: #ffffff;
+      min-width: 360px;
+    }
+    .f02-l2wrap {
+      display: inline-flex;
+      align-items: baseline;
+      min-width: 400px;
+      margin-top: 16px;
+    }
+    .f02-l2 {
+      color: #fab219;
+    }
+    .f02-caret {
+      display: inline-block;
+      width: 12px;
+      height: 24px;
+      margin-left: 6px;
+      background: #fab219;
+      opacity: 0;
+    }
+  </style>
+
+  <div id="root" data-composition-id="02-incident" data-width="1920" data-height="1080">
+    <!-- ground -->
+    <div class="clip f02-bg" data-start="0" data-duration="9.131" data-track-index="0">
+      <div class="f02-grid"></div>
+      <div class="f02-vig"></div>
+    </div>
+
+    <!-- content -->
+    <div class="clip f02-stage" data-start="0" data-duration="9.131" data-track-index="1">
+      <div class="f02-ghost" id="f02-ghost">3:11</div>
+
+      <div class="f02-chrome f02-chrome-top" id="f02-chrome-top">
+        <span class="f02-kicker">incident · timeline</span>
+        <span class="f02-num">no. 02</span>
+      </div>
+
+      <div class="f02-world" id="f02-world">
+        <!-- rail -->
+        <svg class="f02-railsvg" id="f02-railsvg" viewBox="0 0 1760 80" preserveAspectRatio="none">
+          <line class="f02-rail" id="f02-rail" x1="0" y1="40" x2="1760" y2="40" />
+        </svg>
+
+        <!-- station 1 · friday merge -->
+        <div class="f02-stem" id="f02-stem1" style="left: 579px; top: 480px; height: 78px"></div>
+        <div class="f02-node" id="f02-node1" style="left: 573px"></div>
+        <div class="f02-card" id="f02-c1" style="left: 410px; top: 300px; width: 340px; height: 180px">
+          <div class="f02-meta">friday</div>
+          <div class="f02-title">
+            merge
+            <svg class="f02-ticksvg" viewBox="0 0 48 48" width="38" height="38">
+              <circle cx="24" cy="24" r="19" fill="#0ca30c" />
+              <path class="f02-tick" d="M14 24.5 L21 31.5 L34 16.5" fill="none" stroke="#ffffff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </div>
+          <div class="f02-sub" id="f02-c1-sub">pipeline green</div>
+        </div>
+
+        <!-- station 2 · agent claim -->
+        <div class="f02-stem" id="f02-stem2" style="left: 1009px; top: 480px; height: 78px"></div>
+        <div class="f02-node" id="f02-node2" style="left: 1003px"></div>
+        <div class="f02-card" id="f02-c2" style="left: 840px; top: 300px; width: 340px; height: 180px">
+          <div class="f02-meta">agent</div>
+          <div class="f02-title">
+            tests passed
+            <svg class="f02-ticksvg" viewBox="0 0 48 48" width="38" height="38">
+              <circle cx="24" cy="24" r="19" fill="#0ca30c" />
+              <path class="f02-tick" d="M14 24.5 L21 31.5 L34 16.5" fill="none" stroke="#ffffff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </div>
+          <span class="f02-chip" id="f02-chip">confidence 0.97</span>
+        </div>
+
+        <!-- station 3 · the incident -->
+        <div class="f02-stem f02-stem-red" id="f02-stem3" style="left: 1439px; top: 490px; height: 68px"></div>
+        <div class="f02-node f02-node-red" id="f02-node3" style="left: 1433px"></div>
+        <div class="f02-card f02-card-red" id="f02-c3" style="left: 1260px; top: 290px; width: 360px; height: 200px">
+          <div class="f02-meta">saturday</div>
+          <div class="f02-big">03:11</div>
+          <div class="f02-alert">prod down</div>
+          <svg class="f02-bell" id="f02-bell" viewBox="0 0 48 48">
+            <g id="f02-bellg">
+              <path class="f02-bdraw f02-bp" d="M24 8c2 0 3.4 1.4 3.6 3.3C33 13 37 18 37 24v7l4 6H7l4-6v-7c0-6 4-11 9.4-12.7C20.6 9.4 22 8 24 8Z" />
+              <path class="f02-bdraw f02-bp" d="M20 42a4 4 0 0 0 8 0" />
+            </g>
+            <circle id="f02-ring" cx="24" cy="26" r="20" />
+          </svg>
+        </div>
+
+        <!-- aftermath · typed beneath the red card -->
+        <div class="f02-card f02-card-type" id="f02-c4">
+          <div class="f02-l1" id="f02-l1"></div>
+          <div class="f02-l2wrap"><span class="f02-l2" id="f02-l2"></span><span class="f02-caret" id="f02-caret"></span></div>
+        </div>
+      </div>
+
+      <div class="f02-chrome f02-chrome-bot" id="f02-chrome-bot">
+        <span>claim chain · unverified</span>
+        <span class="f02-counter" id="f02-counter">elapsed 0h</span>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <script>
+    (function () {
+      var D = 9.131;
+      var RED = "#d03b3b";
+
+      var tl = gsap.timeline({ paused: true });
+      window.__timelines = window.__timelines || {};
+      window.__timelines["02-incident"] = tl;
+      var $ = function (id) {
+        return document.getElementById(id);
+      };
+
+      /* ── measured stroke setup ── */
+      var rail = $("f02-rail");
+      var railLen = rail.getTotalLength() * 1.02;
+      rail.style.strokeDasharray = String(railLen);
+      rail.style.strokeDashoffset = String(railLen);
+
+      var ticks = [];
+      document.querySelectorAll(".f02-tick").forEach(function (p) {
+        var l = p.getTotalLength() * 1.02;
+        p.style.strokeDasharray = String(l);
+        p.style.strokeDashoffset = String(l);
+        ticks.push({ el: p, len: l });
+      });
+
+      var bellPaths = [];
+      document.querySelectorAll(".f02-bp").forEach(function (p) {
+        var l = p.getTotalLength() * 1.02;
+        p.style.strokeDasharray = String(l);
+        p.style.strokeDashoffset = String(l);
+        bellPaths.push({ el: p, len: l });
+      });
+
+      /* ── virtual camera: one writer, pan mode + organic drift ── */
+      var world = $("f02-world");
+      var cam = { x: 90, y: 0 };
+      var ddx = 0,
+        ddy = 0;
+      function applyCam() {
+        world.style.transform = "translate(" + (cam.x + ddx) + "px," + (cam.y + ddy) + "px)";
+      }
+      var drift = { p: 0 };
+      tl.to(
+        drift,
+        {
+          p: Math.PI * 2 * 1.15,
+          duration: D,
+          ease: "none",
+          onUpdate: function () {
+            ddx = Math.sin(drift.p) * 4;
+            ddy = Math.sin(drift.p * 1.3) * 2.5;
+            applyCam();
+          },
+        },
+        0
+      );
+      applyCam(); // seed frame 0
+
+      /* seated micro-pans — camera drifts left-to-right as cards light in sequence */
+      tl.fromTo(cam, { x: 90 }, { x: 30, duration: 1.4, ease: "power2.inOut", onUpdate: applyCam, immediateRender: false }, 1.15);
+      tl.fromTo(cam, { x: 30 }, { x: -45, duration: 1.3, ease: "power2.inOut", onUpdate: applyCam, immediateRender: false }, 3.25);
+      tl.fromTo(cam, { x: -45 }, { x: -125, duration: 1.0, ease: "power2.inOut", onUpdate: applyCam, immediateRender: false }, 4.5);
+      tl.fromTo(cam, { x: -125 }, { x: -150, duration: 1.2, ease: "power2.inOut", onUpdate: applyCam, immediateRender: false }, 6.8);
+      /* impact jolt when the red card lands */
+      tl.fromTo(cam, { y: 9 }, { y: 0, duration: 0.22, ease: "power2.out", onUpdate: applyCam, immediateRender: false }, 4.99);
+
+      /* ── discrete text driver: card-4 typing + caret + counter ── */
+      var L1 = [
+        { t: 6.95, s: "4h" },
+        { t: 7.04, s: "4h incident" },
+        { t: 7.13, s: "4h incident · 3" },
+        { t: 7.23, s: "4h incident · 3 engineers" },
+      ];
+      var L2 = [
+        { t: 7.45, s: "cause" },
+        { t: 7.53, s: "cause:" },
+        { t: 7.62, s: "cause: stale" },
+        { t: 7.74, s: "cause: stale test" },
+        { t: 7.87, s: "cause: stale test ev" },
+        { t: 8.02, s: "cause: stale test evidence" },
+      ];
+      function textAt(seq, t) {
+        for (var i = seq.length - 1; i >= 0; i--) {
+          if (t >= seq[i].t) return seq[i].s;
+        }
+        return "";
+      }
+      var l1 = $("f02-l1"),
+        l2 = $("f02-l2"),
+        caret = $("f02-caret"),
+        counter = $("f02-counter");
+      var drv = { t: 0 };
+      tl.to(
+        drv,
+        {
+          t: D,
+          duration: D,
+          ease: "none",
+          onUpdate: function () {
+            var t = drv.t;
+            l1.textContent = textAt(L1, t);
+            l2.textContent = textAt(L2, t);
+            caret.style.opacity =
+              t > 6.9 && t < 8.12 ? (Math.sin((t / 0.6) * Math.PI * 2) > 0 ? "1" : "0") : "0";
+            if (t >= 6.9) {
+              counter.textContent = "elapsed +4h";
+              counter.style.color = RED;
+            } else {
+              counter.textContent = "elapsed 0h";
+              counter.style.color = "#ffffff";
+            }
+          },
+        },
+        0
+      );
+
+      /* ── Scene 1 (0.0–2.2): ghost seats, rail draws, first card lands ── */
+      tl.fromTo("#f02-chrome-top", { y: 12, opacity: 0 }, { y: 0, opacity: 1, duration: 0.32, ease: "power3.out" }, 0.08);
+      tl.fromTo("#f02-chrome-bot", { y: 12, opacity: 0 }, { y: 0, opacity: 1, duration: 0.32, ease: "power3.out" }, 0.14);
+      tl.fromTo("#f02-ghost", { opacity: 0, scale: 1.04 }, { opacity: 0.06, scale: 1, duration: 0.7, ease: "power2.out" }, 0.2);
+      tl.fromTo(rail, { strokeDashoffset: railLen }, { strokeDashoffset: 0, duration: 1.25, ease: "power2.out" }, 0.5);
+
+      tl.fromTo("#f02-c1", { y: 26, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power3.out" }, 0.85);
+      tl.fromTo("#f02-stem1", { scaleY: 0 }, { scaleY: 1, duration: 0.3, ease: "power2.out" }, 0.9);
+      tl.fromTo("#f02-node1", { scale: 0 }, { scale: 1, duration: 0.3, ease: "power3.out" }, 0.95);
+      tl.fromTo(ticks[0].el, { strokeDashoffset: ticks[0].len }, { strokeDashoffset: 0, duration: 0.28, ease: "power2.out" }, 1.08);
+      tl.fromTo("#f02-c1-sub", { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.3, ease: "power2.out" }, 1.45);
+
+      /* ── Scene 2 (2.2–4.4): agent claims green, confidence chip ── */
+      tl.fromTo("#f02-c2", { y: 26, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power3.out" }, 2.55);
+      tl.fromTo("#f02-stem2", { scaleY: 0 }, { scaleY: 1, duration: 0.3, ease: "power2.out" }, 2.6);
+      tl.fromTo("#f02-node2", { scale: 0 }, { scale: 1, duration: 0.3, ease: "power3.out" }, 2.65);
+      tl.fromTo(ticks[1].el, { strokeDashoffset: ticks[1].len }, { strokeDashoffset: 0, duration: 0.28, ease: "power2.out" }, 2.78);
+      tl.fromTo("#f02-chip", { scale: 0.7, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.35, ease: "power3.out" }, 3.4);
+
+      /* ── Scene 3 (4.4–6.6): rail desaturates, red card slams, pager pulses ×2 ── */
+      tl.fromTo("#f02-railsvg", { opacity: 1 }, { opacity: 0.55, duration: 0.55, ease: "power2.out", immediateRender: false }, 4.45);
+      tl.fromTo("#f02-c3", { scale: 1.26, opacity: 0, y: -16 }, { scale: 1, opacity: 1, y: 0, duration: 0.34, ease: "power4.out" }, 4.65);
+      tl.fromTo("#f02-stem3", { scaleY: 0 }, { scaleY: 1, duration: 0.26, ease: "power2.out" }, 4.7);
+      tl.fromTo("#f02-node3", { scale: 0 }, { scale: 1, duration: 0.3, ease: "power3.out" }, 4.72);
+      tl.fromTo("#f02-ghost", { opacity: 0.06 }, { opacity: 0.09, duration: 0.3, ease: "power1.out", immediateRender: false }, 4.72);
+      tl.fromTo(bellPaths[0].el, { strokeDashoffset: bellPaths[0].len }, { strokeDashoffset: 0, duration: 0.35, ease: "power2.out" }, 4.78);
+      tl.fromTo(bellPaths[1].el, { strokeDashoffset: bellPaths[1].len }, { strokeDashoffset: 0, duration: 0.22, ease: "power2.out" }, 5.02);
+
+      [5.3, 5.9].forEach(function (t0) {
+        tl.fromTo("#f02-ring", { scale: 0.5, opacity: 0.55 }, { scale: 1.55, opacity: 0, duration: 0.55, ease: "power2.out", immediateRender: false }, t0);
+        tl.fromTo("#f02-bellg", { scale: 1 }, { scale: 1.18, duration: 0.12, ease: "power2.out", immediateRender: false }, t0);
+        tl.fromTo("#f02-bellg", { scale: 1.18 }, { scale: 1, duration: 0.18, ease: "power2.inOut", immediateRender: false }, t0 + 0.12);
+      });
+
+      /* ── Scene 4 (6.6–9.0): aftermath types, rail dims except the red card ── */
+      tl.fromTo("#f02-c4", { y: 22, opacity: 0 }, { y: 0, opacity: 1, duration: 0.45, ease: "power3.out" }, 6.7);
+      tl.fromTo("#f02-railsvg", { opacity: 0.55 }, { opacity: 0.32, duration: 0.6, ease: "power2.out", immediateRender: false }, 6.85);
+      tl.fromTo("#f02-ghost", { opacity: 0.09 }, { opacity: 0.045, duration: 0.6, ease: "power2.out", immediateRender: false }, 6.9);
+      ["#f02-c1", "#f02-c2"].forEach(function (sel) {
+        tl.fromTo(sel, { opacity: 1 }, { opacity: 0.3, duration: 0.6, ease: "power2.out", immediateRender: false }, 6.85);
+      });
+      ["#f02-node1", "#f02-node2", "#f02-stem1", "#f02-stem2"].forEach(function (sel) {
+        tl.fromTo(sel, { opacity: 1 }, { opacity: 0.3, duration: 0.6, ease: "power2.out", immediateRender: false }, 6.85);
+      });
+      tl.fromTo("#f02-c3", { scale: 1 }, { scale: 1.015, duration: 0.5, ease: "power2.out", immediateRender: false }, 7.05);
+      /* hold — the red card and its aftermath carry the frame to the end */
+    })();
+  </script>
+</template>

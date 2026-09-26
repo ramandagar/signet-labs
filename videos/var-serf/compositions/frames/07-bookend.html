@@ -1,0 +1,281 @@
+<template>
+<style>
+  @font-face {
+    font-family: "Barlow";
+    src: url("assets/fonts/Barlow-900.woff2") format("woff2");
+    font-weight: 900;
+    font-display: block;
+  }
+  @font-face {
+    font-family: "IBM Plex Mono";
+    src: url("assets/fonts/IBMPlexMono-500.woff2") format("woff2");
+    font-weight: 500;
+    font-display: block;
+  }
+
+  #root {
+    position: relative;
+    width: 1920px;
+    height: 1080px;
+    overflow: hidden;
+    container-type: size;
+    font-family: "Barlow", sans-serif;
+  }
+
+  /* ground — flat ink plane on its own clip layer (never on #root) */
+  #root .bk07-ground {
+    position: absolute;
+    inset: 0;
+    background: #1A1A19;
+  }
+
+  #root .bk07-line-layer,
+  #root .bk07-lock-layer {
+    position: absolute;
+    inset: 0;
+  }
+
+  /* caption-safe field — everything lives in the top 83% (y <= ~896px) */
+  #root .bk07-field {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 83%;
+  }
+
+  /* scene 1 — statement line, lowercase 900, centered in the field */
+  #root .bk07-line {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 0.26em;
+    font-weight: 900;
+    font-size: 5.2cqw;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    color: #FFFFFF;
+  }
+  #root .bk07-w {
+    display: inline-block;
+  }
+  /* the green tick — GREEN #0CA30C, green use #2 of 2, the film's only other green */
+  #root .bk07-tick {
+    width: 4.6cqw;
+    height: auto;
+    flex: none;
+  }
+  #root .bk07-tick path {
+    fill: none;
+    stroke: #0CA30C;
+    stroke-width: 11;
+    stroke-linecap: butt;
+    stroke-linejoin: miter;
+  }
+
+  /* scenes 2-3 — end-card lockup, centered in the field */
+  #root .bk07-lock {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  #root .bk07-row {
+    display: flex;
+    align-items: center;
+    gap: 1.7cqw;
+  }
+  /* ◈ mark — accent blue, stroke-drawn once */
+  #root .bk07-mark {
+    width: 5.2cqw;
+    height: 5.2cqw;
+    flex: none;
+  }
+  #root .bk07-mark path {
+    fill: none;
+    stroke: #3987E5;
+    stroke-width: 7;
+    stroke-linecap: butt;
+    stroke-linejoin: miter;
+  }
+  #root .bk07-word {
+    font-weight: 900;
+    font-size: 6.2cqw;
+    line-height: 1;
+    letter-spacing: -0.04em;
+    color: #FFFFFF;
+    white-space: nowrap;
+  }
+  #root .bk07-l {
+    display: inline-block;
+  }
+  /* meta line — verbatim, mono chrome; no text-transform so the URL reads exactly */
+  #root .bk07-meta {
+    margin-top: 2.2cqw;
+    font-family: "IBM Plex Mono", monospace;
+    font-weight: 500;
+    font-size: 1.05cqw;
+    letter-spacing: 0.14em;
+    color: #AFB3B7;
+    white-space: nowrap;
+  }
+  #root .bk07-statement {
+    margin-top: 2.6cqw;
+    font-weight: 900;
+    font-size: 3.6cqw;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    color: #FFFFFF;
+  }
+  #root .bk07-proof {
+    color: #3987E5;
+  }
+</style>
+
+<div id="root" data-composition-id="07-bookend" data-duration="3.883" data-width="1920" data-height="1080">
+  <div class="clip bk07-ground" data-start="0" data-duration="3.883" data-track-index="0"></div>
+
+  <!-- scene 1: "errors machines can use." builds word by word; green tick draws after "use." -->
+  <div class="clip bk07-line-layer" data-start="0" data-duration="3.883" data-track-index="1">
+    <div class="bk07-field">
+      <div class="bk07-line">
+        <span class="bk07-w bk07-w1">errors</span>
+        <span class="bk07-w bk07-w2">machines</span>
+        <span class="bk07-w bk07-w3">can</span>
+        <span class="bk07-w bk07-w4">use.</span>
+        <svg class="bk07-tick" viewBox="0 0 100 82" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M8 44 L37 70 L92 12"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- scenes 2-3: stage cleared fully blank, lockup assembles, dead-still hold -->
+  <div class="clip bk07-lock-layer" data-start="0" data-duration="3.883" data-track-index="2">
+    <div class="bk07-field">
+      <div class="bk07-lock">
+        <div class="bk07-row">
+          <svg class="bk07-mark" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path class="bk07-mark-outer" d="M50 5 L95 50 L50 95 L5 50 Z"/>
+            <path class="bk07-mark-inner" d="M50 34 L66 50 L50 66 L34 50 Z"/>
+          </svg>
+          <div class="bk07-word"><span class="bk07-l">v</span><span class="bk07-l">a</span><span class="bk07-l">r</span><span class="bk07-l">-</span><span class="bk07-l">r</span><span class="bk07-l">u</span><span class="bk07-l">n</span><span class="bk07-l">t</span><span class="bk07-l">i</span><span class="bk07-l">m</span><span class="bk07-l">e</span></div>
+        </div>
+        <div class="bk07-meta">OPEN SOURCE · github.com/signet-labs/var-runtime</div>
+        <div class="bk07-statement"><span class="bk07-proof">proof</span>-or-stop.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<script>
+  window.__timelines = window.__timelines || {};
+  const tl = gsap.timeline({ paused: true, defaults: { ease: "power3.out" } });
+
+  /* svg-path-draw setup — measured path lengths, never guessed */
+  function prime(p) {
+    const len = p.getTotalLength() * 1.05;
+    p.style.strokeDasharray = String(len);
+    p.style.strokeDashoffset = String(len);
+    return len;
+  }
+  const DASH_TICK = prime(document.querySelector(".bk07-tick path"));
+  const DASH_OUTER = prime(document.querySelector(".bk07-mark-outer"));
+  const DASH_INNER = prime(document.querySelector(".bk07-mark-inner"));
+
+  /* ============ Scene 1 (0.0 - 1.45s): line builds word by word; tick draws ============ */
+
+  /* word-by-word fade-through-grey register (quiet fades, grey -> white; not a waterfall) */
+  const words = [".bk07-w1", ".bk07-w2", ".bk07-w3", ".bk07-w4"];
+  const wordAt = [0.05, 0.28, 0.52, 0.76];
+  words.forEach((sel, i) => {
+    tl.fromTo(
+      sel,
+      { autoAlpha: 0, color: "#AFB3B7" },
+      { autoAlpha: 1, color: "#FFFFFF", duration: 0.42, ease: "power1.inOut" },
+      wordAt[i]
+    );
+  });
+
+  /* green tick draws after "use." (GREEN #0CA30C — green use #2 of 2) */
+  tl.fromTo(
+    ".bk07-tick path",
+    { strokeDashoffset: DASH_TICK },
+    { strokeDashoffset: 0, duration: 0.34, ease: "power2.out" },
+    1.02
+  );
+
+  /* ============ Scene 2 (1.45 - 2.36s): clears FULLY OUT, blank beat, lockup assembles ============ */
+
+  /* clear: word-by-word fade-out, left first — everything invisible by 1.70s */
+  words.forEach((sel, i) => {
+    tl.fromTo(
+      sel,
+      { autoAlpha: 1 },
+      { autoAlpha: 0, duration: 0.13, ease: "power1.in", immediateRender: false },
+      1.46 + i * 0.035
+    );
+  });
+  tl.fromTo(
+    ".bk07-tick",
+    { autoAlpha: 1 },
+    { autoAlpha: 0, duration: 0.12, ease: "power1.in", immediateRender: false },
+    1.5
+  );
+  /* hard gate: line layer unmounted from 1.72s — lockup cannot overlap it at any sample */
+  tl.set(".bk07-line-layer", { opacity: 0 }, 1.72);
+
+  /* blank stage 1.70 - 1.76s, then the mark blooms in while its stroke draws (draws once) */
+  tl.fromTo(
+    ".bk07-mark",
+    { autoAlpha: 0, scale: 0.82 },
+    { autoAlpha: 1, scale: 1, duration: 0.3, ease: "power2.out" },
+    1.76
+  );
+  tl.fromTo(
+    ".bk07-mark-outer",
+    { strokeDashoffset: DASH_OUTER },
+    { strokeDashoffset: 0, duration: 0.34, ease: "power2.out" },
+    1.76
+  );
+  tl.fromTo(
+    ".bk07-mark-inner",
+    { strokeDashoffset: DASH_INNER },
+    { strokeDashoffset: 0, duration: 0.22, ease: "power2.out" },
+    2.0
+  );
+
+  /* var-runtime — letter cascade left to right with slight overshoot */
+  tl.fromTo(
+    ".bk07-l",
+    { autoAlpha: 0, y: 20 },
+    { autoAlpha: 1, y: 0, duration: 0.22, stagger: 0.018, ease: "back.out(1.7)" },
+    1.94
+  );
+
+  /* meta line — left-to-right clip wipe */
+  tl.fromTo(
+    ".bk07-meta",
+    { clipPath: "inset(0% 100% 0% 0%)" },
+    { clipPath: "inset(0% 0% 0% 0%)", duration: 0.24, ease: "power2.inOut" },
+    2.1
+  );
+
+  /* proof-or-stop. — rises in, "proof" in accent blue */
+  tl.fromTo(
+    ".bk07-statement",
+    { autoAlpha: 0, y: 26 },
+    { autoAlpha: 1, y: 0, duration: 0.24, ease: "power3.out" },
+    2.12
+  );
+
+  /* ============ Scene 3 (2.36 - 3.883s): DEAD STILL — no motion scheduled past 2.36s; hold = 1.52s ============ */
+
+  window.__timelines["07-bookend"] = tl;
+</script>
+</template>

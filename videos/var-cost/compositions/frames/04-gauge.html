@@ -1,0 +1,290 @@
+<template>
+  <style>
+    /* Fonts — shipped files only (project-root relative paths) */
+    @font-face {
+      font-family: "IBM Plex Mono";
+      src: url("assets/fonts/IBMPlexMono-500.woff2") format("woff2");
+      font-weight: 500;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: "IBM Plex Mono";
+      src: url("assets/fonts/IBMPlexMono-600.woff2") format("woff2");
+      font-weight: 600;
+      font-style: normal;
+    }
+
+    /* Root — styled via #root only. Dark register: ground #1A1A19, text #FFFFFF,
+       accent #3987E5 (the frame's one color; no green/amber/red here). */
+    #root {
+      position: absolute;
+      inset: 0;
+      width: 1920px;
+      height: 1080px;
+      overflow: hidden;
+      container-type: size;
+      background: transparent;
+      font-family: "IBM Plex Mono", monospace;
+    }
+
+    .g04-bg,
+    .g04-stage {
+      position: absolute;
+      inset: 0;
+    }
+    .g04-bg {
+      background: #1a1a19;
+    }
+
+    /* Slow continuous camera wrapper (blueprint signature move) */
+    .g04-zoom {
+      position: absolute;
+      inset: 0;
+      box-sizing: border-box;
+      padding: 120px 106px 0;
+    }
+
+    /* Chrome — mono uppercase, tracked */
+    .g04-chrome {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+    .g04-kicker,
+    .g04-meta,
+    .g04-route-label,
+    .g04-ax,
+    .g04-line-label {
+      font-weight: 500;
+      font-size: 0.72cqw;
+      line-height: 1;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+    .g04-kicker {
+      color: #3987e5;
+    }
+    .g04-meta {
+      color: rgba(255, 255, 255, 0.55);
+    }
+
+    /* Hero row — giant tabular readout left, route chip right-anchored
+       (space-between keeps the chip fixed when the digit count grows 62 → 100) */
+    .g04-hero {
+      margin-top: 110px;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+    .g04-readout {
+      display: flex;
+      align-items: baseline;
+      color: #3987e5;
+      font-weight: 600;
+    }
+    .g04-num {
+      display: inline-block;
+      font-size: 12.5cqw;
+      line-height: 0.9;
+      letter-spacing: -0.02em;
+      font-variant-numeric: tabular-nums; /* mandatory — no jitter across 62 → 79 → 100 */
+    }
+    .g04-pct {
+      font-size: 4.6cqw;
+      font-weight: 500;
+      margin-left: 0.8cqw;
+      letter-spacing: 0;
+    }
+
+    .g04-route {
+      display: flex;
+      align-items: center;
+      gap: 1.6cqw;
+    }
+    .g04-route-label {
+      color: rgba(255, 255, 255, 0.45);
+    }
+    .g04-chipbox {
+      display: inline-grid;
+    }
+    .g04-chip {
+      grid-area: 1 / 1;
+      font-weight: 600;
+      font-size: 0.85cqw;
+      line-height: 1;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      padding: 1cqw 1.8cqw;
+    }
+    .g04-chip--flagship {
+      color: rgba(255, 255, 255, 0.72);
+      border: 1px solid rgba(255, 255, 255, 0.28);
+    }
+    .g04-chip--fast {
+      background: #3987e5;
+      color: #1a1a19;
+      border: 1px solid #3987e5;
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    /* Gauge — hairline track, blue fill, 1px ticks at 10% intervals */
+    .g04-gauge {
+      position: relative;
+      margin-top: 104px;
+    }
+    .g04-track {
+      position: relative;
+      height: 3.4cqw;
+      border: 1px solid rgba(215, 216, 217, 0.35);
+    }
+    .g04-tick {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 1px;
+      background: rgba(215, 216, 217, 0.28);
+    }
+    /* width:100% REQUIRED — fill is scaleX'd from a left origin, never width-tweened */
+    .g04-fill {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #3987e5;
+      transform: scaleX(0.62);
+      transform-origin: left center;
+    }
+
+    .g04-axis {
+      position: relative;
+      margin-top: 1.1cqw;
+      height: 1.2cqw;
+    }
+    .g04-ax {
+      position: absolute;
+      top: 0;
+      letter-spacing: 0.1em;
+      color: rgba(255, 255, 255, 0.45);
+      transform: translateX(-50%);
+    }
+    .g04-ax--l {
+      transform: none;
+    }
+    .g04-ax--r {
+      transform: translateX(-100%);
+    }
+    .g04-line-label {
+      position: absolute;
+      right: 0;
+      top: 2.4cqw;
+      color: rgba(255, 255, 255, 0.45);
+    }
+  </style>
+
+  <div id="root" data-composition-id="04-gauge" data-width="1920" data-height="1080" data-duration="6.656">
+    <!-- full-bleed ground on a dedicated lowest-track clip (never on #root) -->
+    <div class="clip g04-bg" data-start="0" data-duration="6.656" data-track-index="0"></div>
+
+    <div class="clip g04-stage" data-start="0" data-duration="6.656" data-track-index="1">
+      <div class="g04-zoom" id="g04-zoom">
+        <header class="g04-chrome" id="g04-chrome">
+          <div class="g04-kicker">route cost</div>
+          <div class="g04-meta">% of budget</div>
+        </header>
+
+        <div class="g04-hero" id="g04-hero">
+          <div class="g04-readout" id="g04-readout">
+            <span class="g04-num" id="g04-num">62</span><span class="g04-pct">%</span>
+          </div>
+          <div class="g04-route" id="g04-route">
+            <span class="g04-route-label">route</span>
+            <span class="g04-chipbox">
+              <span class="g04-chip g04-chip--flagship" id="g04-chip-flagship">flagship</span>
+              <span class="g04-chip g04-chip--fast" id="g04-chip-fast">fast</span>
+            </span>
+          </div>
+        </div>
+
+        <div class="g04-gauge" id="g04-gaugeblock">
+          <div class="g04-track">
+            <div class="g04-tick" style="left: 10%"></div>
+            <div class="g04-tick" style="left: 20%"></div>
+            <div class="g04-tick" style="left: 30%"></div>
+            <div class="g04-tick" style="left: 40%"></div>
+            <div class="g04-tick" style="left: 50%"></div>
+            <div class="g04-tick" style="left: 60%"></div>
+            <div class="g04-tick" style="left: 70%"></div>
+            <div class="g04-tick" style="left: 80%"></div>
+            <div class="g04-tick" style="left: 90%"></div>
+            <div class="g04-fill" id="g04-fill"></div>
+          </div>
+          <div class="g04-axis">
+            <span class="g04-ax g04-ax--l" style="left: 0%">0</span>
+            <span class="g04-ax" style="left: 10%">10</span>
+            <span class="g04-ax" style="left: 20%">20</span>
+            <span class="g04-ax" style="left: 30%">30</span>
+            <span class="g04-ax" style="left: 40%">40</span>
+            <span class="g04-ax" style="left: 50%">50</span>
+            <span class="g04-ax" style="left: 60%">60</span>
+            <span class="g04-ax" style="left: 70%">70</span>
+            <span class="g04-ax" style="left: 80%">80</span>
+            <span class="g04-ax" style="left: 90%">90</span>
+            <span class="g04-ax g04-ax--r" id="g04-ax100" style="left: 100%">100</span>
+            <span class="g04-line-label" id="g04-line-label">budget line</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <script>
+    var DUR = 6.656; // fixed upstream — never stretched or trimmed
+    var T0 = 0.3; // count 62 -> 79 begins
+    var T1 = 3.55; // lands 79 on "Seventy-nine"
+    var FLIP = 4.15; // count reads 80; chip FLAGSHIP -> FAST (one hard swap)
+    var T3 = 6.15; // lands 100, freezes; zoom drifts to DUR
+
+    var numEl = document.getElementById("g04-num");
+    var fillEl = document.getElementById("g04-fill");
+    var state = { v: 62 }; // deterministic proxy — value is pure index math of time
+    function renderValue() {
+      numEl.textContent = Math.round(state.v);
+    }
+
+    var tl = gsap.timeline({ paused: true });
+
+    // Blueprint signature: very slow continuous camera zoom-in underneath the whole shot
+    tl.fromTo("#g04-zoom", { scale: 1 }, { scale: 1.035, duration: DUR, ease: "none" }, 0);
+
+    // Quick cut-in entrances (fromTo; hero fully visible well before 0.5s)
+    tl.fromTo("#g04-chrome", { autoAlpha: 0, y: 14 }, { autoAlpha: 1, y: 0, duration: 0.5, ease: "power2.out" }, 0.02);
+    tl.fromTo("#g04-hero", { autoAlpha: 0, y: 30 }, { autoAlpha: 1, y: 0, duration: 0.55, ease: "power3.out" }, 0.06);
+    tl.fromTo("#g04-gaugeblock", { autoAlpha: 0, y: 30 }, { autoAlpha: 1, y: 0, duration: 0.55, ease: "power3.out" }, 0.14);
+
+    // Count-up — number, scale growth, and bar fill share the same window + ease (one beat)
+    tl.fromTo(state, { v: 62 }, { v: 79, duration: T1 - T0, ease: "power2.out", onUpdate: renderValue, immediateRender: true }, T0);
+    tl.fromTo(state, { v: 80 }, { v: 100, duration: T3 - FLIP, ease: "power2.out", onUpdate: renderValue, immediateRender: false }, FLIP);
+
+    // Transform scale grows toward (then past) the static final type size — never tween font-size
+    tl.fromTo("#g04-readout", { scale: 0.9 }, { scale: 1, duration: T1 - T0, ease: "power2.out", transformOrigin: "left bottom" }, T0);
+    tl.fromTo("#g04-readout", { scale: 1 }, { scale: 1.045, duration: T3 - FLIP, ease: "power2.out", transformOrigin: "left bottom", immediateRender: false }, FLIP);
+
+    // Progress fill — scaleX from a left origin, same ease/window as the count
+    tl.fromTo(fillEl, { scaleX: 0.62 }, { scaleX: 0.79, duration: T1 - T0, ease: "power2.out" }, T0);
+    tl.fromTo(fillEl, { scaleX: 0.8 }, { scaleX: 1, duration: T3 - FLIP, ease: "power2.out", immediateRender: false }, FLIP);
+
+    // The flip at 80 — one hard swap, no bounce (zero-duration sets, seek-safe)
+    tl.set("#g04-chip-flagship", { autoAlpha: 0 }, FLIP);
+    tl.set("#g04-chip-fast", { autoAlpha: 1 }, FLIP);
+
+    // "before you reach the line" — the 100 mark lights as the fill closes on it
+    tl.fromTo("#g04-ax100", { color: "rgba(255,255,255,0.45)" }, { color: "#3987E5", duration: 0.4, ease: "power2.out" }, 5.3);
+    tl.fromTo("#g04-line-label", { color: "rgba(255,255,255,0.45)" }, { color: "#3987E5", duration: 0.4, ease: "power2.out" }, 5.3);
+
+    window.__timelines["04-gauge"] = tl;
+  </script>
+</template>

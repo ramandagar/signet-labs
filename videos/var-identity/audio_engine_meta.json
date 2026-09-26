@@ -1,0 +1,744 @@
+{
+  "tts_provider": "kokoro",
+  "voice_id": "am_michael",
+  "bgm": null,
+  "bgm_pending": false,
+  "bgm_provider": null,
+  "bgm_pid": null,
+  "bgm_log": null,
+  "bgm_mode": null,
+  "bgm_target_duration_s": null,
+  "bgm_seed_duration_s": null,
+  "bgm_loop_count": null,
+  "voices": [
+    {
+      "id": "01",
+      "path": "assets/voice/01.wav",
+      "duration_s": 2.987,
+      "words": [
+        {
+          "id": "w0",
+          "text": "MCP",
+          "start": 0.08,
+          "end": 0.25
+        },
+        {
+          "id": "w1",
+          "text": "doesn't",
+          "start": 0.25,
+          "end": 0.86
+        },
+        {
+          "id": "w2",
+          "text": "say",
+          "start": 0.86,
+          "end": 1.12
+        },
+        {
+          "id": "w3",
+          "text": "who's",
+          "start": 1.12,
+          "end": 1.55
+        },
+        {
+          "id": "w4",
+          "text": "calling,",
+          "start": 1.55,
+          "end": 2.34
+        },
+        {
+          "id": "w5",
+          "text": "we",
+          "start": 2.36,
+          "end": 2.48
+        },
+        {
+          "id": "w6",
+          "text": "do.",
+          "start": 2.48,
+          "end": 2.77
+        }
+      ]
+    },
+    {
+      "id": "02",
+      "path": "assets/voice/02.wav",
+      "duration_s": 4.117,
+      "words": [
+        {
+          "id": "w0",
+          "text": "Every",
+          "start": 0.11,
+          "end": 0.34
+        },
+        {
+          "id": "w1",
+          "text": "tool",
+          "start": 0.34,
+          "end": 0.61
+        },
+        {
+          "id": "w2",
+          "text": "call",
+          "start": 0.61,
+          "end": 0.88
+        },
+        {
+          "id": "w3",
+          "text": "your",
+          "start": 0.88,
+          "end": 1.15
+        },
+        {
+          "id": "w4",
+          "text": "agent",
+          "start": 1.15,
+          "end": 1.49
+        },
+        {
+          "id": "w5",
+          "text": "makes",
+          "start": 1.49,
+          "end": 1.86
+        },
+        {
+          "id": "w6",
+          "text": "carries",
+          "start": 1.86,
+          "end": 2.42
+        },
+        {
+          "id": "w7",
+          "text": "a",
+          "start": 2.42,
+          "end": 2.75
+        },
+        {
+          "id": "w8",
+          "text": "signed",
+          "start": 2.75,
+          "end": 3.22
+        },
+        {
+          "id": "w9",
+          "text": "envelope.",
+          "start": 3.22,
+          "end": 4.07
+        }
+      ]
+    },
+    {
+      "id": "03",
+      "path": "assets/voice/03.wav",
+      "duration_s": 7.872,
+      "words": [
+        {
+          "id": "w0",
+          "text": "Inside",
+          "start": 0.03,
+          "end": 0.59
+        },
+        {
+          "id": "w1",
+          "text": "the",
+          "start": 0.59,
+          "end": 0.89
+        },
+        {
+          "id": "w2",
+          "text": "principle",
+          "start": 0.89,
+          "end": 1.78
+        },
+        {
+          "id": "w3",
+          "text": "a",
+          "start": 1.78,
+          "end": 1.88
+        },
+        {
+          "id": "w4",
+          "text": "real",
+          "start": 1.88,
+          "end": 2.28
+        },
+        {
+          "id": "w5",
+          "text": "human,",
+          "start": 2.28,
+          "end": 2.93
+        },
+        {
+          "id": "w6",
+          "text": "the",
+          "start": 3.02,
+          "end": 3.16
+        },
+        {
+          "id": "w7",
+          "text": "agent",
+          "start": 3.16,
+          "end": 3.44
+        },
+        {
+          "id": "w8",
+          "text": "and",
+          "start": 3.54,
+          "end": 3.64
+        },
+        {
+          "id": "w9",
+          "text": "exactly",
+          "start": 3.64,
+          "end": 4.26
+        },
+        {
+          "id": "w10",
+          "text": "what",
+          "start": 4.26,
+          "end": 4.6
+        },
+        {
+          "id": "w11",
+          "text": "it",
+          "start": 4.6,
+          "end": 4.75
+        },
+        {
+          "id": "w12",
+          "text": "may",
+          "start": 4.78,
+          "end": 4.98
+        },
+        {
+          "id": "w13",
+          "text": "do,",
+          "start": 5.03,
+          "end": 5.44
+        },
+        {
+          "id": "w14",
+          "text": "an",
+          "start": 5.48,
+          "end": 5.6
+        },
+        {
+          "id": "w15",
+          "text": "approval",
+          "start": 5.6,
+          "end": 6
+        },
+        {
+          "id": "w16",
+          "text": "chain",
+          "start": 6,
+          "end": 6.52
+        },
+        {
+          "id": "w17",
+          "text": "and",
+          "start": 6.77,
+          "end": 7.02
+        },
+        {
+          "id": "w18",
+          "text": "an",
+          "start": 7.02,
+          "end": 7.21
+        },
+        {
+          "id": "w19",
+          "text": "expiry.",
+          "start": 7.21,
+          "end": 7.8
+        }
+      ]
+    },
+    {
+      "id": "04",
+      "path": "assets/voice/04.wav",
+      "duration_s": 10.624,
+      "words": [
+        {
+          "id": "w0",
+          "text": "The",
+          "start": 0.06,
+          "end": 0.25
+        },
+        {
+          "id": "w1",
+          "text": "envelope",
+          "start": 0.25,
+          "end": 0.92
+        },
+        {
+          "id": "w2",
+          "text": "rides",
+          "start": 0.92,
+          "end": 1.33
+        },
+        {
+          "id": "w3",
+          "text": "the",
+          "start": 1.4,
+          "end": 1.59
+        },
+        {
+          "id": "w4",
+          "text": "call",
+          "start": 1.59,
+          "end": 1.92
+        },
+        {
+          "id": "w5",
+          "text": "itself",
+          "start": 1.92,
+          "end": 2.13
+        },
+        {
+          "id": "w6",
+          "text": "in",
+          "start": 2.5,
+          "end": 2.65
+        },
+        {
+          "id": "w7",
+          "text": "the",
+          "start": 2.65,
+          "end": 2.96
+        },
+        {
+          "id": "w8",
+          "text": "MCP",
+          "start": 2.96,
+          "end": 3.27
+        },
+        {
+          "id": "w9",
+          "text": "underscore",
+          "start": 3.27,
+          "end": 4.32
+        },
+        {
+          "id": "w10",
+          "text": "meta",
+          "start": 4.32,
+          "end": 4.57
+        },
+        {
+          "id": "w11",
+          "text": "slot.",
+          "start": 4.93,
+          "end": 5.5
+        },
+        {
+          "id": "w12",
+          "text": "The",
+          "start": 5.56,
+          "end": 5.72
+        },
+        {
+          "id": "w13",
+          "text": "call",
+          "start": 5.72,
+          "end": 6.02
+        },
+        {
+          "id": "w14",
+          "text": "and",
+          "start": 6.02,
+          "end": 6.17
+        },
+        {
+          "id": "w15",
+          "text": "the",
+          "start": 6.26,
+          "end": 6.46
+        },
+        {
+          "id": "w16",
+          "text": "identity",
+          "start": 6.46,
+          "end": 7.06
+        },
+        {
+          "id": "w17",
+          "text": "travel",
+          "start": 7.06,
+          "end": 7.51
+        },
+        {
+          "id": "w18",
+          "text": "together.",
+          "start": 7.51,
+          "end": 8.16
+        },
+        {
+          "id": "w19",
+          "text": "No",
+          "start": 8.22,
+          "end": 8.36
+        },
+        {
+          "id": "w20",
+          "text": "side",
+          "start": 8.36,
+          "end": 8.76
+        },
+        {
+          "id": "w21",
+          "text": "channel,",
+          "start": 8.76,
+          "end": 9.68
+        },
+        {
+          "id": "w22",
+          "text": "no",
+          "start": 9.68,
+          "end": 9.85
+        },
+        {
+          "id": "w23",
+          "text": "trust",
+          "start": 9.85,
+          "end": 10.26
+        },
+        {
+          "id": "w24",
+          "text": "me.",
+          "start": 10.28,
+          "end": 10.74
+        }
+      ]
+    },
+    {
+      "id": "05",
+      "path": "assets/voice/05.wav",
+      "duration_s": 9.472,
+      "words": [
+        {
+          "id": "w0",
+          "text": "The",
+          "start": 0.05,
+          "end": 0.19
+        },
+        {
+          "id": "w1",
+          "text": "server",
+          "start": 0.19,
+          "end": 0.5
+        },
+        {
+          "id": "w2",
+          "text": "verifies",
+          "start": 0.56,
+          "end": 1.08
+        },
+        {
+          "id": "w3",
+          "text": "the",
+          "start": 1.08,
+          "end": 1.27
+        },
+        {
+          "id": "w4",
+          "text": "signature,",
+          "start": 1.27,
+          "end": 1.87
+        },
+        {
+          "id": "w5",
+          "text": "checks",
+          "start": 2.05,
+          "end": 2.63
+        },
+        {
+          "id": "w6",
+          "text": "the",
+          "start": 2.63,
+          "end": 2.94
+        },
+        {
+          "id": "w7",
+          "text": "expiry,",
+          "start": 2.94,
+          "end": 3.7
+        },
+        {
+          "id": "w8",
+          "text": "and",
+          "start": 3.7,
+          "end": 3.87
+        },
+        {
+          "id": "w9",
+          "text": "forces",
+          "start": 4.03,
+          "end": 4.25
+        },
+        {
+          "id": "w10",
+          "text": "the",
+          "start": 4.26,
+          "end": 4.48
+        },
+        {
+          "id": "w11",
+          "text": "scope",
+          "start": 4.48,
+          "end": 4.86
+        },
+        {
+          "id": "w12",
+          "text": "per",
+          "start": 4.86,
+          "end": 5.14
+        },
+        {
+          "id": "w13",
+          "text": "user",
+          "start": 5.14,
+          "end": 5.23
+        },
+        {
+          "id": "w14",
+          "text": "per",
+          "start": 5.62,
+          "end": 6.01
+        },
+        {
+          "id": "w15",
+          "text": "call.",
+          "start": 6.01,
+          "end": 6.68
+        },
+        {
+          "id": "w16",
+          "text": "Every",
+          "start": 6.73,
+          "end": 7.03
+        },
+        {
+          "id": "w17",
+          "text": "call,",
+          "start": 7.03,
+          "end": 7.45
+        },
+        {
+          "id": "w18",
+          "text": "every",
+          "start": 7.45,
+          "end": 7.76
+        },
+        {
+          "id": "w19",
+          "text": "time,",
+          "start": 7.83,
+          "end": 8.26
+        },
+        {
+          "id": "w20",
+          "text": "not",
+          "start": 8.26,
+          "end": 8.49
+        },
+        {
+          "id": "w21",
+          "text": "once",
+          "start": 8.49,
+          "end": 8.8
+        },
+        {
+          "id": "w22",
+          "text": "at",
+          "start": 8.8,
+          "end": 8.88
+        },
+        {
+          "id": "w23",
+          "text": "login.",
+          "start": 8.94,
+          "end": 9.6
+        }
+      ]
+    },
+    {
+      "id": "06",
+      "path": "assets/voice/06.wav",
+      "duration_s": 7.723,
+      "words": [
+        {
+          "id": "w0",
+          "text": "And",
+          "start": 0.1,
+          "end": 0.23
+        },
+        {
+          "id": "w1",
+          "text": "afterward",
+          "start": 0.23,
+          "end": 0.9
+        },
+        {
+          "id": "w2",
+          "text": "the",
+          "start": 0.95,
+          "end": 1.15
+        },
+        {
+          "id": "w3",
+          "text": "audit",
+          "start": 1.15,
+          "end": 1.53
+        },
+        {
+          "id": "w4",
+          "text": "trail",
+          "start": 1.53,
+          "end": 1.91
+        },
+        {
+          "id": "w5",
+          "text": "answers,",
+          "start": 1.91,
+          "end": 2.6
+        },
+        {
+          "id": "w6",
+          "text": "eight",
+          "start": 2.6,
+          "end": 2.9
+        },
+        {
+          "id": "w7",
+          "text": "events",
+          "start": 2.9,
+          "end": 3.21
+        },
+        {
+          "id": "w8",
+          "text": "acted",
+          "start": 3.35,
+          "end": 3.68
+        },
+        {
+          "id": "w9",
+          "text": "on",
+          "start": 3.68,
+          "end": 3.84
+        },
+        {
+          "id": "w10",
+          "text": "behalf",
+          "start": 3.84,
+          "end": 4.14
+        },
+        {
+          "id": "w11",
+          "text": "of",
+          "start": 4.22,
+          "end": 4.24
+        },
+        {
+          "id": "w12",
+          "text": "Alice,",
+          "start": 4.24,
+          "end": 5.12
+        },
+        {
+          "id": "w13",
+          "text": "not",
+          "start": 5.2,
+          "end": 5.44
+        },
+        {
+          "id": "w14",
+          "text": "the",
+          "start": 5.44,
+          "end": 5.6
+        },
+        {
+          "id": "w15",
+          "text": "agent",
+          "start": 5.6,
+          "end": 6
+        },
+        {
+          "id": "w16",
+          "text": "did",
+          "start": 6,
+          "end": 6.23
+        },
+        {
+          "id": "w17",
+          "text": "it,",
+          "start": 6.23,
+          "end": 6.72
+        },
+        {
+          "id": "w18",
+          "text": "Alice",
+          "start": 6.84,
+          "end": 7.15
+        },
+        {
+          "id": "w19",
+          "text": "did",
+          "start": 7.15,
+          "end": 7.4
+        },
+        {
+          "id": "w20",
+          "text": "it.",
+          "start": 7.4,
+          "end": 7.7
+        }
+      ]
+    },
+    {
+      "id": "07",
+      "path": "assets/voice/07.wav",
+      "duration_s": 3.392,
+      "words": [
+        {
+          "id": "w0",
+          "text": "Every",
+          "start": 0.11,
+          "end": 0.33
+        },
+        {
+          "id": "w1",
+          "text": "call",
+          "start": 0.33,
+          "end": 0.59
+        },
+        {
+          "id": "w2",
+          "text": "signed.",
+          "start": 0.59,
+          "end": 1.17
+        },
+        {
+          "id": "w3",
+          "text": "VAR",
+          "start": 1.48,
+          "end": 1.65
+        },
+        {
+          "id": "w4",
+          "text": "runtime",
+          "start": 1.65,
+          "end": 2.24
+        },
+        {
+          "id": "w5",
+          "text": "proof-or-stop.",
+          "start": 2.24,
+          "end": 3.39
+        }
+      ]
+    }
+  ],
+  "sfx": [],
+  "total_duration_s": 46.187
+}

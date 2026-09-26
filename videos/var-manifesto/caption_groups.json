@@ -1,0 +1,247 @@
+{
+  "total_duration_s": 32,
+  "width": 1920,
+  "height": 1080,
+  "groups": [
+    {
+      "id": "caption-group-0",
+      "frame": 1,
+      "start": 0.09,
+      "end": 0.37,
+      "text": "a log",
+      "words": [
+        {
+          "id": "caption-word-0-0",
+          "text": "a",
+          "start": 0.09,
+          "end": 0.13
+        },
+        {
+          "id": "caption-word-0-1",
+          "text": "log",
+          "start": 0.13,
+          "end": 0.37
+        }
+      ]
+    },
+    {
+      "id": "caption-group-1",
+      "frame": 1,
+      "start": 0.37,
+      "end": 0.93,
+      "text": "line is",
+      "words": [
+        {
+          "id": "caption-word-1-0",
+          "text": "line",
+          "start": 0.37,
+          "end": 0.75
+        },
+        {
+          "id": "caption-word-1-1",
+          "text": "is",
+          "start": 0.75,
+          "end": 0.93
+        }
+      ]
+    },
+    {
+      "id": "caption-group-2",
+      "frame": 1,
+      "start": 0.93,
+      "end": 2.08,
+      "text": "not evidence.",
+      "words": [
+        {
+          "id": "caption-word-2-0",
+          "text": "not",
+          "start": 0.93,
+          "end": 1.22
+        },
+        {
+          "id": "caption-word-2-1",
+          "text": "evidence.",
+          "start": 1.22,
+          "end": 1.96
+        }
+      ]
+    },
+    {
+      "id": "caption-group-3",
+      "frame": 2,
+      "start": 7.09,
+      "end": 8.26,
+      "text": "a self-report is",
+      "words": [
+        {
+          "id": "caption-word-3-0",
+          "text": "a",
+          "start": 7.09,
+          "end": 7.1
+        },
+        {
+          "id": "caption-word-3-1",
+          "text": "self-report",
+          "start": 7.1,
+          "end": 8.08
+        },
+        {
+          "id": "caption-word-3-2",
+          "text": "is",
+          "start": 8.08,
+          "end": 8.26
+        }
+      ]
+    },
+    {
+      "id": "caption-group-4",
+      "frame": 2,
+      "start": 8.26,
+      "end": 9.12,
+      "text": "not a fact.",
+      "words": [
+        {
+          "id": "caption-word-4-0",
+          "text": "not",
+          "start": 8.26,
+          "end": 8.53
+        },
+        {
+          "id": "caption-word-4-1",
+          "text": "a",
+          "start": 8.53,
+          "end": 8.62
+        },
+        {
+          "id": "caption-word-4-2",
+          "text": "fact.",
+          "start": 8.62,
+          "end": 9
+        }
+      ]
+    },
+    {
+      "id": "caption-group-5",
+      "frame": 3,
+      "start": 13.55,
+      "end": 14.59,
+      "text": "No evidence,",
+      "words": [
+        {
+          "id": "caption-word-5-0",
+          "text": "No",
+          "start": 13.55,
+          "end": 13.68
+        },
+        {
+          "id": "caption-word-5-1",
+          "text": "evidence,",
+          "start": 13.68,
+          "end": 14.59
+        }
+      ]
+    },
+    {
+      "id": "caption-group-6",
+      "frame": 3,
+      "start": 14.59,
+      "end": 15.62,
+      "text": "no advance.",
+      "words": [
+        {
+          "id": "caption-word-6-0",
+          "text": "no",
+          "start": 14.59,
+          "end": 14.77
+        },
+        {
+          "id": "caption-word-6-1",
+          "text": "advance.",
+          "start": 14.77,
+          "end": 15.5
+        }
+      ]
+    },
+    {
+      "id": "caption-group-7",
+      "frame": 4,
+      "start": 20.05,
+      "end": 21.97,
+      "text": "proof-or-stop via runtime.",
+      "words": [
+        {
+          "id": "caption-word-7-0",
+          "text": "proof-or-stop",
+          "start": 20.05,
+          "end": 21
+        },
+        {
+          "id": "caption-word-7-1",
+          "text": "via",
+          "start": 21,
+          "end": 21.24
+        },
+        {
+          "id": "caption-word-7-2",
+          "text": "runtime.",
+          "start": 21.24,
+          "end": 21.85
+        }
+      ]
+    },
+    {
+      "id": "caption-group-8",
+      "frame": 5,
+      "start": 26.09,
+      "end": 28.03,
+      "text": "VaRuntime open source,",
+      "words": [
+        {
+          "id": "caption-word-8-0",
+          "text": "VaRuntime",
+          "start": 26.09,
+          "end": 26.83
+        },
+        {
+          "id": "caption-word-8-1",
+          "text": "open",
+          "start": 26.83,
+          "end": 27.22
+        },
+        {
+          "id": "caption-word-8-2",
+          "text": "source,",
+          "start": 27.22,
+          "end": 27.96
+        }
+      ]
+    },
+    {
+      "id": "caption-group-9",
+      "frame": 5,
+      "start": 28.03,
+      "end": 29.16,
+      "text": "proof or stop.",
+      "words": [
+        {
+          "id": "caption-word-9-0",
+          "text": "proof",
+          "start": 28.03,
+          "end": 28.43
+        },
+        {
+          "id": "caption-word-9-1",
+          "text": "or",
+          "start": 28.43,
+          "end": 28.62
+        },
+        {
+          "id": "caption-word-9-2",
+          "text": "stop.",
+          "start": 28.62,
+          "end": 29.04
+        }
+      ]
+    }
+  ]
+}

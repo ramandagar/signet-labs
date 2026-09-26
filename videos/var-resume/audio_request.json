@@ -1,0 +1,41 @@
+{
+  "provider": "kokoro",
+  "speed": 1,
+  "lines": [
+    {
+      "id": "01",
+      "text": "Minute 38 of a 40-minute run. The process dies."
+    },
+    {
+      "id": "02",
+      "text": "Normally that means re-run, re-pay, re-explain. Here, everything is already saved."
+    },
+    {
+      "id": "03",
+      "text": "Every step checkpointed — messages, tool results, approvals, the meter. Written after every single call — not at the end, when it's too late."
+    },
+    {
+      "id": "04",
+      "text": "Relaunch. The session resumes at the exact step it stopped. Not from the top — from step seven."
+    },
+    {
+      "id": "05",
+      "text": "State intact. Meter intact. Seven completed tool results — no re-execution, no re-payment."
+    },
+    {
+      "id": "06",
+      "text": "The crash costs you a heartbeat. Not the work. The meter never blinked."
+    },
+    {
+      "id": "07",
+      "text": "Crash-proof by default. var-runtime. Proof-or-Stop."
+    }
+  ],
+  "bgm": {
+    "mode": "retrieve",
+    "query": "dark-tech minimal ambient, slow build, one impact at the restored meter (~33s)",
+    "blob": "Minute 38 of 40. The process dies. Nothing is lost.",
+    "arc": "disaster-recovery (kill it in front of them, restore it untouched)"
+  },
+  "voice": "am_michael"
+}

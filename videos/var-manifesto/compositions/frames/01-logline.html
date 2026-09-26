@@ -1,0 +1,178 @@
+<template>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <style>
+    /* ---- fonts (shipped with project, project-root relative) ---- */
+    @font-face {
+      font-family: "Barlow";
+      src: url("assets/fonts/Barlow-900.woff2") format("woff2");
+      font-weight: 900;
+      font-style: normal;
+      font-display: block;
+    }
+
+    /* ---- root (styled via #root only) ---- */
+    #root {
+      position: absolute;
+      inset: 0;
+      width: 1920px;
+      height: 1080px;
+      overflow: hidden;
+    }
+
+    /* ---- full-bleed ground: clip layer on the lowest track ---- */
+    [class~="01-logline-bg"] {
+      position: absolute;
+      inset: 0;
+      background: #0d0d0d; /* page ground — semantic law */
+      container-type: size;
+    }
+
+    /* ghost "log" watermark — huge, cropped at the caption keep-out (83%) */
+    [class~="01-logline-ghost-stage"] {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 83%;
+      overflow: hidden;
+    }
+    [class~="01-logline-ghost-wrap"] {
+      position: absolute;
+      left: 50%;
+      top: 37%; /* centered by GSAP xPercent/yPercent — no CSS transform here */
+    }
+    [class~="01-logline-ghost"] {
+      font-family: "Barlow", sans-serif;
+      font-weight: 900;
+      font-size: 54cqw;
+      line-height: 0.75;
+      letter-spacing: -0.04em;
+      color: #ffffff;
+      opacity: 0; /* seated by GSAP to 0.055 */
+      transform-origin: 50% 50%;
+      user-select: none;
+    }
+
+    /* ---- content clip ---- */
+    [class~="01-logline-stage"] {
+      position: absolute;
+      inset: 0;
+      container-type: size;
+    }
+
+    /* statement — Broadside display: lowercase 900, negative-tracked, centered */
+    [class~="01-logline-statement"] {
+      position: absolute;
+      top: 46%;
+      left: 0;
+      width: 100%;
+      margin: 0;
+      transform: translateY(-50%); /* static container, never GSAP-animated */
+      text-align: center;
+      font-family: "Barlow", sans-serif;
+      font-weight: 900;
+      font-size: 10cqw;
+      line-height: 0.98;
+      letter-spacing: -0.04em;
+      color: #ffffff; /* ink */
+    }
+    [class~="01-logline-line"] {
+      display: block;
+      white-space: nowrap;
+    }
+    [class~="01-logline-w"] {
+      display: inline-block;
+    }
+    [class~="01-logline-key"] {
+      color: #3987e5; /* accent blue — the one keyword pop: "evidence" */
+    }
+  </style>
+
+  <div
+    id="root"
+    data-composition-id="01-logline"
+    data-start="0"
+    data-duration="7"
+    data-width="1920"
+    data-height="1080"
+  >
+    <!-- track 0: ground + ghost watermark -->
+    <div class="clip 01-logline-bg" data-start="0" data-duration="7" data-track-index="0">
+      <div class="01-logline-ghost-stage">
+        <div class="01-logline-ghost-wrap">
+          <div class="01-logline-ghost">log</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- track 1: the statement -->
+    <div class="clip 01-logline-stage" data-start="0" data-duration="7" data-track-index="1">
+      <h1 class="01-logline-statement" data-layout-allow-overlap="">
+        <span class="01-logline-line" data-layout-allow-overlap=""><span class="01-logline-w" data-layout-allow-overlap="">a</span> <span class="01-logline-w" data-layout-allow-overlap="">log</span> <span class="01-logline-w" data-layout-allow-overlap="">line</span></span>
+        <span class="01-logline-line" data-layout-allow-overlap=""><span class="01-logline-w" data-layout-allow-overlap="">is</span> <span class="01-logline-w" data-layout-allow-overlap="">not</span> <span class="01-logline-w 01-logline-key" data-layout-allow-overlap="">evidence.</span></span>
+      </h1>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var root =
+        (document.currentScript && document.currentScript.previousElementSibling) ||
+        document.querySelector('[data-composition-id="01-logline"]');
+      var q = function (c) {
+        return root.querySelector('[class~="' + c + '"]');
+      };
+      var qa = function (c) {
+        return root.querySelectorAll('[class~="' + c + '"]');
+      };
+
+      window.__timelines = window.__timelines || {};
+      var tl = gsap.timeline({ paused: true, defaults: { ease: "power2.out" } });
+
+      // ---- Scene 1 (0.0–~1.3s): the ghost watermark "log" seats — rises from
+      // slightly oversized + invisible to its 5.5% watermark state, slow settle.
+      tl.fromTo(
+        q("01-logline-ghost-wrap"),
+        { xPercent: -50, yPercent: -50, scale: 1 },
+        { xPercent: -50, yPercent: -50, scale: 1, duration: 7, ease: "none" },
+        0
+      );
+      tl.fromTo(
+        q("01-logline-ghost"),
+        { opacity: 0, scale: 1.07 },
+        { opacity: 0.055, scale: 1, duration: 1.2, ease: "power2.out" },
+        0.05
+      );
+
+      // ---- Scene 1–2 (~0.3–2.5s): "a log line is not evidence." builds
+      // word-by-word at center, synced to the voice; "evidence." lands blue.
+      var words = [
+        { el: qa("01-logline-w")[0], at: 0.28 },
+        { el: qa("01-logline-w")[1], at: 0.66 },
+        { el: qa("01-logline-w")[2], at: 1.04 },
+        { el: qa("01-logline-w")[3], at: 1.48 },
+        { el: qa("01-logline-w")[4], at: 1.76 },
+        { el: q("01-logline-key"), at: 1.98, dur: 0.55, ease: "power3.out" }
+      ];
+      words.forEach(function (w) {
+        tl.fromTo(
+          w.el,
+          { opacity: 0, y: 34, filter: "blur(10px)" },
+          {
+            opacity: 1,
+            y: 0,
+            filter: "blur(0px)",
+            duration: w.dur || 0.6,
+            ease: w.ease || "power2.out"
+          },
+          w.at
+        );
+      });
+
+      // ---- Scene 3 (2.5–7.0s): deliberate stillness — the line holds STILL
+      // to the end (stillness is the payload; no exit, the root transition owns it).
+
+      window.__timelines["01-logline"] = tl;
+    })();
+  </script>
+</template>

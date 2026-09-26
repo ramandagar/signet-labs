@@ -1,0 +1,465 @@
+<template>
+  <style>
+    /* ---- fonts (shipped with project, project-root relative) ---- */
+    @font-face {
+      font-family: "Barlow";
+      src: url("assets/fonts/Barlow-800.woff2") format("woff2");
+      font-weight: 800;
+      font-style: normal;
+      font-display: block;
+    }
+    @font-face {
+      font-family: "IBM Plex Mono";
+      src: url("assets/fonts/IBMPlexMono-Regular.woff2") format("woff2");
+      font-weight: 400;
+      font-style: normal;
+      font-display: block;
+    }
+    @font-face {
+      font-family: "IBM Plex Mono";
+      src: url("assets/fonts/IBMPlexMono-Medium.woff2") format("woff2");
+      font-weight: 500;
+      font-style: normal;
+      font-display: block;
+    }
+
+    /* root — styled via #root only (never a class on the composition root) */
+    #root {
+      position: absolute;
+      inset: 0;
+      width: 1920px;
+      height: 1080px;
+      overflow: hidden;
+      container-type: size;
+      --f05-canvas: #1a1a19;
+      --f05-card: #201f1e;
+      --f05-ink: #ffffff;
+      --f05-muted: #afb3b7;
+      --f05-accent: #3987e5;
+      --f05-green: #0ca30c; /* the ONE green in the film — the restored tick */
+      --f05-hair: rgba(255, 255, 255, 0.16);
+      --f05-mono: "IBM Plex Mono", monospace;
+      --f05-sans: "Barlow", sans-serif;
+    }
+
+    #root .f05-bg,
+    #root .f05-chrome,
+    #root .f05-stage {
+      position: absolute;
+      inset: 0;
+    }
+    #root .f05-bg {
+      background: var(--f05-canvas);
+    }
+
+    /* ---- top chrome (hairline bar, mono label left, catalogue number right) ---- */
+    #root .f05-topline {
+      position: absolute;
+      left: 105px;
+      right: 105px;
+      top: 64px;
+      height: 1px;
+      background: rgba(215, 216, 217, 0.5);
+      transform: scaleX(0);
+      transform-origin: left center;
+    }
+    #root .f05-tlab {
+      position: absolute;
+      top: 30px;
+      font-family: var(--f05-mono);
+      font-weight: 500;
+      font-size: 15px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.78);
+    }
+    #root .f05-tl-l {
+      left: 105px;
+    }
+    #root .f05-tl-r {
+      right: 105px;
+    }
+
+    /* ---- kicker lockup (rule stub + mono eyebrow, accent blue) ---- */
+    #root .f05-kickrow {
+      position: absolute;
+      left: 105px;
+      top: 120px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    #root .f05-kickrule {
+      width: 36px;
+      height: 2px;
+      background: var(--f05-accent);
+      transform: scaleX(0);
+      transform-origin: left center;
+    }
+    #root .f05-kicktext {
+      font-family: var(--f05-mono);
+      font-weight: 500;
+      font-size: 15px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--f05-accent);
+    }
+
+    /* ---- display statement (lowercase Barlow 800, masked word rise) ---- */
+    #root .f05-display {
+      position: absolute;
+      left: 105px;
+      top: 172px;
+      display: flex;
+      gap: 0.32em;
+      font-family: var(--f05-sans);
+      font-weight: 800;
+      font-size: 120px;
+      letter-spacing: -0.03em;
+      line-height: 0.95;
+      text-transform: lowercase;
+      color: var(--f05-ink);
+    }
+    #root .f05-dmask {
+      display: inline-block;
+      overflow: hidden;
+      padding-bottom: 0.14em;
+      margin-bottom: -0.14em;
+    }
+    #root .f05-dw {
+      display: inline-block;
+    }
+
+    /* ---- the receipt well (full-width terminal panel, opens downward) ---- */
+    #root .f05-wellwrap {
+      position: absolute;
+      left: 105px;
+      top: 400px;
+      width: 1710px;
+      height: 272px;
+      overflow: hidden;
+      transform: scaleY(0);
+      transform-origin: top center;
+    }
+    #root .f05-well {
+      box-sizing: border-box;
+      height: 272px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 54px;
+      padding: 0 40px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+    }
+    #root .f05-lrow {
+      display: flex;
+      align-items: baseline;
+      gap: 22px;
+    }
+    #root .f05-lnum {
+      flex: none;
+      width: 38px;
+      font-family: var(--f05-mono);
+      font-weight: 400;
+      font-size: 15px;
+      letter-spacing: 0.1em;
+      color: rgba(255, 255, 255, 0.62);
+      opacity: 0;
+    }
+    #root .f05-ltxt {
+      display: block;
+      font-family: var(--f05-mono);
+      font-weight: 500;
+      font-size: 27px;
+      line-height: 1.25;
+      letter-spacing: 0;
+      color: var(--f05-ink);
+      white-space: pre;
+      clip-path: inset(-25% 100% -25% -2%);
+    }
+
+    /* ---- the meter chip (re-render of the frame-02 session card — UNCHANGED) ---- */
+    #root .f05-chipwrap {
+      position: absolute;
+      left: 1230px;
+      top: 150px;
+      width: 585px;
+      opacity: 0;
+    }
+    #root .f05-chipcard {
+      box-sizing: border-box;
+      padding: 26px 28px 30px;
+      background: var(--f05-card);
+      border: 1px solid var(--f05-hair);
+    }
+    #root .f05-ctop {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding-bottom: 14px;
+      margin-bottom: 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+    }
+    #root .f05-chlabel {
+      font-family: var(--f05-mono);
+      font-weight: 500;
+      font-size: 15px;
+      letter-spacing: 0.08em;
+      color: rgba(255, 255, 255, 0.88);
+      white-space: nowrap;
+    }
+    #root .f05-cchip {
+      font-family: var(--f05-mono);
+      font-weight: 400;
+      font-size: 13px;
+      letter-spacing: 0.1em;
+      color: var(--f05-muted);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      padding: 4px 10px;
+      white-space: nowrap;
+    }
+    #root .f05-rail {
+      display: flex;
+      gap: 10px;
+    }
+    #root .f05-rtick {
+      flex: 1;
+      height: 12px;
+      background: rgba(255, 255, 255, 0.1);
+    }
+    #root .f05-rlit {
+      background: var(--f05-accent);
+    }
+    #root .f05-rhalf {
+      position: relative;
+    }
+    #root .f05-rhalffill {
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 55%;
+      background: var(--f05-accent);
+    }
+    #root .f05-cmeta {
+      margin-top: 22px;
+    }
+    #root .f05-metarow {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+    #root .f05-step {
+      font-family: var(--f05-mono);
+      font-weight: 500;
+      font-size: 17px;
+      letter-spacing: 0.06em;
+      color: var(--f05-ink);
+    }
+    #root .f05-amt {
+      font-family: var(--f05-mono);
+      font-weight: 400;
+      font-size: 17px;
+      letter-spacing: 0.04em;
+      color: var(--f05-muted);
+      font-variant-numeric: tabular-nums;
+    }
+    #root .f05-metertrack {
+      margin-top: 14px;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.1);
+    }
+    #root .f05-meterfill {
+      width: 9.27%;
+      height: 100%;
+      background: var(--f05-accent);
+    }
+
+    /* ---- the green tick (drawn on the drop) — the only green in the frame ---- */
+    #root .f05-tick {
+      position: absolute;
+      top: -56px;
+      right: -40px;
+      width: 150px;
+      height: 150px;
+      overflow: visible;
+      opacity: 0;
+    }
+    #root .f05-tick-c,
+    #root .f05-tick-k {
+      fill: none;
+      stroke: var(--f05-green);
+      stroke-linecap: square;
+      stroke-dasharray: 100;
+      stroke-dashoffset: 100;
+    }
+    #root .f05-tick-c {
+      stroke-width: 11;
+    }
+    #root .f05-tick-k {
+      stroke-width: 12;
+    }
+  </style>
+
+  <div id="root" data-composition-id="05-receipt" data-width="1920" data-height="1080" data-duration="6.997">
+    <!-- track 0: full-bleed ground -->
+    <div class="clip f05-bg" data-start="0" data-duration="6.997" data-track-index="0"></div>
+
+    <!-- track 1: top chrome -->
+    <div class="clip f05-chrome" data-start="0" data-duration="6.997" data-track-index="1">
+      <div class="f05-topline"></div>
+      <div class="f05-tlab f05-tl-l">var resume — receipt</div>
+      <div class="f05-tlab f05-tl-r">no. 05</div>
+    </div>
+
+    <!-- track 2: stage -->
+    <div class="clip f05-stage" data-start="0" data-duration="6.997" data-track-index="2">
+      <!-- kicker + display statement -->
+      <div class="f05-kickrow">
+        <div class="f05-kickrule"></div>
+        <div class="f05-kicktext">resume receipt</div>
+      </div>
+      <div class="f05-display">
+        <span class="f05-dmask"><span class="f05-dw">nothing</span></span>
+        <span class="f05-dmask"><span class="f05-dw">lost</span></span>
+      </div>
+
+      <!-- the receipt well: two verbatim mono lines -->
+      <div class="f05-wellwrap">
+        <div class="f05-well">
+          <div class="f05-lrow">
+            <span class="f05-lnum">01</span>
+            <span class="f05-ltxt">resumed at step 7 — meter restored: {'tokens': 75500, 'usd': 0.1854, 'wall_clock_seconds': 0.0}</span>
+          </div>
+          <div class="f05-lrow">
+            <span class="f05-lnum">02</span>
+            <span class="f05-ltxt">no re-execution: 7 completed tool results intact</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- the meter chip: re-renders UNCHANGED -->
+      <div class="f05-chipwrap">
+        <div class="f05-chipcard">
+          <div class="f05-ctop">
+            <span class="f05-chlabel">session s_f3c9… · run_tests</span>
+            <span class="f05-cchip">minute 38 / 40</span>
+          </div>
+          <div class="f05-rail">
+            <span class="f05-rtick f05-rlit"></span>
+            <span class="f05-rtick f05-rlit"></span>
+            <span class="f05-rtick f05-rlit"></span>
+            <span class="f05-rtick f05-rlit"></span>
+            <span class="f05-rtick f05-rlit"></span>
+            <span class="f05-rtick f05-rlit"></span>
+            <span class="f05-rtick f05-rhalf"><span class="f05-rhalffill"></span></span>
+            <span class="f05-rtick"></span>
+            <span class="f05-rtick"></span>
+          </div>
+          <div class="f05-cmeta">
+            <div class="f05-metarow">
+              <span class="f05-step">step 7 / 9</span>
+              <span class="f05-amt">$0.1854 / $2.00</span>
+            </div>
+            <div class="f05-metertrack">
+              <div class="f05-meterfill"></div>
+            </div>
+          </div>
+        </div>
+        <svg class="f05-tick" viewBox="0 0 120 120" fill="none" aria-hidden="true">
+          <circle class="f05-tick-c" cx="60" cy="60" r="44" pathLength="100"></circle>
+          <path class="f05-tick-k" d="M38 63 L55 79 L85 45" pathLength="100"></path>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <script>
+    (function () {
+      var scope = document.querySelector('div[data-composition-id="05-receipt"]') || document;
+      function all(s) {
+        return scope.querySelectorAll(s);
+      }
+
+      var tl = gsap.timeline({ paused: true });
+      var DUR = 6.997;
+
+      /* ---- open (0-0.9s): chrome + kicker + display establish the empty page ---- */
+      tl.fromTo(all(".f05-topline"), { scaleX: 0 }, { scaleX: 1, duration: 0.6, ease: "power2.out" }, 0.02);
+      tl.fromTo(all(".f05-tlab"), { opacity: 0, y: -6 }, { opacity: 1, y: 0, duration: 0.4, ease: "power1.out" }, 0.1);
+      tl.fromTo(all(".f05-kickrule"), { scaleX: 0 }, { scaleX: 1, duration: 0.45, ease: "power2.out" }, 0.1);
+      tl.fromTo(all(".f05-kicktext"), { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" }, 0.16);
+
+      var words = all(".f05-dw");
+      tl.fromTo(words[0], { yPercent: 115 }, { yPercent: 0, duration: 0.6, ease: "power3.out" }, 0.24);
+      tl.fromTo(words[1], { yPercent: 115 }, { yPercent: 0, duration: 0.6, ease: "power3.out" }, 0.34);
+
+      /* ---- Scene 1 (0.0-3.4s): the well opens downward (anchored-layout-expand),
+         then the two receipt lines type verbatim (discrete steps = per-char) ---- */
+      tl.fromTo(".f05-wellwrap", { scaleY: 0 }, { scaleY: 1, duration: 0.5, ease: "power3.out" }, 0.16);
+      tl.fromTo(".f05-well", { y: -272 }, { y: 0, duration: 0.5, ease: "power3.out" }, 0.16);
+
+      tl.fromTo(all(".f05-lnum")[0], { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power1.out" }, 0.4);
+      /* line A — 95 chars, one step each */
+      tl.fromTo(
+        all(".f05-ltxt")[0],
+        { clipPath: "inset(-25% 100% -25% -2%)" },
+        { clipPath: "inset(-25% -2% -25% -2%)", duration: 2.0, ease: "steps(95)" },
+        0.55
+      );
+      tl.fromTo(all(".f05-lnum")[1], { opacity: 0 }, { opacity: 1, duration: 0.25, ease: "power1.out" }, 2.62);
+      /* line B — 48 chars, one step each */
+      tl.fromTo(
+        all(".f05-ltxt")[1],
+        { clipPath: "inset(-25% 100% -25% -2%)" },
+        { clipPath: "inset(-25% -2% -25% -2%)", duration: 0.68, ease: "steps(48)" },
+        2.72
+      );
+
+      /* ---- Scene 2 (3.4-5.4s): the meter chip re-renders UNCHANGED;
+         one repaint flicker through the card; the green tick draws exactly on the 4.6s drop ---- */
+      tl.fromTo(
+        ".f05-chipwrap",
+        { opacity: 0, scale: 0.94, y: 16, transformOrigin: "50% 50%" },
+        { opacity: 1, scale: 1, y: 0, duration: 0.5, ease: "back.out(1.4)" },
+        3.55
+      );
+      /* repaint blip — the value rides through unchanged */
+      tl.fromTo(".f05-chipcard", { opacity: 1 }, { opacity: 0.5, duration: 0.05, ease: "none" }, 4.06);
+      tl.fromTo(".f05-chipcard", { opacity: 0.5 }, { opacity: 1, duration: 0.07, ease: "none" }, 4.11);
+
+      /* the tick — svg-path-draw, green #0ca30c, starts exactly at the sub-drop */
+      tl.fromTo(
+        ".f05-tick",
+        { opacity: 0, rotation: -8, transformOrigin: "50% 50%" },
+        { opacity: 1, rotation: -8, duration: 0.14, ease: "none" },
+        4.6
+      );
+      tl.fromTo(
+        ".f05-tick-c",
+        { strokeDashoffset: 100 },
+        { strokeDashoffset: 0, duration: 0.42, ease: "power2.out" },
+        4.6
+      );
+      tl.fromTo(
+        ".f05-tick-k",
+        { strokeDashoffset: 100 },
+        { strokeDashoffset: 0, duration: 0.46, ease: "power2.out" },
+        4.82
+      );
+      /* one subtle impact blip on the chip as the tick lands */
+      tl.fromTo(".f05-chipwrap", { scale: 1 }, { scale: 1.015, duration: 0.1, ease: "power2.out" }, 4.6);
+      tl.fromTo(".f05-chipwrap", { scale: 1.015 }, { scale: 1, duration: 0.22, ease: "power2.inOut" }, 4.7);
+
+      /* ---- Scene 3: dead-still hold — nothing tweens past 5.28s ---- */
+      tl.to({}, { duration: 0.01, ease: "none" }, 6.98);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["05-receipt"] = tl;
+      tl.seek(0);
+    })();
+  </script>
+</template>

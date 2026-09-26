@@ -1,0 +1,340 @@
+<template>
+  <style>
+    /* fonts shipped with the project */
+    @font-face {
+      font-family: "Barlow";
+      src: url("assets/fonts/Barlow-700.woff2") format("woff2");
+      font-weight: 700;
+      font-style: normal;
+      font-display: block;
+    }
+    @font-face {
+      font-family: "IBM Plex Mono";
+      src: url("assets/fonts/IBMPlexMono-Regular.woff2") format("woff2");
+      font-weight: 400;
+      font-style: normal;
+      font-display: block;
+    }
+    @font-face {
+      font-family: "IBM Plex Mono";
+      src: url("assets/fonts/IBMPlexMono-Medium.woff2") format("woff2");
+      font-weight: 500;
+      font-style: normal;
+      font-display: block;
+    }
+
+    /* root — styled via #root only */
+    #root {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      container-type: size;
+      font-family: "Barlow", sans-serif;
+    }
+
+    /* full-bleed ground on its own clip, never on #root */
+    .f02-death-bg {
+      position: absolute;
+      inset: 0;
+      background: #1a1a19;
+    }
+
+    .f02-death-stage {
+      position: absolute;
+      inset: 0;
+    }
+
+    /* ---- the frozen session card (continuity from 01-midwork) ---- */
+    .f02-death-cardwrap {
+      position: absolute;
+      left: 9.4cqw;
+      top: 10.2cqw;
+      width: 35cqw;
+    }
+    .f02-death-card {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 20cqw;
+      box-sizing: border-box;
+      padding: 1.6cqw 1.7cqw;
+      background: #201f1e;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+    }
+    .f02-death-cardtop {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1cqw;
+      padding-bottom: 1.1cqw;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+    }
+    .f02-death-hlabel {
+      font-family: "IBM Plex Mono", monospace;
+      font-weight: 500;
+      font-size: 0.85cqw;
+      letter-spacing: 0.08em;
+      color: rgba(255, 255, 255, 0.88);
+      white-space: nowrap;
+    }
+    .f02-death-chip {
+      font-family: "IBM Plex Mono", monospace;
+      font-weight: 400;
+      font-size: 0.72cqw;
+      letter-spacing: 0.1em;
+      color: #afb3b7;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      padding: 0.32cqw 0.6cqw;
+      white-space: nowrap;
+    }
+    .f02-death-rail {
+      display: flex;
+      gap: 0.55cqw;
+    }
+    .f02-death-tick {
+      flex: 1;
+      height: 0.75cqw;
+      background: rgba(255, 255, 255, 0.1);
+    }
+    .f02-death-lit {
+      background: #3987e5;
+    }
+    .f02-death-half {
+      position: relative;
+    }
+    .f02-death-halffill {
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 55%;
+      background: #3987e5;
+    }
+    .f02-death-metarow {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+    .f02-death-step {
+      font-family: "IBM Plex Mono", monospace;
+      font-weight: 500;
+      font-size: 0.95cqw;
+      letter-spacing: 0.06em;
+      color: #ffffff;
+    }
+    .f02-death-amount {
+      font-family: "IBM Plex Mono", monospace;
+      font-weight: 400;
+      font-size: 0.95cqw;
+      letter-spacing: 0.04em;
+      color: #afb3b7;
+      font-variant-numeric: tabular-nums;
+    }
+    .f02-death-metertrack {
+      margin-top: 0.9cqw;
+      height: 0.3cqw;
+      background: rgba(255, 255, 255, 0.1);
+    }
+    .f02-death-meterfill {
+      width: 9.27%;
+      height: 100%;
+      background: #3987e5;
+    }
+
+    /* ---- the red X stamp — the ONLY red in the film ---- */
+    .f02-death-stamp {
+      position: absolute;
+      top: -2.3cqw;
+      right: -2.3cqw;
+      width: 7cqw;
+      height: 7cqw;
+      opacity: 0;
+    }
+
+    /* ---- the crash line (focal) ---- */
+    .f02-death-crash {
+      position: absolute;
+      left: 9.4cqw;
+      top: 33.9cqw;
+    }
+    .f02-death-line {
+      font-family: "IBM Plex Mono", monospace;
+      font-weight: 500;
+      font-size: 2cqw;
+      line-height: 1.25;
+      letter-spacing: 0.01em;
+      color: #ffffff;
+      white-space: pre;
+    }
+    .f02-death-ch {
+      display: inline-block;
+      opacity: 1;
+    }
+    .f02-death-caret {
+      display: inline-block;
+      width: 0.55em;
+      height: 0.95em;
+      margin-left: 0.18em;
+      background: #ffffff;
+      vertical-align: -0.08em;
+      opacity: 0;
+    }
+    .f02-death-exit {
+      margin-top: 0.55cqw;
+      opacity: 0;
+    }
+
+    /* ---- the cost, muted, beside the card ---- */
+    .f02-death-words {
+      position: absolute;
+      left: 56cqw;
+      top: 15.4cqw;
+    }
+    .f02-death-word {
+      display: flex;
+      align-items: baseline;
+      gap: 0.9cqw;
+      font-family: "Barlow", sans-serif;
+      font-weight: 700;
+      font-size: 2.6cqw;
+      letter-spacing: -0.01em;
+      line-height: 1;
+      color: #afb3b7;
+      margin-bottom: 1.7cqw;
+      opacity: 0;
+    }
+    .f02-death-wmark {
+      font-family: "IBM Plex Mono", monospace;
+      font-weight: 500;
+      font-size: 1.05cqw;
+      letter-spacing: 0.14em;
+      color: rgba(175, 179, 183, 0.8);
+    }
+  </style>
+
+  <div id="root" data-composition-id="02-death" data-width="1920" data-height="1080">
+    <div class="clip f02-death-bg" data-start="0" data-duration="5.867" data-track-index="0"></div>
+
+    <div class="clip f02-death-stage" data-start="0" data-duration="5.867" data-track-index="1">
+      <div class="f02-death-cardwrap">
+        <div class="f02-death-card" id="f02-death-card">
+          <div class="f02-death-cardtop">
+            <span class="f02-death-hlabel">session s_f3c9… · run_tests</span>
+            <span class="f02-death-chip" id="f02-death-chip">minute 38 / 40</span>
+          </div>
+          <div class="f02-death-rail">
+            <span class="f02-death-tick f02-death-lit"></span>
+            <span class="f02-death-tick f02-death-lit"></span>
+            <span class="f02-death-tick f02-death-lit"></span>
+            <span class="f02-death-tick f02-death-lit"></span>
+            <span class="f02-death-tick f02-death-lit"></span>
+            <span class="f02-death-tick f02-death-lit"></span>
+            <span class="f02-death-tick f02-death-half"><span class="f02-death-halffill" id="f02-death-halffill"></span></span>
+            <span class="f02-death-tick"></span>
+            <span class="f02-death-tick"></span>
+          </div>
+          <div class="f02-death-cardmeta">
+            <div class="f02-death-metarow">
+              <span class="f02-death-step">step 6 / 9</span>
+              <span class="f02-death-amount">$0.1854 / $2.00</span>
+            </div>
+            <div class="f02-death-metertrack">
+              <div class="f02-death-meterfill" id="f02-death-meterfill"></div>
+            </div>
+          </div>
+        </div>
+        <svg id="f02-death-stamp" class="f02-death-stamp" viewBox="0 0 120 120" fill="none" aria-hidden="true">
+          <g opacity="0.38" transform="translate(3.5,3.5)" stroke="#d03b3b" stroke-width="13" stroke-linecap="square">
+            <path d="M24 24 L96 96"></path>
+            <path d="M96 24 L24 96"></path>
+          </g>
+          <g stroke="#d03b3b" stroke-width="13" stroke-linecap="square">
+            <path d="M22 22 L98 98"></path>
+            <path d="M98 22 L22 98"></path>
+          </g>
+        </svg>
+      </div>
+
+      <div class="f02-death-crash">
+        <div class="f02-death-line"><span class="f02-death-ch">*</span><span class="f02-death-ch">*</span><span class="f02-death-ch">*</span><span class="f02-death-ch"> </span><span class="f02-death-ch">a</span><span class="f02-death-ch">g</span><span class="f02-death-ch">e</span><span class="f02-death-ch">n</span><span class="f02-death-ch">t</span><span class="f02-death-ch"> </span><span class="f02-death-ch">p</span><span class="f02-death-ch">r</span><span class="f02-death-ch">o</span><span class="f02-death-ch">c</span><span class="f02-death-ch">e</span><span class="f02-death-ch">s</span><span class="f02-death-ch">s</span><span class="f02-death-ch"> </span><span class="f02-death-ch">c</span><span class="f02-death-ch">r</span><span class="f02-death-ch">a</span><span class="f02-death-ch">s</span><span class="f02-death-ch">h</span><span class="f02-death-ch">e</span><span class="f02-death-ch">s</span><span class="f02-death-ch"> </span><span class="f02-death-ch">m</span><span class="f02-death-ch">i</span><span class="f02-death-ch">d</span><span class="f02-death-ch">-</span><span class="f02-death-ch">P</span><span class="f02-death-ch">R</span><span class="f02-death-ch">-</span><span class="f02-death-ch">c</span><span class="f02-death-ch">r</span><span class="f02-death-ch">e</span><span class="f02-death-ch">a</span><span class="f02-death-ch">t</span><span class="f02-death-ch">i</span><span class="f02-death-ch">o</span><span class="f02-death-ch">n</span><span class="f02-death-ch"> </span><span class="f02-death-ch">*</span><span class="f02-death-ch">*</span><span class="f02-death-ch">*</span><span class="f02-death-caret" id="f02-death-caret"></span></div>
+        <div class="f02-death-line f02-death-exit" id="f02-death-exit">exit 1</div>
+      </div>
+
+      <div class="f02-death-words">
+        <div class="f02-death-word" id="f02-death-w1"><span class="f02-death-wmark">/</span>re-run</div>
+        <div class="f02-death-word" id="f02-death-w2"><span class="f02-death-wmark">/</span>re-pay</div>
+        <div class="f02-death-word" id="f02-death-w3"><span class="f02-death-wmark">/</span>re-explain</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var tl = gsap.timeline({ paused: true });
+
+      /* bursty keystroke schedule — char c appears at 1.50 + T[c] (discrete-text-sequence) */
+      var FULL_LEN = 45;
+      var TS = [0.05, 0.11, 0.16, 0.22, 0.27, 0.33, 0.44, 0.5, 0.58, 0.72, 0.78, 0.84];
+      var CUTS = [4, 9, 10, 17, 18, 25, 26, 30, 34, 41, 42, 45];
+      var chars = gsap.utils.toArray(".f02-death-ch");
+
+      /* ---- Scene 1 (0.0–1.4s): the X stamps; the rail desaturates ---- */
+      tl.fromTo(
+        "#f02-death-stamp",
+        { opacity: 0, scale: 2.6, rotation: -8 },
+        { opacity: 0.97, scale: 1, rotation: -8, duration: 0.32, ease: "power4.in" },
+        0.1
+      );
+      tl.to("#f02-death-stamp", { scale: 1.05, duration: 0.07, ease: "power2.out" }, 0.42);
+      tl.to("#f02-death-stamp", { scale: 1, duration: 0.09, ease: "power2.in" }, 0.49);
+      /* card takes the impact */
+      tl.to("#f02-death-card", { x: 3, duration: 0.05, ease: "none" }, 0.42)
+        .to("#f02-death-card", { x: -2, duration: 0.05, ease: "none" }, 0.47)
+        .to("#f02-death-card", { x: 0, duration: 0.06, ease: "none" }, 0.52);
+      /* the working accent drains to ink/muted */
+      tl.to(
+        ".f02-death-lit",
+        { backgroundColor: "#6b7075", duration: 0.42, ease: "power2.inOut", stagger: 0.055 },
+        0.58
+      );
+      tl.to("#f02-death-halffill", { backgroundColor: "#6b7075", duration: 0.42, ease: "power2.inOut" }, 0.82);
+      tl.to("#f02-death-meterfill", { backgroundColor: "#5f6468", duration: 0.45, ease: "power2.inOut" }, 0.78);
+      tl.to("#f02-death-chip", { opacity: 0.6, duration: 0.4, ease: "power1.inOut" }, 0.8);
+
+      /* ---- Scene 2 (1.4–2.8s): the crash line types; `exit 1` prints ---- */
+      /* caret starts at the line front (hidden chars keep their width, so it rides a negative x) */
+      tl.fromTo(
+        "#f02-death-caret",
+        { opacity: 0, x: (-0.61 * FULL_LEN) + "em" },
+        { opacity: 1, duration: 0.05, ease: "none" },
+        1.48
+      );
+      for (var c = 1; c <= FULL_LEN; c++) {
+        var tt = TS[0];
+        for (var i = 0; i < CUTS.length; i++) {
+          if (c <= CUTS[i]) { tt = TS[i]; break; }
+        }
+        tl.fromTo(chars[c - 1], { opacity: 0 }, { opacity: 1, duration: 0.001, ease: "none" }, 1.5 + tt);
+        tl.to("#f02-death-caret", { x: (-0.61 * (FULL_LEN - c)) + "em", duration: 0.001, ease: "none" }, 1.5 + tt);
+      }
+      tl.fromTo(
+        "#f02-death-exit",
+        { opacity: 0, y: 8 },
+        { opacity: 1, y: 0, duration: 0.2, ease: "power2.out" },
+        2.58
+      );
+      tl.to("#f02-death-caret", { opacity: 0, duration: 0.1, ease: "none" }, 2.58);
+
+      /* ---- Scene 3 (2.8s–end): the cost sits muted beside the card; then ONE still beat ---- */
+      tl.fromTo("#f02-death-w1", { opacity: 0, y: 26 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 2.98);
+      tl.fromTo("#f02-death-w2", { opacity: 0, y: 26 }, { opacity: 0.55, y: 0, duration: 0.5, ease: "power3.out" }, 3.3);
+      tl.fromTo("#f02-death-w3", { opacity: 0, y: 26 }, { opacity: 0.3, y: 0, duration: 0.5, ease: "power3.out" }, 3.62);
+
+      /* true stillness: nothing tweens from 4.12s to the end of the slot */
+      tl.to({}, { duration: 0.01, ease: "none" }, 5.857);
+
+      window.__timelines["02-death"] = tl;
+    })();
+  </script>
+</template>

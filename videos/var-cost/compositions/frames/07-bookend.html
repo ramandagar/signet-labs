@@ -1,0 +1,230 @@
+<template id="frame-07-bookend-template" data-composition-id="07-bookend" data-width="1920" data-height="1080">
+  <style>
+    /* fonts shipped with the project */
+    @font-face {
+      font-family: "Barlow";
+      src: url("assets/fonts/Barlow-900.woff2") format("woff2");
+      font-weight: 900;
+      font-style: normal;
+      font-display: block;
+    }
+    @font-face {
+      font-family: "Barlow";
+      src: url("assets/fonts/Barlow-700.woff2") format("woff2");
+      font-weight: 700;
+      font-style: normal;
+      font-display: block;
+    }
+    @font-face {
+      font-family: "IBM Plex Mono";
+      src: url("assets/fonts/IBMPlexMono-500.woff2") format("woff2");
+      font-weight: 500;
+      font-style: normal;
+      font-display: block;
+    }
+
+    /* root — styled via #root only */
+    #root {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      container-type: size;
+      font-family: "Barlow", sans-serif;
+      color: #ffffff;
+    }
+
+    /* full-bleed dark-register ground — dedicated clip, never painted on #root */
+    .bookend07-bg {
+      position: absolute;
+      inset: 0;
+      background: #1a1a19;
+    }
+
+    /* content stages — hard stop above the caption band (bottom 184px keep-out) */
+    .bookend07-stage1,
+    .bookend07-stage2 {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 184px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ---- scene 1: the closing statement + green tick ---- */
+    .bookend07-stack {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.1cqw;
+      text-align: center;
+    }
+    .bookend07-l1 {
+      font-size: 8cqw;
+      font-weight: 900;
+      line-height: 0.95;
+      letter-spacing: -0.04em;
+      color: #ffffff;
+      white-space: nowrap;
+    }
+    .bookend07-l2 {
+      font-size: 5.6cqw;
+      font-weight: 900;
+      line-height: 0.95;
+      letter-spacing: -0.03em;
+      color: #afb3b7;
+      white-space: nowrap;
+    }
+    .bookend07-tick {
+      width: 3.4cqw;
+      height: auto;
+      margin-top: 1cqw;
+    }
+
+    /* ---- scene 2/3: the end-card lockup ---- */
+    .bookend07-lockup {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    .bookend07-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.2cqw;
+    }
+    .bookend07-mark {
+      width: 4cqw;
+      height: 4cqw;
+      flex: none;
+    }
+    .bookend07-word {
+      font-size: 5.2cqw;
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: -0.03em;
+      color: #ffffff;
+      white-space: nowrap;
+    }
+    .bookend07-meta {
+      margin-top: 1.7cqw;
+      font-family: "IBM Plex Mono", monospace;
+      font-weight: 500;
+      font-size: 0.95cqw;
+      letter-spacing: 0.14em;
+      color: #afb3b7;
+      white-space: nowrap;
+    }
+    .bookend07-payoff {
+      margin-top: 1.1cqw;
+      font-size: 3.2cqw;
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      color: #ffffff;
+      white-space: nowrap;
+    }
+    /* semantic color law: the green tick is the film's ONLY green —
+       every other accent is the blue */
+    .bookend07-acc {
+      color: #3987e5;
+    }
+  </style>
+
+  <div id="root" data-composition-id="07-bookend" data-width="1920" data-height="1080">
+    <div class="clip bookend07-bg" data-start="0" data-duration="2.005" data-track-index="0"></div>
+
+    <!-- scene 1: statement + green tick — clip-gated OFF at 0.44s, before the lockup clip exists -->
+    <div class="clip bookend07-stage1" data-start="0" data-duration="0.44" data-track-index="1">
+      <div class="bookend07-stack" id="bookend07-stack">
+        <div class="bookend07-l1" id="bookend07-l1">var-runtime.</div>
+        <div class="bookend07-l2" id="bookend07-l2">proof-or-stop.</div>
+        <svg class="bookend07-tick" viewBox="0 0 56 46" fill="none" aria-hidden="true">
+          <path id="bookend07-tick" d="M6 24 L21 39 L50 8" stroke="#0CA30C" stroke-width="9"
+                stroke-linecap="square" stroke-linejoin="miter"
+                stroke-dasharray="64" stroke-dashoffset="64" />
+        </svg>
+      </div>
+    </div>
+
+    <!-- scene 2/3: lockup assembles on a cleared stage, then holds dead still to the end -->
+    <div class="clip bookend07-stage2" data-start="0.45" data-duration="1.555" data-track-index="2">
+      <div class="bookend07-lockup" id="bookend07-lockup">
+        <div class="bookend07-row">
+          <svg class="bookend07-mark" viewBox="0 0 100 100" fill="none" aria-hidden="true">
+            <path id="bookend07-mark-outer" d="M50 6 L94 50 L50 94 L6 50 Z" stroke="#3987E5" stroke-width="6"
+                  stroke-linejoin="miter" stroke-dasharray="250" stroke-dashoffset="250" />
+            <path id="bookend07-mark-inner" d="M50 33 L67 50 L50 67 L33 50 Z" stroke="#3987E5" stroke-width="6"
+                  stroke-linejoin="miter" stroke-dasharray="97" stroke-dashoffset="97" />
+          </svg>
+          <div class="bookend07-word" id="bookend07-word">var-runtime</div>
+        </div>
+        <div class="bookend07-meta" id="bookend07-meta">OPEN SOURCE &middot; github.com/signet-labs/var-runtime</div>
+        <div class="bookend07-payoff" id="bookend07-payoff"><span class="bookend07-acc">proof</span>-or-stop.</div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <script>
+    window.__timelines = window.__timelines || {};
+    (function () {
+      var tl = gsap.timeline({ paused: true });
+
+      /* Fixed frame duration: 2.005s (VO: "var-runtime. Proof-or-Stop.").
+         The packet's 6s scene windows are compressed into 0-0.5s so the
+         mandated dead-still hold runs 0.500s -> 2.005s (1.505s >= 1.5s). */
+
+      /* ---- Scene 1 (0-0.31s): statement lands on the cut, green tick draws after it ---- */
+      tl.fromTo("#bookend07-l1",
+        { opacity: 0, y: 16 },
+        { opacity: 1, y: 0, duration: 0.07, ease: "power3.out" }, 0.0);
+      tl.fromTo("#bookend07-l2",
+        { opacity: 0, y: 14 },
+        { opacity: 1, y: 0, duration: 0.07, ease: "power3.out" }, 0.03);
+      /* the tick draws AFTER the statement (svg stroke draw, the film's only green) */
+      tl.fromTo("#bookend07-tick",
+        { attr: { "stroke-dashoffset": 64 } },
+        { attr: { "stroke-dashoffset": 0 }, duration: 0.13, ease: "power2.inOut" }, 0.14);
+
+      /* ---- Scene 2 clear (0.31-0.41s): shrink-toward-center + fade; fully out at 0.41s.
+         The stage-1 clip itself disappears at 0.44s and the lockup clip only exists
+         from 0.45s, so the clear and the assemble can never overlap at any sample. ---- */
+      tl.to("#bookend07-stack",
+        { opacity: 0, scale: 0.95, y: 6, transformOrigin: "center center",
+          duration: 0.1, ease: "power1.in" }, 0.31);
+
+      /* ---- Scene 2 assemble (0.45-0.50s): mark stroke-draws once, wordmark, meta, payoff ---- */
+      tl.fromTo("#bookend07-lockup",
+        { opacity: 0, scale: 0.93 },
+        { opacity: 1, scale: 1, transformOrigin: "center center",
+          duration: 0.05, ease: "back.out(1.6)" }, 0.45);
+      tl.fromTo("#bookend07-mark-outer",
+        { attr: { "stroke-dashoffset": 250 } },
+        { attr: { "stroke-dashoffset": 0 }, duration: 0.05, ease: "power1.out" }, 0.45);
+      tl.fromTo("#bookend07-mark-inner",
+        { attr: { "stroke-dashoffset": 97 } },
+        { attr: { "stroke-dashoffset": 0 }, duration: 0.04, ease: "power1.out" }, 0.46);
+      tl.fromTo("#bookend07-word",
+        { opacity: 0, y: 10 },
+        { opacity: 1, y: 0, duration: 0.045, ease: "power2.out" }, 0.455);
+      tl.fromTo("#bookend07-meta",
+        { opacity: 0, y: 8 },
+        { opacity: 1, y: 0, duration: 0.04, ease: "power2.out" }, 0.462);
+      tl.fromTo("#bookend07-payoff",
+        { opacity: 0, y: 8 },
+        { opacity: 1, y: 0, duration: 0.03, ease: "power2.out" }, 0.47);
+
+      /* ---- Scene 3 (0.50-2.005s): DEAD STILL — no tweens, no breathe, holds to the last sample.
+         Final frame: no exit; the stillness IS the ending. ---- */
+
+      /* full-span anchor so the sub-comp timeline spans the whole frame window */
+      tl.to({}, { duration: 2.005 }, 0);
+
+      window.__timelines["07-bookend"] = tl;
+    })();
+  </script>
+</template>

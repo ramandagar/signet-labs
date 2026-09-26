@@ -1,0 +1,265 @@
+<template>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <style>
+    /* ---- fonts (shipped with project, project-root relative) ---- */
+    @font-face {
+      font-family: "Barlow";
+      src: url("assets/fonts/Barlow-700.woff2") format("woff2");
+      font-weight: 700;
+      font-style: normal;
+      font-display: block;
+    }
+
+    /* ---- root (styled via #root only) ---- */
+    #root {
+      position: absolute;
+      inset: 0;
+      width: 1920px;
+      height: 1080px;
+      overflow: hidden;
+    }
+
+    /* ---- full-bleed ground: clip layer on the lowest track ---- */
+    [class~="01-hook-bg"] {
+      position: absolute;
+      inset: 0;
+      background: #1a1a19; /* dark register ground */
+      container-type: size;
+    }
+
+    /* ---- content clip: statement stage ---- */
+    [class~="01-hook-stage"] {
+      position: absolute;
+      inset: 0;
+      container-type: size;
+    }
+
+    /* centered column, held inside the caption keep-out (top 83%) */
+    [class~="01-hook-col"] {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 83%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* thesis lines — Broadside h2: lowercase, 700, negative-tracked */
+    [class~="01-hook-line"] {
+      margin: 0;
+      font-family: "Barlow", sans-serif;
+      font-weight: 700;
+      font-size: 4.5cqw;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      color: #ffffff; /* ink */
+      text-align: center;
+      white-space: nowrap;
+    }
+    [class~="01-hook-line2"] {
+      margin-top: 1.6cqw;
+      color: #3987e5; /* accent — the chaining clause */
+    }
+
+    [class~="01-hook-w"] {
+      display: inline-block;
+      position: relative;
+      will-change: transform;
+    }
+
+    /* structure underline drawn under the first "human." */
+    [class~="01-hook-uline"] {
+      position: absolute;
+      left: 0.02em;
+      right: -0.04em;
+      bottom: -0.03em;
+      height: 0.055em;
+      background: #3987e5;
+      will-change: transform;
+    }
+
+    /* ---- tiny approval-card glyph — the seed of the household object ---- */
+    [class~="01-hook-card"] {
+      position: relative;
+      margin-top: 4.2cqw;
+      width: 6.2cqw;
+      height: 6.6cqw;
+      box-sizing: border-box;
+      border: 1px solid rgba(215, 216, 217, 0.35);
+      background: #1a1a19; /* flat — same ground, hairline only */
+      padding: 0.9cqw;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      transform-origin: 50% 50%;
+      will-change: transform;
+    }
+    [class~="01-hook-tick"] {
+      width: 2.7cqw;
+      height: 2.4cqw;
+      display: block;
+    }
+    [class~="01-hook-tick-path"] {
+      stroke-dasharray: 100;
+      stroke-dashoffset: 100; /* drawn on by GSAP */
+    }
+    [class~="01-hook-fline"] {
+      height: 0.16cqw;
+      margin-top: 0.62cqw;
+    }
+    [class~="01-hook-fline1"] {
+      width: 4.1cqw;
+      background: rgba(255, 255, 255, 0.3);
+    }
+    [class~="01-hook-fline2"] {
+      width: 2.6cqw;
+      background: rgba(255, 255, 255, 0.18);
+    }
+
+    /* one-shot accent motes drifting outward from the card pop */
+    [class~="01-hook-mote"] {
+      position: absolute;
+      left: 50%;
+      top: 40%;
+      width: 0.32cqw;
+      height: 0.32cqw;
+      margin-left: -0.16cqw;
+      margin-top: -0.16cqw;
+      background: #3987e5;
+      opacity: 0;
+      will-change: transform;
+    }
+  </style>
+
+  <div
+    id="root"
+    data-composition-id="01-hook"
+    data-start="0"
+    data-duration="3.413"
+    data-width="1920"
+    data-height="1080"
+  >
+    <!-- track 0: ground -->
+    <div class="clip 01-hook-bg" data-start="0" data-duration="3.413" data-track-index="0"></div>
+
+    <!-- track 1: thesis + glyph -->
+    <div class="clip 01-hook-stage" data-start="0" data-duration="3.413" data-track-index="1">
+      <div class="01-hook-col">
+        <div class="01-hook-line 01-hook-line1">
+          <span class="01-hook-w">some</span> <span class="01-hook-w">claims</span>
+          <span class="01-hook-w">need</span> <span class="01-hook-w">a</span>
+          <span class="01-hook-w">human.<span class="01-hook-uline"></span></span>
+        </div>
+        <div class="01-hook-line 01-hook-line2">
+          <span class="01-hook-w">chain</span> <span class="01-hook-w">the</span>
+          <span class="01-hook-w">human</span> <span class="01-hook-w">to</span>
+          <span class="01-hook-w">the</span> <span class="01-hook-w">proof.</span>
+        </div>
+        <div class="01-hook-card">
+          <svg class="01-hook-tick" viewBox="0 0 34 30" aria-hidden="true">
+            <polyline
+              class="01-hook-tick-path"
+              points="3,17 12,26 31,4"
+              pathLength="100"
+              fill="none"
+              stroke="#3987E5"
+              stroke-width="4.5"
+              stroke-linecap="square"
+            />
+          </svg>
+          <div class="01-hook-fline 01-hook-fline1"></div>
+          <div class="01-hook-fline 01-hook-fline2"></div>
+          <div class="01-hook-mote 01-hook-mote1"></div>
+          <div class="01-hook-mote 01-hook-mote2"></div>
+          <div class="01-hook-mote 01-hook-mote3"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var root =
+        (document.currentScript && document.currentScript.previousElementSibling) ||
+        document.querySelector('[data-composition-id="01-hook"]');
+      var q = function (c) {
+        return root.querySelector('[class~="' + c + '"]');
+      };
+
+      window.__timelines = window.__timelines || {};
+      var tl = gsap.timeline({ paused: true, defaults: { ease: "power3.out" } });
+
+      // ---- Beat 1 (0.08–1.56s): "some claims need a human." builds word-by-word
+      // at optical center, each word landing on its voice cue.
+      var l1 = root.querySelectorAll('[class~="01-hook-line1"] [class~="01-hook-w"]');
+      var t1 = [0.08, 0.38, 0.68, 0.94, 1.18];
+      l1.forEach(function (w, i) {
+        tl.fromTo(
+          w,
+          { opacity: 0, y: 36, filter: "blur(12px)" },
+          { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.38, ease: "power3.out" },
+          t1[i]
+        );
+      });
+
+      // Sentence-pause beat: the structure underline draws left→right under
+      // "human." — the word the second clause chains.
+      tl.fromTo(
+        q("01-hook-uline"),
+        { scaleX: 0, transformOrigin: "0% 50%" },
+        { scaleX: 1, duration: 0.32, ease: "power2.out" },
+        1.52
+      );
+
+      // ---- Beat 2 (1.62–3.20s): "chain the human to the proof." builds in accent
+      // blue; the final token "proof." arrives with a heavier snap.
+      var l2 = root.querySelectorAll('[class~="01-hook-line2"] [class~="01-hook-w"]');
+      var t2 = [1.62, 1.9, 2.16, 2.4, 2.62, 2.8];
+      l2.forEach(function (w, i) {
+        var last = i === l2.length - 1;
+        tl.fromTo(
+          w,
+          { opacity: 0, y: last ? 42 : 36, filter: "blur(" + (last ? 14 : 12) + "px)" },
+          { opacity: 1, y: 0, filter: "blur(0px)", duration: last ? 0.4 : 0.38, ease: "power3.out" },
+          t2[i]
+        );
+      });
+
+      // ---- Resolve (3.02s → hold): the tiny approval-card glyph spring-pops in
+      // as the payoff for "proof.", its tick draws on, accent motes drift out.
+      // Settles and holds to the end — no exit (the root transition owns it).
+      tl.fromTo(
+        q("01-hook-card"),
+        { scale: 0, opacity: 0, y: 20 },
+        { scale: 1, opacity: 1, y: 0, duration: 0.4, ease: "power3.out" },
+        3.02
+      );
+      tl.fromTo(
+        q("01-hook-tick-path"),
+        { strokeDashoffset: 100 },
+        { strokeDashoffset: 0, duration: 0.28, ease: "power2.inOut" },
+        3.1
+      );
+      var motes = [
+        { sel: "01-hook-mote1", dx: -44, dy: -56 },
+        { sel: "01-hook-mote2", dx: 48, dy: -42 },
+        { sel: "01-hook-mote3", dx: 10, dy: 58 }
+      ];
+      motes.forEach(function (m) {
+        tl.fromTo(
+          q(m.sel),
+          { x: 0, y: 0 },
+          { x: m.dx, y: m.dy, duration: 0.38, ease: "power2.out" },
+          3.02
+        );
+        tl.fromTo(q(m.sel), { opacity: 0 }, { opacity: 0.85, duration: 0.1, ease: "power1.out" }, 3.02);
+        tl.fromTo(q(m.sel), { opacity: 0.85 }, { opacity: 0, duration: 0.26, ease: "power2.in" }, 3.14);
+      });
+
+      window.__timelines["01-hook"] = tl;
+    })();
+  </script>
+</template>

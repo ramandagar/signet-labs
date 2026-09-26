@@ -1,0 +1,343 @@
+<template>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <style>
+    /* ---- fonts (shipped with project, project-root relative) ---- */
+    @font-face {
+      font-family: "Barlow";
+      src: url("assets/fonts/Barlow-900.woff2") format("woff2");
+      font-weight: 900;
+      font-style: normal;
+      font-display: block;
+    }
+    @font-face {
+      font-family: "Barlow";
+      src: url("assets/fonts/Barlow-800.woff2") format("woff2");
+      font-weight: 800;
+      font-style: normal;
+      font-display: block;
+    }
+    @font-face {
+      font-family: "IBM Plex Mono";
+      src: url("assets/fonts/IBMPlexMono-500.woff2") format("woff2");
+      font-weight: 500;
+      font-style: normal;
+      font-display: block;
+    }
+
+    /* ---- root (styled via #root only) ---- */
+    #root {
+      position: absolute;
+      inset: 0;
+      width: 1920px;
+      height: 1080px;
+      overflow: hidden;
+    }
+
+    /* ---- full-bleed ground: clip layer on the lowest track ---- */
+    [class~="07-bookend-bg"] {
+      position: absolute;
+      inset: 0;
+      background: #1a1a19; /* dark register ground */
+      container-type: size;
+    }
+
+    /* ---- scene 1: the closing statement stage (cleared before the lockup) ---- */
+    [class~="07-bookend-s1"] {
+      position: absolute;
+      inset: 0;
+      container-type: size;
+    }
+    [class~="07-bookend-s1col"] {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 83%; /* caption keep-out: nothing below the bottom 17% */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transform-origin: 50% 50%;
+      will-change: transform;
+    }
+    [class~="07-bookend-phrase"] {
+      margin: 0;
+      font-family: "Barlow", sans-serif;
+      font-weight: 900;
+      font-size: 6.7cqw;
+      line-height: 1.06;
+      letter-spacing: -0.04em;
+      color: #ffffff; /* ink */
+      text-align: center;
+      display: flex;
+      align-items: center;
+      gap: 0.22em;
+      white-space: nowrap;
+    }
+    [class~="07-bookend-phrase2"] {
+      margin-top: 0.9cqw;
+    }
+    [class~="07-bookend-w"] {
+      display: inline-block;
+      position: relative;
+      will-change: transform;
+    }
+    /* the semantic green tick — draws on after "built in" (green #2 of 2) */
+    [class~="07-bookend-gtick"] {
+      width: 0.5em;
+      height: 0.44em;
+      margin-top: 0.04em;
+      display: block;
+      overflow: visible;
+    }
+    [class~="07-bookend-gtick-path"] {
+      stroke-dasharray: 100;
+      stroke-dashoffset: 100; /* drawn on by GSAP */
+    }
+
+    /* ---- scene 2: end-card lockup (starts only after scene 1 is fully out) ---- */
+    [class~="07-bookend-lk"] {
+      position: absolute;
+      inset: 0;
+      container-type: size;
+    }
+    [class~="07-bookend-lkcol"] {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 83%; /* caption keep-out */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* the series mark: outlined diamond, drawn once stroke-by-stroke */
+    [class~="07-bookend-mark"] {
+      width: 5cqw;
+      height: 5cqw;
+      display: block;
+      overflow: visible;
+    }
+    [class~="07-bookend-mark-outer"],
+    [class~="07-bookend-mark-inner"] {
+      stroke-dasharray: 100;
+      stroke-dashoffset: 100; /* drawn on by GSAP */
+    }
+
+    [class~="07-bookend-wordmark"] {
+      margin-top: 1.7cqw;
+      font-family: "Barlow", sans-serif;
+      font-weight: 900;
+      font-size: 7.7cqw;
+      line-height: 1;
+      letter-spacing: -0.04em;
+      color: #ffffff; /* ink */
+      white-space: nowrap;
+    }
+    [class~="07-bookend-ltr"] {
+      display: inline-block;
+      will-change: transform;
+    }
+
+    [class~="07-bookend-meta"] {
+      margin-top: 1.2cqw;
+      font-family: "IBM Plex Mono", monospace;
+      font-weight: 500;
+      font-size: 1.15cqw;
+      letter-spacing: 0.12em;
+      color: #afb3b7; /* muted */
+      white-space: nowrap;
+      clip-path: inset(0 100% 0 0); /* wiped in left→right by GSAP */
+      will-change: clip-path;
+    }
+
+    /* the system's only ornament: 36×2 rule stub between meta and statement */
+    [class~="07-bookend-stub"] {
+      margin-top: 2.2cqw;
+      width: 1.9cqw;
+      height: 2px;
+      background: #3987e5; /* accent blue */
+      will-change: transform;
+    }
+
+    [class~="07-bookend-statement"] {
+      margin-top: 1.9cqw;
+      font-family: "Barlow", sans-serif;
+      font-weight: 800;
+      font-size: 3.5cqw;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      color: #ffffff; /* ink */
+      white-space: nowrap;
+      will-change: transform;
+    }
+    [class~="07-bookend-statement-proof"] {
+      color: #3987e5; /* accent blue — the one inked clause */
+    }
+  </style>
+
+  <div
+    id="root"
+    data-composition-id="07-bookend"
+    data-start="0"
+    data-duration="3.819"
+    data-width="1920"
+    data-height="1080"
+  >
+    <!-- track 0: ground -->
+    <div class="clip 07-bookend-bg" data-start="0" data-duration="3.819" data-track-index="0"></div>
+
+    <!-- track 1: closing statement + green tick — hard-gated out at 1.62s -->
+    <div class="clip 07-bookend-s1" data-start="0" data-duration="1.62" data-track-index="1">
+      <div class="07-bookend-s1col">
+        <div class="07-bookend-phrase">
+          <span class="07-bookend-w">accountability,</span>
+        </div>
+        <div class="07-bookend-phrase 07-bookend-phrase2">
+          <span class="07-bookend-w">built</span>
+          <span class="07-bookend-w">in.</span>
+          <svg class="07-bookend-gtick" viewBox="0 0 100 88" aria-hidden="true">
+            <polyline
+              class="07-bookend-gtick-path"
+              points="8,50 36,78 92,8"
+              pathLength="100"
+              fill="none"
+              stroke="#0CA30C"
+              stroke-width="12"
+              stroke-linecap="square"
+            />
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- track 2: end-card lockup — cannot appear before 1.62s (scene 1 is fully clear by 1.56s) -->
+    <div class="clip 07-bookend-lk" data-start="1.62" data-duration="2.199" data-track-index="2">
+      <div class="07-bookend-lkcol">
+        <svg class="07-bookend-mark" viewBox="0 0 120 120" aria-hidden="true">
+          <path
+            class="07-bookend-mark-outer"
+            d="M60 8 L112 60 L60 112 L8 60 Z"
+            pathLength="100"
+            fill="none"
+            stroke="#3987E5"
+            stroke-width="7"
+          />
+          <path
+            class="07-bookend-mark-inner"
+            d="M60 42 L78 60 L60 78 L42 60 Z"
+            pathLength="100"
+            fill="none"
+            stroke="#3987E5"
+            stroke-width="6"
+          />
+        </svg>
+        <div class="07-bookend-wordmark"><span class="07-bookend-ltr">v</span><span class="07-bookend-ltr">a</span><span class="07-bookend-ltr">r</span><span class="07-bookend-ltr">-</span><span class="07-bookend-ltr">r</span><span class="07-bookend-ltr">u</span><span class="07-bookend-ltr">n</span><span class="07-bookend-ltr">t</span><span class="07-bookend-ltr">i</span><span class="07-bookend-ltr">m</span><span class="07-bookend-ltr">e</span></div>
+        <div class="07-bookend-meta">OPEN SOURCE · github.com/signet-labs/var-runtime</div>
+        <div class="07-bookend-stub"></div>
+        <div class="07-bookend-statement"><span class="07-bookend-statement-proof">proof</span>-or-stop.</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var root =
+        (document.currentScript && document.currentScript.previousElementSibling) ||
+        document.querySelector('[data-composition-id="07-bookend"]');
+      var q = function (c) {
+        return root.querySelector('[class~="' + c + '"]');
+      };
+
+      window.__timelines = window.__timelines || {};
+      var tl = gsap.timeline({ paused: true, defaults: { ease: "power3.out" } });
+
+      // ---- Scene 1 (0.06–1.24s): "accountability, built in." builds word-by-word
+      // at optical center; the green tick draws on after the words land.
+      var words = root.querySelectorAll('[class~="07-bookend-w"]');
+      var tIn = [0.06, 0.22, 0.36];
+      words.forEach(function (w, i) {
+        tl.fromTo(
+          w,
+          { opacity: 0, y: 40 },
+          { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" },
+          tIn[i]
+        );
+      });
+
+      // tick draw (stroke-dashoffset): 0.86 → 1.24, after "built in."
+      tl.fromTo(
+        q("07-bookend-gtick-path"),
+        { strokeDashoffset: 100 },
+        { strokeDashoffset: 0, duration: 0.38, ease: "power2.inOut" },
+        0.86
+      );
+
+      // ---- Clear (1.30–1.56s): the whole statement shrinks toward center and
+      // fades fully out — the stage is BLANK from 1.56s (clip gate at 1.62s backs
+      // this up; the lockup's first pixel is 1.70s, so no overlap at any sample).
+      tl.fromTo(
+        q("07-bookend-s1col"),
+        { scale: 1, opacity: 1 },
+        { scale: 0.94, opacity: 0, duration: 0.26, ease: "power2.in" },
+        1.3
+      );
+
+      // ---- Scene 2 (1.70–2.30s): lockup assembles on the cleared stage.
+      // Mark draws once — outer diamond, then inner.
+      tl.fromTo(
+        q("07-bookend-mark-outer"),
+        { strokeDashoffset: 100 },
+        { strokeDashoffset: 0, duration: 0.32, ease: "power2.inOut" },
+        1.7
+      );
+      tl.fromTo(
+        q("07-bookend-mark-inner"),
+        { strokeDashoffset: 100 },
+        { strokeDashoffset: 0, duration: 0.2, ease: "power2.inOut" },
+        1.9
+      );
+
+      // Wordmark "var-runtime" cascades letter-by-letter (left → right).
+      var ltrs = root.querySelectorAll('[class~="07-bookend-ltr"]');
+      ltrs.forEach(function (l, i) {
+        tl.fromTo(
+          l,
+          { opacity: 0, y: 34 },
+          { opacity: 1, y: 0, duration: 0.28, ease: "back.out(1.4)" },
+          1.84 + i * 0.016
+        );
+      });
+
+      // Meta line wipes in left→right (URL verbatim, muted mono chrome).
+      tl.fromTo(
+        q("07-bookend-meta"),
+        { clipPath: "inset(0 100% 0 0)" },
+        { clipPath: "inset(0 0% 0 0)", duration: 0.22, ease: "power2.inOut" },
+        1.96
+      );
+
+      // Rule stub draws across, then the statement lands — the final beat.
+      tl.fromTo(
+        q("07-bookend-stub"),
+        { scaleX: 0, transformOrigin: "50% 50%" },
+        { scaleX: 1, duration: 0.18, ease: "power2.out" },
+        2.02
+      );
+      tl.fromTo(
+        q("07-bookend-statement"),
+        { opacity: 0, y: 26 },
+        { opacity: 1, y: 0, duration: 0.26, ease: "power3.out" },
+        2.04
+      );
+
+      // ---- Scene 3 (2.30 → 3.819s): DEAD STILL hold (~1.52s). No tween
+      // starts after 2.30s — the end card holds motionless to the last frame.
+      // No exit: this is the final frame's settled state.
+
+      window.__timelines["07-bookend"] = tl;
+    })();
+  </script>
+</template>

@@ -1,0 +1,192 @@
+{
+  "bgm": null,
+  "bgm_pending": false,
+  "voices": [
+    {
+      "frame": 1,
+      "path": "assets/voice/01.wav",
+      "duration_s": 1.963,
+      "words": [
+        {
+          "id": "w0",
+          "text": "a",
+          "start": 0.09,
+          "end": 0.13
+        },
+        {
+          "id": "w1",
+          "text": "log",
+          "start": 0.13,
+          "end": 0.37
+        },
+        {
+          "id": "w2",
+          "text": "line",
+          "start": 0.37,
+          "end": 0.75
+        },
+        {
+          "id": "w3",
+          "text": "is",
+          "start": 0.75,
+          "end": 0.93
+        },
+        {
+          "id": "w4",
+          "text": "not",
+          "start": 0.93,
+          "end": 1.22
+        },
+        {
+          "id": "w5",
+          "text": "evidence.",
+          "start": 1.22,
+          "end": 1.96
+        }
+      ]
+    },
+    {
+      "frame": 2,
+      "path": "assets/voice/02.wav",
+      "duration_s": 2.048,
+      "words": [
+        {
+          "id": "w0",
+          "text": "a",
+          "start": 0.09,
+          "end": 0.1
+        },
+        {
+          "id": "w1",
+          "text": "self-report",
+          "start": 0.1,
+          "end": 1.08
+        },
+        {
+          "id": "w2",
+          "text": "is",
+          "start": 1.08,
+          "end": 1.26
+        },
+        {
+          "id": "w3",
+          "text": "not",
+          "start": 1.26,
+          "end": 1.53
+        },
+        {
+          "id": "w4",
+          "text": "a",
+          "start": 1.53,
+          "end": 1.62
+        },
+        {
+          "id": "w5",
+          "text": "fact.",
+          "start": 1.62,
+          "end": 2
+        }
+      ]
+    },
+    {
+      "frame": 3,
+      "path": "assets/voice/03.wav",
+      "duration_s": 2.027,
+      "words": [
+        {
+          "id": "w0",
+          "text": "No",
+          "start": 0.05,
+          "end": 0.18
+        },
+        {
+          "id": "w1",
+          "text": "evidence,",
+          "start": 0.18,
+          "end": 1.09
+        },
+        {
+          "id": "w2",
+          "text": "no",
+          "start": 1.09,
+          "end": 1.27
+        },
+        {
+          "id": "w3",
+          "text": "advance.",
+          "start": 1.27,
+          "end": 2
+        }
+      ]
+    },
+    {
+      "frame": 4,
+      "path": "assets/voice/04.wav",
+      "duration_s": 2.069,
+      "words": [
+        {
+          "id": "w0",
+          "text": "proof-or-stop",
+          "start": 0.05,
+          "end": 1
+        },
+        {
+          "id": "w1",
+          "text": "via",
+          "start": 1,
+          "end": 1.24
+        },
+        {
+          "id": "w2",
+          "text": "runtime.",
+          "start": 1.24,
+          "end": 1.85
+        }
+      ]
+    },
+    {
+      "frame": 5,
+      "path": "assets/voice/05.wav",
+      "duration_s": 3.093,
+      "words": [
+        {
+          "id": "w0",
+          "text": "VaRuntime",
+          "start": 0.09,
+          "end": 0.83
+        },
+        {
+          "id": "w1",
+          "text": "open",
+          "start": 0.83,
+          "end": 1.22
+        },
+        {
+          "id": "w2",
+          "text": "source,",
+          "start": 1.22,
+          "end": 1.96
+        },
+        {
+          "id": "w3",
+          "text": "proof",
+          "start": 2.03,
+          "end": 2.43
+        },
+        {
+          "id": "w4",
+          "text": "or",
+          "start": 2.43,
+          "end": 2.62
+        },
+        {
+          "id": "w5",
+          "text": "stop.",
+          "start": 2.62,
+          "end": 3.04
+        }
+      ]
+    }
+  ],
+  "sfx": []
+}

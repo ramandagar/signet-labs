@@ -1,0 +1,485 @@
+<template>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <style>
+    /* ---- fonts (shipped with project, project-root relative) ---- */
+    @font-face {
+      font-family: "Barlow";
+      src: url("assets/fonts/Barlow-900.woff2") format("woff2");
+      font-weight: 900;
+      font-style: normal;
+      font-display: block;
+    }
+    @font-face {
+      font-family: "IBM Plex Mono";
+      src: url("assets/fonts/IBMPlexMono-500.woff2") format("woff2");
+      font-weight: 500;
+      font-style: normal;
+      font-display: block;
+    }
+    @font-face {
+      font-family: "IBM Plex Mono";
+      src: url("assets/fonts/IBMPlexMono-600.woff2") format("woff2");
+      font-weight: 600;
+      font-style: normal;
+      font-display: block;
+    }
+
+    /* ---- root (styled via #root only) ---- */
+    #root {
+      position: absolute;
+      inset: 0;
+      width: 1920px;
+      height: 1080px;
+      overflow: hidden;
+    }
+
+    /* ---- full-bleed ground: clip layer on the lowest track ---- */
+    [class~="02-call-bg"] {
+      position: absolute;
+      inset: 0;
+      background: #1a1a19; /* cream ground — dark register */
+      container-type: size;
+    }
+
+    /* Crouwel vertical hairlines, stopped at the caption keep-out (83%) — same system as 01-hook */
+    [class~="02-call-grid"] {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 83%;
+      background-image: linear-gradient(90deg, rgba(215, 216, 217, 0.07) 1px, transparent 1px);
+      background-size: 16.6667% 100%;
+    }
+
+    /* ---- content clip ---- */
+    [class~="02-call-stage"] {
+      position: absolute;
+      inset: 0;
+      container-type: size;
+    }
+
+    /* slide-chrome: top hairline bar, label left / catalogue number right */
+    [class~="02-call-chrome"] {
+      position: absolute;
+      top: 5.56cqh;
+      left: 5.52cqw;
+      right: 5.52cqw;
+      height: 2.6cqh;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      padding-bottom: 0.83cqh;
+    }
+    [class~="02-call-chrome-label"],
+    [class~="02-call-chrome-num"] {
+      font-family: "IBM Plex Mono", monospace;
+      font-weight: 500;
+      font-size: 0.78cqw;
+      letter-spacing: 0.14em;
+      color: #afb3b7; /* cream-hint chrome */
+      line-height: 1;
+    }
+    [class~="02-call-chrome-line"] {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 1px;
+      background: rgba(215, 216, 217, 0.25);
+      transform-origin: left center;
+    }
+
+    /* one slow camera move underneath the shot: push toward the _meta slot */
+    [class~="02-call-camera"] {
+      position: absolute;
+      inset: 0;
+    }
+
+    /* ---- the tool-call card (flat plane: hairline border, no radius, no shadow) ---- */
+    [class~="02-call-card"] {
+      position: absolute;
+      left: 5.52cqw;
+      top: 19.44cqh;
+      width: 49.48cqw;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(215, 216, 217, 0.28);
+    }
+
+    /* header plate — ink block on the dark register (compare-panel precedent) */
+    [class~="02-call-head"] {
+      height: 8.89cqh;
+      background: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 1.25cqw;
+      padding: 0 2.08cqw;
+    }
+    [class~="02-call-stub"] {
+      flex: 0 0 auto;
+      width: 1.875cqw;
+      height: 2px;
+      background: #3987e5; /* accent — structure only */
+      transform-origin: left center;
+    }
+    [class~="02-call-headtext"] {
+      position: relative;
+      display: inline-block;
+      font-family: "IBM Plex Mono", monospace;
+      font-weight: 600;
+      font-size: 1.5625cqw;
+      line-height: 1;
+      color: #1a1a19;
+      white-space: nowrap;
+    }
+    [class~="02-call-headtag"] {
+      margin-left: auto;
+      font-family: "IBM Plex Mono", monospace;
+      font-weight: 500;
+      font-size: 1.04cqw;
+      letter-spacing: 0.14em;
+      color: #afb3b7;
+      line-height: 1;
+    }
+
+    /* typing carets — machine accent blue; positioned left:0, driven by GSAP x only */
+    [class~="02-call-caret"] {
+      position: absolute;
+      left: 0;
+      top: -0.12em;
+      width: 3px;
+      height: 1.25em;
+      background: #3987e5;
+      opacity: 0;
+    }
+
+    /* params body */
+    [class~="02-call-body"] {
+      padding: 4.07cqh 2.08cqw 4.07cqh;
+    }
+    [class~="02-call-row"] {
+      font-family: "IBM Plex Mono", monospace;
+      font-weight: 500;
+      font-size: 1.9792cqw;
+      line-height: 1;
+      color: #ffffff; /* ink */
+      white-space: nowrap;
+    }
+    [class~="02-call-row"] + [class~="02-call-row"] {
+      margin-top: 2.78cqh;
+    }
+    [class~="02-call-rgroup"] {
+      position: relative;
+      display: inline-block;
+    }
+    [class~="02-call-k"] {
+      color: #3987e5; /* accent on keywords only */
+    }
+    [class~="02-call-p"] {
+      color: #afb3b7;
+    }
+
+    /* ---- the empty _meta slot (the focal point) ---- */
+    [class~="02-call-slotwrap"] {
+      position: relative;
+      height: 11.85cqh;
+      margin-top: 3.33cqh;
+      overflow: hidden;
+    }
+    [class~="02-call-slot"] {
+      position: absolute;
+      inset: 0;
+      border: 1px solid rgba(215, 216, 217, 0.28);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1.46cqw;
+    }
+    [class~="02-call-slotlabel"] {
+      font-family: "IBM Plex Mono", monospace;
+      font-weight: 500;
+      font-size: 1.15cqw;
+      letter-spacing: 0.08em;
+      color: #afb3b7;
+      line-height: 1;
+    }
+    [class~="02-call-slotstub"] {
+      width: 1.875cqw;
+      height: 2px;
+      background: #3987e5;
+      transform-origin: left center;
+    }
+
+    /* ---- Scene 3 display payoff: one Broadside word, lowercase 900 ---- */
+    [class~="02-call-payoff"] {
+      position: absolute;
+      left: 61.46cqw;
+      top: 33.33cqh;
+    }
+    [class~="02-call-paystub"] {
+      width: 1.875cqw;
+      height: 2px;
+      background: #3987e5;
+      transform-origin: left center;
+      margin-bottom: 2.4cqh;
+    }
+    [class~="02-call-word"] {
+      font-family: "Barlow", sans-serif;
+      font-weight: 900;
+      font-size: 7.71cqw;
+      line-height: 0.9;
+      letter-spacing: -0.04em;
+      color: #ffffff; /* ink — blue stays on structure/keywords */
+      white-space: nowrap;
+    }
+    [class~="02-call-l"] {
+      display: inline-block;
+      opacity: 0;
+    }
+  </style>
+
+  <div
+    id="root"
+    data-composition-id="02-call"
+    data-start="0"
+    data-duration="4.117"
+    data-width="1920"
+    data-height="1080"
+  >
+    <!-- track 0: ground + Crouwel grid -->
+    <div class="clip 02-call-bg" data-start="0" data-duration="4.117" data-track-index="0">
+      <div class="02-call-grid"></div>
+    </div>
+
+    <!-- track 1: chrome + card theater + display payoff -->
+    <div class="clip 02-call-stage" data-start="0" data-duration="4.117" data-track-index="1">
+      <div class="02-call-chrome" data-layout-allow-overlap="">
+        <span class="02-call-chrome-label" data-layout-allow-overlap="">TOOL CALL</span>
+        <span class="02-call-chrome-num" data-layout-allow-overlap="">NO. 02</span>
+        <div class="02-call-chrome-line"></div>
+      </div>
+
+      <div class="02-call-camera" data-layout-allow-overlap="">
+        <div class="02-call-card" data-layout-allow-overlap="">
+          <!-- header plate: tools/call -->
+          <div class="02-call-head" data-layout-allow-overlap="">
+            <span class="02-call-stub"></span>
+            <span class="02-call-headtext" data-layout-allow-overlap=""
+              ><span class="02-call-ch">t</span><span class="02-call-ch">o</span><span class="02-call-ch">o</span><span class="02-call-ch">l</span><span class="02-call-ch">s</span><span class="02-call-ch">/</span><span class="02-call-ch">c</span><span class="02-call-ch">a</span><span class="02-call-ch">l</span><span class="02-call-ch">l</span><span class="02-call-caret 02-call-caret-head"></span></span>
+            <span class="02-call-headtag" data-layout-allow-overlap="">MCP</span>
+          </div>
+
+          <!-- params body -->
+          <div class="02-call-body" data-layout-allow-overlap="">
+            <div class="02-call-row 02-call-rowname" data-layout-allow-overlap="">
+              <span class="02-call-rgroup" data-layout-allow-overlap=""
+                ><span class="02-call-ch 02-call-k">n</span><span class="02-call-ch 02-call-k">a</span><span class="02-call-ch 02-call-k">m</span><span class="02-call-ch 02-call-k">e</span><span class="02-call-ch 02-call-p">&colon;</span><span class="02-call-ch 02-call-p">&nbsp;</span><span class="02-call-ch">&quot;</span><span class="02-call-ch">r</span><span class="02-call-ch">e</span><span class="02-call-ch">a</span><span class="02-call-ch">d</span><span class="02-call-ch">_</span><span class="02-call-ch">f</span><span class="02-call-ch">i</span><span class="02-call-ch">l</span><span class="02-call-ch">e</span><span class="02-call-ch">&quot;</span><span class="02-call-caret 02-call-caret-row1"></span></span>
+            </div>
+            <div class="02-call-row 02-call-rowpath" data-layout-allow-overlap="">
+              <span class="02-call-rgroup" data-layout-allow-overlap=""
+                ><span class="02-call-ch 02-call-k">p</span><span class="02-call-ch 02-call-k">a</span><span class="02-call-ch 02-call-k">t</span><span class="02-call-ch 02-call-k">h</span><span class="02-call-ch 02-call-p">&colon;</span><span class="02-call-ch 02-call-p">&nbsp;</span><span class="02-call-ch">&quot;</span><span class="02-call-ch">s</span><span class="02-call-ch">r</span><span class="02-call-ch">c</span><span class="02-call-ch">/</span><span class="02-call-ch">a</span><span class="02-call-ch">u</span><span class="02-call-ch">t</span><span class="02-call-ch">h</span><span class="02-call-ch">.</span><span class="02-call-ch">p</span><span class="02-call-ch">y</span><span class="02-call-ch">&quot;</span><span class="02-call-caret 02-call-caret-row2"></span></span>
+            </div>
+
+            <!-- the empty _meta slot — the vacancy is the point -->
+            <div class="02-call-slotwrap" data-layout-allow-overlap="">
+              <div class="02-call-slot" data-layout-allow-overlap="">
+                <span class="02-call-slotlabel" data-layout-allow-overlap="">_meta &middot; empty</span>
+                <span class="02-call-slotstub"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Scene 3 payoff word -->
+        <div class="02-call-payoff" data-layout-allow-overlap="">
+          <div class="02-call-paystub"></div>
+          <div class="02-call-word" data-layout-allow-overlap=""
+            ><span class="02-call-l">u</span><span class="02-call-l">n</span><span class="02-call-l">s</span><span class="02-call-l">i</span><span class="02-call-l">g</span><span class="02-call-l">n</span><span class="02-call-l">e</span><span class="02-call-l">d</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var root =
+        (document.currentScript && document.currentScript.previousElementSibling) ||
+        document.querySelector('[data-composition-id="02-call"]');
+      var q = function (c) {
+        return root.querySelector('[class~="' + c + '"]');
+      };
+
+      window.__timelines = window.__timelines || {};
+      var tl = gsap.timeline({ paused: true, defaults: { ease: "power3.out" } });
+
+      // Character advance of IBM Plex Mono is exactly 0.6em — caret glide targets are
+      // nChars * 0.6 * fontSize(px). Fonts are locked at this fixed 1920x1080 canvas:
+      // header 1.5625cqw = 30px -> 18px/char; rows 1.9792cqw = 38px -> 22.8px/char.
+
+      var type = function (scope, t0, step) {
+        var chars = scope.querySelectorAll('[class~="02-call-ch"]');
+        for (var i = 0; i < chars.length; i++) {
+          tl.fromTo(chars[i], { opacity: 0 }, { opacity: 1, duration: 0.001, ease: "none" }, t0 + i * step);
+        }
+        return chars.length;
+      };
+
+      // ---- Scene 1 (0–1.37s; packet 0–2.0s scaled x0.686 to the fixed 4.117s):
+      // canvas + chrome; the card rises in; header `tools/call` types.
+      tl.fromTo(q("02-call-grid"), { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.out" }, 0);
+      tl.fromTo(
+        q("02-call-chrome-line"),
+        { scaleX: 0 },
+        { scaleX: 1, duration: 0.5, ease: "power2.out" },
+        0.05
+      );
+      tl.fromTo(
+        q("02-call-chrome-label"),
+        { autoAlpha: 0, y: -8 },
+        { autoAlpha: 1, y: 0, duration: 0.4 },
+        0.15
+      );
+      tl.fromTo(
+        q("02-call-chrome-num"),
+        { autoAlpha: 0, y: -8 },
+        { autoAlpha: 1, y: 0, duration: 0.4 },
+        0.22
+      );
+
+      // Macro move (the shot's ONE camera move): slow continuous push toward the slot.
+      tl.fromTo(
+        q("02-call-camera"),
+        { scale: 1 },
+        { scale: 1.032, transformOrigin: "600px 600px", duration: 4.117, ease: "none" },
+        0
+      );
+
+      tl.fromTo(
+        q("02-call-card"),
+        { y: 64, autoAlpha: 0 },
+        { y: 0, autoAlpha: 1, duration: 0.75 },
+        0.05
+      );
+      tl.fromTo(
+        q("02-call-stub"),
+        { scaleX: 0 },
+        { scaleX: 1, duration: 0.45, ease: "power2.out" },
+        0.4
+      );
+
+      // header types: 10 chars x 0.08s from 0.55 -> 1.35; caret blinks (finite), then dies.
+      var headText = q("02-call-headtext");
+      var nHead = type(headText, 0.55, 0.08);
+      tl.fromTo(
+        q("02-call-caret-head"),
+        { x: 0 },
+        { x: nHead * 18, duration: nHead * 0.08, ease: "none" },
+        0.55
+      );
+      tl.fromTo(
+        q("02-call-caret-head"),
+        { autoAlpha: 1 },
+        { autoAlpha: 0, duration: 0.16, ease: "steps(1)", yoyo: true, repeat: 4, immediateRender: false },
+        0.55
+      );
+      tl.fromTo(
+        q("02-call-headtag"),
+        { autoAlpha: 0 },
+        { autoAlpha: 1, duration: 0.35 },
+        1.0
+      );
+
+      // ---- Scene 2 (1.37–2.88s; packet 2.0–4.2s scaled): params block types.
+      // row 1: name: "read_file" — 17 chars x 0.04s from 1.5 -> 2.14.
+      var row1 = q("02-call-rowname");
+      var n1 = type(row1, 1.5, 0.04);
+      tl.fromTo(
+        q("02-call-caret-row1"),
+        { x: 0 },
+        { x: n1 * 22.8, duration: n1 * 0.04, ease: "none" },
+        1.5
+      );
+      tl.fromTo(
+        q("02-call-caret-row1"),
+        { autoAlpha: 1 },
+        { autoAlpha: 0, duration: 0.16, ease: "steps(1)", yoyo: true, repeat: 4, immediateRender: false },
+        1.5
+      );
+      // row 2: path: "src/auth.py" — 18 chars x 0.04s from 2.2 -> 2.88.
+      var row2 = q("02-call-rowpath");
+      var n2 = type(row2, 2.2, 0.04);
+      tl.fromTo(
+        q("02-call-caret-row2"),
+        { x: 0 },
+        { x: n2 * 22.8, duration: n2 * 0.04, ease: "none" },
+        2.2
+      );
+      tl.fromTo(
+        q("02-call-caret-row2"),
+        { autoAlpha: 1 },
+        { autoAlpha: 0, duration: 0.16, ease: "steps(1)", yoyo: true, repeat: 4, immediateRender: false },
+        2.2
+      );
+
+      // ---- Scene 3 (2.88–4.117s; packet 4.2–6.0s scaled): the empty _meta slot
+      // rises into the card's foot, then highlights hairline-blue — the vacancy lands.
+      tl.fromTo(
+        q("02-call-slot"),
+        { yPercent: 110 },
+        { yPercent: 0, duration: 0.5 },
+        2.85
+      );
+      tl.fromTo(
+        q("02-call-slotlabel"),
+        { autoAlpha: 0 },
+        { autoAlpha: 1, duration: 0.35 },
+        3.0
+      );
+      // the highlight: hairline -> accent blue, faint blue wash, label flips blue, stub stamps in
+      tl.fromTo(
+        q("02-call-slot"),
+        { borderColor: "rgba(215,216,217,0.28)", backgroundColor: "rgba(255,255,255,0)" },
+        {
+          borderColor: "rgba(57,135,229,0.95)",
+          backgroundColor: "rgba(57,135,229,0.07)",
+          duration: 0.45,
+          ease: "power2.out"
+        },
+        3.2
+      );
+      tl.fromTo(
+        q("02-call-slotlabel"),
+        { color: "#afb3b7" },
+        { color: "#3987e5", duration: 0.35, ease: "power2.out" },
+        3.25
+      );
+      tl.fromTo(
+        q("02-call-slotstub"),
+        { scaleX: 0 },
+        { scaleX: 1, duration: 0.4 },
+        3.35
+      );
+
+      // Display payoff word lands letter-staggered with the highlight (content arriving
+      // into the back half — never front-loaded).
+      tl.fromTo(
+        q("02-call-paystub"),
+        { scaleX: 0 },
+        { scaleX: 1, duration: 0.4, ease: "power2.out" },
+        3.3
+      );
+      var letters = q("02-call-word").querySelectorAll('[class~="02-call-l"]');
+      for (var i = 0; i < letters.length; i++) {
+        tl.fromTo(
+          letters[i],
+          { opacity: 0, y: 44, filter: "blur(10px)" },
+          { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.42 },
+          3.4 + i * 0.035
+        );
+      }
+
+      // ---- hold to 4.117s under the camera drift; no exit — the root transition owns it.
+      window.__timelines["02-call"] = tl;
+    })();
+  </script>
+</template>

@@ -1,0 +1,394 @@
+<template>
+  <!-- 04-sign — Frame 4 "The signature": continuation of the 03 approval card (cut, same
+       anatomy). A cursor-less click beat: the role row is review-marked, the approve button
+       takes a pale hover tint, presses and fills INK once (label flips white, deny dims,
+       header tense-flips to approved). Three blue dots pulse under the card and die the
+       instant the signature payload prints beneath it in three VO-synced chunks
+       (approved_by / role / expires), then a small blue seal stamps the card's corner.
+       One slow receipt-zoom push decelerates into the stamp; the frame holds still.
+       Broadside dark register; accent blue is structure/seal only — no green/amber/red. -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <style>
+    @font-face {
+      font-family: 'IBM Plex Mono';
+      src: url('assets/fonts/IBMPlexMono-400.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+      font-display: block;
+    }
+    @font-face {
+      font-family: 'IBM Plex Mono';
+      src: url('assets/fonts/IBMPlexMono-500.woff2') format('woff2');
+      font-weight: 500;
+      font-style: normal;
+      font-display: block;
+    }
+    @font-face {
+      font-family: 'IBM Plex Mono';
+      src: url('assets/fonts/IBMPlexMono-600.woff2') format('woff2');
+      font-weight: 600;
+      font-style: normal;
+      font-display: block;
+    }
+
+    #root {
+      position: absolute;
+      inset: 0;
+      width: 1920px;
+      height: 1080px;
+      overflow: hidden;
+      container-type: size;
+      font-family: 'IBM Plex Mono', monospace;
+      color: #FFFFFF;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* full-bleed ground on its own clip layer — never on #root */
+    .f04-sign-bg {
+      position: absolute;
+      inset: 0;
+      background: #1A1A19;
+    }
+
+    .f04-sign-stageclip {
+      position: absolute;
+      inset: 0;
+    }
+
+    /* camera wrapper — the ONE slow receipt-zoom push decelerates into the seal stamp */
+    .f04-sign-world {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transform-origin: 50% 42%;
+    }
+
+    /* the approval card — continuation of 03: white surface, flat plane, sharp corners,
+       1px ink hairlines. Drawn at final size; no layout tweens anywhere. */
+    .f04-sign-card {
+      position: absolute;
+      left: 520px;
+      top: 200px;
+      width: 880px;
+      box-sizing: border-box;
+      padding: 46px 52px 46px;
+      background: #FFFFFF;
+    }
+
+    .f04-sign-hdstack {
+      position: relative;
+      height: 18px;
+      margin-bottom: 20px;
+      padding-bottom: 0;
+      border-bottom: 1px solid rgba(26, 26, 25, 0.16);
+    }
+    .f04-sign-hd {
+      position: absolute;
+      left: 0;
+      top: 0;
+      font-size: 14px;
+      line-height: 18px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #1A1A19;
+      white-space: pre;
+    }
+    .f04-sign-hddot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #3987E5;
+      margin-right: 12px;
+      vertical-align: 1px;
+    }
+
+    .f04-sign-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 64px;
+      border-bottom: 1px solid rgba(26, 26, 25, 0.14);
+    }
+    .f04-sign-rowkey {
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      color: #AFB3B7;
+      white-space: pre;
+    }
+    .f04-sign-rowval {
+      font-size: 22px;
+      font-weight: 500;
+      color: #1A1A19;
+      white-space: pre;
+    }
+    .f04-sign-rolewrap {
+      position: relative;
+      display: inline-block;
+    }
+    /* the review mark — blue structure accent swept under the role the VO names */
+    .f04-sign-roleul {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -7px;
+      height: 2px;
+      background: #3987E5;
+      transform-origin: 0% 50%;
+    }
+
+    .f04-sign-btns {
+      display: flex;
+      gap: 16px;
+      margin-top: 30px;
+    }
+    .f04-sign-btn {
+      position: relative;
+      flex: 1;
+      height: 60px;
+      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .f04-sign-btn-approve {
+      border: 1px solid #1A1A19;
+    }
+    .f04-sign-btn-deny {
+      border: 1px solid rgba(26, 26, 25, 0.3);
+    }
+    .f04-sign-btnlabel {
+      position: relative;
+      z-index: 2;
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #1A1A19;
+    }
+    .f04-sign-denylabel {
+      color: #AFB3B7;
+    }
+    .f04-sign-tint {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      background: rgba(57, 135, 229, 0.12);
+      opacity: 0;
+    }
+    .f04-sign-fill {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background: #1A1A19;
+      transform-origin: 0% 50%;
+    }
+
+    /* the signature payload — the focal. Prints beneath the card on the ground,
+       left-to-right inside a fixed-width block so partial text never re-centers. */
+    .f04-sign-under {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 668px;
+      height: 44px;
+    }
+    .f04-sign-sigrow {
+      width: 1192px;
+      margin: 0 auto;
+      height: 44px;
+      line-height: 44px;
+      font-size: 31px;
+      white-space: pre;
+    }
+    .f04-sign-key { color: #AFB3B7; font-weight: 500; }
+    .f04-sign-val { color: #FFFFFF; font-weight: 500; }
+    .f04-sign-sep { color: #AFB3B7; font-weight: 400; }
+    .f04-sign-exp { color: #3987E5; font-weight: 600; }
+    .f04-sign-caret {
+      display: inline-block;
+      width: 0.5em;
+      height: 1.02em;
+      background: #3987E5;
+      vertical-align: -0.14em;
+      margin-left: 2px;
+      opacity: 0;
+    }
+
+    /* working-state dots — die the instant the payload lands */
+    .f04-sign-dots {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+    }
+    .f04-sign-dotp {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: #3987E5;
+      opacity: 0;
+    }
+
+    /* the signed seal — small blue stamp on the card's corner */
+    .f04-sign-seal {
+      position: absolute;
+      top: -20px;
+      right: -20px;
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: #3987E5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+    }
+  </style>
+
+  <div id="root" data-composition-id="04-sign" data-width="1920" data-height="1080">
+    <div class="clip f04-sign-bg" data-start="0" data-duration="6.08" data-track-index="0"></div>
+    <div class="clip f04-sign-stageclip" data-start="0" data-duration="6.08" data-track-index="1">
+      <div class="f04-sign-world" id="f04-sign-world">
+        <div class="f04-sign-card" id="f04-sign-card">
+          <div class="f04-sign-hdstack">
+            <span class="f04-sign-hd" id="f04-sign-hd-old">approval requested</span>
+            <span class="f04-sign-hd" id="f04-sign-hd-new"><span class="f04-sign-hddot" id="f04-sign-hddot"></span>approved</span>
+          </div>
+          <div class="f04-sign-row">
+            <span class="f04-sign-rowkey">claim:</span>
+            <span class="f04-sign-rowval">deploy_to_production</span>
+          </div>
+          <div class="f04-sign-row">
+            <span class="f04-sign-rowkey">requested_by:</span>
+            <span class="f04-sign-rowval">coder-1</span>
+          </div>
+          <div class="f04-sign-row">
+            <span class="f04-sign-rowkey">role required:</span>
+            <span class="f04-sign-rowval f04-sign-rolewrap">senior_engineer<span class="f04-sign-roleul" id="f04-sign-roleul"></span></span>
+          </div>
+          <div class="f04-sign-btns">
+            <div class="f04-sign-btn f04-sign-btn-approve" id="f04-sign-btna">
+              <div class="f04-sign-tint" id="f04-sign-tint"></div>
+              <div class="f04-sign-fill" id="f04-sign-fill"></div>
+              <span class="f04-sign-btnlabel" id="f04-sign-btna-label">approve</span>
+            </div>
+            <div class="f04-sign-btn f04-sign-btn-deny" id="f04-sign-btnd">
+              <span class="f04-sign-btnlabel f04-sign-denylabel">deny</span>
+            </div>
+          </div>
+          <div class="f04-sign-seal" id="f04-sign-seal">
+            <svg width="30" height="30" viewBox="0 0 30 30" fill="none">
+              <polyline points="7,15.5 13,21.5 23,9.5" stroke="#FFFFFF" stroke-width="3.4" stroke-linecap="square" stroke-linejoin="miter"/>
+            </svg>
+          </div>
+        </div>
+        <div class="f04-sign-under">
+          <div class="f04-sign-sigrow" id="f04-sign-sigrow"><span class="f04-sign-key" id="f04-sign-k1"></span><span class="f04-sign-caret" id="f04-sign-caret-k1"></span><span class="f04-sign-val" id="f04-sign-v1"></span><span class="f04-sign-caret" id="f04-sign-caret-v1"></span><span class="f04-sign-sep" id="f04-sign-s1"></span><span class="f04-sign-caret" id="f04-sign-caret-s1"></span><span class="f04-sign-key" id="f04-sign-k2"></span><span class="f04-sign-caret" id="f04-sign-caret-k2"></span><span class="f04-sign-val" id="f04-sign-v2"></span><span class="f04-sign-caret" id="f04-sign-caret-v2"></span><span class="f04-sign-sep" id="f04-sign-s2"></span><span class="f04-sign-caret" id="f04-sign-caret-s2"></span><span class="f04-sign-key" id="f04-sign-k3"></span><span class="f04-sign-caret" id="f04-sign-caret-k3"></span><span class="f04-sign-exp" id="f04-sign-v3"></span><span class="f04-sign-caret" id="f04-sign-caret-v3"></span></div>
+          <div class="f04-sign-dots" id="f04-sign-dots">
+            <span class="f04-sign-dotp" id="f04-sign-d0"></span>
+            <span class="f04-sign-dotp" id="f04-sign-d1"></span>
+            <span class="f04-sign-dotp" id="f04-sign-d2"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (() => {
+      const $ = (id) => document.getElementById(id);
+      const tl = gsap.timeline({ paused: true });
+
+      /* the card is the cut-continuation of 03 — present and settled at t=0, no entrance.
+         Scene 1 (0–1.7s) "A senior engineer reviews.": the role the VO names gets its
+         blue review mark, then a pale hover tint blooms on approve (cursor-less). */
+      tl.fromTo('#f04-sign-roleul', { scaleX: 0 }, { scaleX: 1, duration: 0.5, ease: 'power2.out' }, 0.55);
+      tl.fromTo('#f04-sign-tint', { opacity: 0 }, { opacity: 1, duration: 0.35, ease: 'power2.out' }, 1.15);
+
+      /* the shot's one camera move — receipt zoom: slow push decelerating into the stamp */
+      tl.fromTo('#f04-sign-world', { scale: 1 }, { scale: 1.04, duration: 5.72, ease: 'power2.out' }, 0);
+
+      /* Scene 2 (~1.7–2.7s) "Approves.": press-release spring, ink fills ONCE left→right,
+         label flips white, deny goes inert, header tense-flips to approved. */
+      tl.to('#f04-sign-btna', { scale: 0.94, duration: 0.09, ease: 'power2.in' }, 1.78);
+      tl.to('#f04-sign-btna', { scale: 1.05, duration: 0.16, ease: 'power2.out' }, 1.87);
+      tl.to('#f04-sign-btna', { scale: 1, duration: 0.14, ease: 'power2.out' }, 2.03);
+      tl.fromTo('#f04-sign-fill', { scaleX: 0 }, { scaleX: 1, duration: 0.28, ease: 'power2.inOut' }, 1.9);
+      tl.fromTo('#f04-sign-btna-label', { color: '#1A1A19' }, { color: '#FFFFFF', duration: 0.16, ease: 'power2.out' }, 1.98);
+      tl.to('#f04-sign-btnd', { opacity: 0.38, duration: 0.3, ease: 'power2.out' }, 2.3);
+      tl.to('#f04-sign-hd-old', { y: -12, opacity: 0, duration: 0.26, ease: 'power2.in' }, 2.35);
+      tl.fromTo('#f04-sign-hd-new', { y: 12, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: 'power2.out' }, 2.44);
+      tl.fromTo('#f04-sign-hddot', { scale: 0 }, { scale: 1, duration: 0.3, ease: 'back.out(2.2)' }, 2.52);
+
+      /* working-state theater: three blue dots pulse under the card — finite, phase-offset,
+         killed the exact frame the payload starts printing (2.72s). */
+      tl.fromTo('#f04-sign-d0', { opacity: 0 }, { opacity: 1, duration: 0.12, ease: 'power1.out' }, 2.18);
+      tl.fromTo('#f04-sign-d1', { opacity: 0 }, { opacity: 1, duration: 0.12, ease: 'power1.out' }, 2.24);
+      tl.fromTo('#f04-sign-d2', { opacity: 0 }, { opacity: 1, duration: 0.12, ease: 'power1.out' }, 2.3);
+      for (let i = 0; i < 3; i++) {
+        const b = 2.24 + i * 0.07;
+        for (let k = 0; k < 2; k++) {
+          tl.to('#f04-sign-d' + i, { y: -5, duration: 0.085, ease: 'sine.inOut' }, b + k * 0.17);
+          tl.to('#f04-sign-d' + i, { y: 0, duration: 0.085, ease: 'sine.inOut' }, b + k * 0.17 + 0.085);
+        }
+        tl.set('#f04-sign-d' + i, { opacity: 0, immediateRender: false }, 2.72);
+      }
+
+      /* Scene 3 (2.7–5.5s) "The signature is real, scoped, and expiring." — the payload
+         prints in three VO-synced chunks: discrete-text-sequence via zero-duration
+         per-character sets (seek-safe, pure function of the playhead). */
+      const typeSeg = (el, text, t0, per) => {
+        for (let i = 1; i <= text.length; i++) {
+          tl.set(el, { textContent: text.slice(0, i), immediateRender: false }, t0 + i * per);
+        }
+        return t0 + text.length * per;
+      };
+      const PER = 0.03;
+      const SEGS = [
+        ['k1', 'approved_by: ', 2.72],
+        ['v1', 'e.encalada', 0],
+        ['s1', ' \u00B7 ', 3.82],
+        ['k2', 'role: ', 0],
+        ['v2', 'senior_engineer', 0],
+        ['s2', ' \u00B7 ', 4.96],
+        ['k3', 'expires ', 0],
+        ['v3', '+3600s', 0],
+      ];
+      let t = 2.72;
+      const marks = [];
+      for (const [id, text, at] of SEGS) {
+        if (at) t = at;
+        marks.push([id, t]);
+        t = typeSeg($('f04-sign-' + id), text, t, PER);
+      }
+      for (let i = 0; i < marks.length; i++) {
+        const [id, on] = marks[i];
+        const caret = '#f04-sign-caret-' + id;
+        tl.set(caret, { opacity: 1, immediateRender: false }, on);
+        if (i < marks.length - 1) {
+          tl.set(caret, { opacity: 0, immediateRender: false }, marks[i + 1][1]);
+        }
+      }
+      /* the trailing caret blinks twice on the finished line, then dies — hold is clean */
+      tl.set('#f04-sign-caret-v3', { opacity: 0, immediateRender: false }, 5.6);
+      tl.set('#f04-sign-caret-v3', { opacity: 1, immediateRender: false }, 5.73);
+      tl.set('#f04-sign-caret-v3', { opacity: 0, immediateRender: false }, 5.86);
+
+      /* Scene 4 (5.5s→end) — the small blue seal stamps the card corner; then the frame
+         holds still to the end (no exit — the root transition owns it). */
+      tl.fromTo('#f04-sign-seal',
+        { opacity: 0, scale: 2.3, rotation: -14 },
+        { opacity: 1, scale: 1, rotation: 0, duration: 0.22, ease: 'power3.in', transformOrigin: '50% 50%' },
+        5.5
+      );
+
+      window.__timelines['04-sign'] = tl;
+    })();
+  </script>
+</template>

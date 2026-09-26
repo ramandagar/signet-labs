@@ -1,0 +1,197 @@
+<template>
+<style>
+  @font-face {
+    font-family: "Barlow";
+    src: url("assets/fonts/Barlow-900.woff2") format("woff2");
+    font-weight: 900;
+    font-style: normal;
+    font-display: block;
+  }
+
+  #root {
+    position: relative;
+    width: 1920px;
+    height: 1080px;
+    overflow: hidden;
+    container-type: size;
+    font-family: "Barlow", sans-serif;
+  }
+
+  /* track 0 — full-bleed dark ground (never on #root) */
+  .\30 1-hook-bg {
+    position: absolute;
+    inset: 0;
+    background: #1a1a19;
+  }
+
+  /* track 1 — the whole statement stage */
+  .\30 1-hook-stage {
+    position: absolute;
+    inset: 0;
+  }
+
+  /* ghost "?" watermark — huge, whisper-quiet accent, sits BEHIND the type */
+  .\30 1-hook-ghost {
+    position: absolute;
+    left: 46cqw;
+    top: -4cqw;
+    font-weight: 900;
+    font-size: 64cqw;
+    line-height: 0.8;
+    letter-spacing: -0.04em;
+    color: #3987e5;
+    user-select: none;
+    pointer-events: none;
+  }
+
+  .\30 1-hook-copy {
+    position: absolute;
+    left: 5.5cqw;
+    top: 21cqh;
+  }
+
+  /* the reframe line — massive lowercase Barlow 900, negative-tracked */
+  .\30 1-hook-line {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.18em;
+    font-weight: 900;
+    font-size: 8cqw;
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    text-transform: lowercase;
+    color: #ffffff;
+    white-space: nowrap;
+  }
+  .\30 1-hook-line2 {
+    margin-top: 0.5cqw;
+    color: #3987e5; /* clause 2 = the accent blue */
+  }
+  .\30 1-hook-w {
+    display: inline-block;
+  }
+
+  /* drawn accent underline beneath "classified." */
+  .\30 1-hook-classified {
+    position: relative;
+  }
+  .\30 1-hook-u {
+    position: absolute;
+    left: 0.03em;
+    right: 0.1em;
+    bottom: -0.07em;
+    height: 0.05em;
+    background: #3987e5;
+  }
+
+  /* six-cell taxonomy strip — empty mono chrome cells, sharp, 1px hairlines */
+  .\30 1-hook-tax {
+    display: flex;
+    gap: 0.6cqw;
+    margin-top: 3.4cqw;
+  }
+  .\30 1-hook-cell {
+    box-sizing: border-box;
+    width: 8cqw;
+    height: 3.2cqw;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    background: transparent;
+  }
+  .\30 1-hook-cell-hot {
+    border-color: rgba(57, 135, 229, 0.85);
+    background: rgba(57, 135, 229, 0.16);
+  }
+</style>
+
+<div id="root" data-composition-id="01-hook" data-width="1920" data-height="1080">
+  <div class="clip 01-hook-bg" data-start="0" data-duration="2.795" data-track-index="0"></div>
+
+  <div class="clip 01-hook-stage" data-start="0" data-duration="2.795" data-track-index="1">
+    <div class="01-hook-ghost" id="01-hook-ghost">?</div>
+
+    <div class="01-hook-copy">
+      <div class="01-hook-line">
+        <span class="01-hook-w" id="01-hook-w-agents">agents</span>
+        <span class="01-hook-w" id="01-hook-w-dont">don&rsquo;t</span>
+        <span class="01-hook-w" id="01-hook-w-fail">fail.</span>
+      </div>
+      <div class="01-hook-line 01-hook-line2">
+        <span class="01-hook-w" id="01-hook-w-theyre">they&rsquo;re</span>
+        <span class="01-hook-w 01-hook-classified" id="01-hook-w-classified">classified.<span class="01-hook-u" id="01-hook-u"></span></span>
+      </div>
+      <div class="01-hook-tax">
+        <span class="01-hook-cell"></span>
+        <span class="01-hook-cell"></span>
+        <span class="01-hook-cell"></span>
+        <span class="01-hook-cell"></span>
+        <span class="01-hook-cell"></span>
+        <span class="01-hook-cell 01-hook-cell-hot"></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<script>
+  (function () {
+    var root = document.querySelector('[data-composition-id="01-hook"]');
+    var byId = function (id) { return document.getElementById(id); };
+    var cells = Array.prototype.slice.call(root.getElementsByClassName("01-hook-cell"));
+
+    var tl = gsap.timeline({ paused: true });
+
+    // Scene 1 — the ghost "?" watermark arrives, then drifts under the whole shot
+    var ghost = byId("01-hook-ghost");
+    tl.fromTo(
+      ghost,
+      { opacity: 0, scale: 0.965 },
+      { opacity: 0.09, scale: 1, duration: 0.55, ease: "power2.out" },
+      0.04
+    );
+    tl.fromTo(
+      ghost,
+      { scale: 1 },
+      { scale: 1.05, duration: 2.155, ease: "none", immediateRender: false },
+      0.64
+    );
+
+    // Scene 2 — clause 1 builds word-by-word: "agents don't fail."
+    var beat = function (id, at, ease) {
+      tl.fromTo(
+        byId(id),
+        { y: 46, opacity: 0, scale: 0.94 },
+        { y: 0, opacity: 1, scale: 1, duration: 0.5, ease: ease },
+        at
+      );
+    };
+    beat("01-hook-w-agents", 0.12, "back.out(1.4)");
+    beat("01-hook-w-dont", 0.5, "back.out(1.4)");
+    beat("01-hook-w-fail", 0.88, "back.out(1.9)"); // clause-1 punch
+
+    // Scene 3 — clause 2 lands in accent blue: "they're classified."
+    beat("01-hook-w-theyre", 1.42, "back.out(1.4)");
+    beat("01-hook-w-classified", 1.78, "back.out(1.9)"); // payoff word
+
+    // drawn accent underline sweeps left-to-right beneath "classified."
+    tl.fromTo(
+      byId("01-hook-u"),
+      { scaleX: 0, transformOrigin: "0% 50%" },
+      { scaleX: 1, duration: 0.38, ease: "power3.inOut" },
+      2.06
+    );
+
+    // Scene 4 — the six-cell taxonomy strip slides in beneath, lands, and holds
+    cells.forEach(function (cell, i) {
+      tl.fromTo(
+        cell,
+        { x: -38, opacity: 0 },
+        { x: 0, opacity: 1, duration: 0.42, ease: "power3.out" },
+        1.98 + i * 0.055
+      );
+    });
+
+    window.__timelines = window.__timelines || {};
+    window.__timelines["01-hook"] = tl;
+  })();
+</script>
+</template>

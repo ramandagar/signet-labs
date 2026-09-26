@@ -1,0 +1,269 @@
+<template>
+  <style>
+    /* Fonts — shipped project files only (assets/fonts) */
+    @font-face {
+      font-family: 'Barlow';
+      src: url('assets/fonts/Barlow-800.woff2') format('woff2');
+      font-weight: 800;
+      font-style: normal;
+      font-display: block;
+    }
+    @font-face {
+      font-family: 'Barlow';
+      src: url('assets/fonts/Barlow-900.woff2') format('woff2');
+      font-weight: 900;
+      font-style: normal;
+      font-display: block;
+    }
+    @font-face {
+      font-family: 'IBM Plex Mono';
+      src: url('assets/fonts/IBMPlexMono-500.woff2') format('woff2');
+      font-weight: 500;
+      font-style: normal;
+      font-display: block;
+    }
+
+    /* Root — styled via #root only (never a class on the composition root) */
+    #root {
+      position: absolute;
+      inset: 0;
+      width: 1920px;
+      height: 1080px;
+      overflow: hidden;
+      container-type: size;
+      font-family: 'Barlow', sans-serif;
+    }
+
+    .clip {
+      position: absolute;
+      inset: 0;
+    }
+
+    /* Full-bleed ground — dedicated clip on the lowest track (dark register, flat plane) */
+    .b07-bg {
+      background: #1a1a19;
+    }
+
+    .b07-stage {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    /* Both scenes occupy the same optical center (~0.42h) for a seamless swap */
+    .b07-resolve,
+    .b07-lock {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* — Scene 1: resolve line — Barlow h1 ramp, lowercase, negative-tracked — */
+    .b07-rline {
+      display: flex;
+      align-items: center;
+      column-gap: 34px;
+    }
+    .b07-rline + .b07-rline {
+      margin-top: 14px;
+    }
+    .b07-rw {
+      display: inline-block;
+      font-weight: 800;
+      font-size: 144px;
+      line-height: 0.95;
+      letter-spacing: -0.03em;
+      color: #ffffff;
+      white-space: nowrap;
+    }
+    /* the film's ONLY green — drawn stroke, undrawn state invisible via dashoffset */
+    .b07-tick {
+      width: 88px;
+      height: 70px;
+      margin-left: 10px;
+      margin-top: 8px;
+      flex: 0 0 auto;
+    }
+    #b07-tickpath {
+      stroke-dasharray: 80;
+      stroke-dashoffset: 80;
+    }
+
+    /* — Scene 2: end-card lockup — */
+    .b07-row {
+      display: flex;
+      align-items: center;
+      column-gap: 32px;
+    }
+    .b07-mark {
+      width: 96px;
+      height: 96px;
+      flex: 0 0 auto;
+    }
+    #b07-mkpath {
+      stroke-dasharray: 250;
+      stroke-dashoffset: 250;
+    }
+    .b07-wordmark {
+      font-weight: 900;
+      font-size: 106px;
+      line-height: 1;
+      letter-spacing: -0.03em;
+      color: #ffffff;
+      white-space: nowrap;
+    }
+    .b07-ch {
+      display: inline-block;
+    }
+    .b07-meta {
+      margin-top: 38px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-weight: 500;
+      font-size: 17px;
+      line-height: 1;
+      letter-spacing: 0.14em;
+      padding-left: 0.14em; /* optical centering vs trailing tracking */
+      color: #afb3b7;
+      white-space: nowrap;
+    }
+    .b07-statement {
+      margin-top: 36px;
+      font-weight: 900;
+      font-size: 88px;
+      line-height: 1;
+      letter-spacing: -0.03em;
+      color: #ffffff;
+    }
+    .b07-proof {
+      color: #3987e5; /* the film's accent blue */
+    }
+  </style>
+
+  <div
+    id="root"
+    data-composition-id="07-bookend"
+    data-start="0"
+    data-duration="4.075"
+    data-width="1920"
+    data-height="1080"
+  >
+    <!-- full-bleed ground clip, lowest track -->
+    <div class="clip b07-bg" data-start="0" data-duration="4.075" data-track-index="0"></div>
+
+    <div class="b07-stage">
+      <!-- Scene 1: resolve line "tamper-evident, by construction." + green tick -->
+      <div class="b07-resolve">
+        <div class="b07-rline">
+          <span class="b07-rw" id="b07-w1">tamper-evident,</span>
+        </div>
+        <div class="b07-rline">
+          <span class="b07-rw" id="b07-w2">by</span>
+          <span class="b07-rw" id="b07-w3">construction.</span>
+          <svg class="b07-tick" id="b07-tick" viewBox="0 0 64 52" aria-hidden="true">
+            <path
+              id="b07-tickpath"
+              d="M6 30 L24 48 L58 6"
+              fill="none"
+              stroke="#0ca30c"
+              stroke-width="9"
+              stroke-linecap="square"
+              stroke-linejoin="miter"
+              pathLength="80"
+            />
+          </svg>
+        </div>
+      </div>
+
+      <!-- Scene 2/3: end-card lockup — ◈ + var-runtime / meta / proof-or-stop. -->
+      <div class="b07-lock">
+        <div class="b07-row">
+          <svg class="b07-mark" viewBox="0 0 100 100" aria-hidden="true">
+            <path
+              id="b07-mkpath"
+              d="M50 6 L94 50 L50 94 L6 50 Z"
+              fill="none"
+              stroke="#3987e5"
+              stroke-width="7"
+              pathLength="250"
+            />
+            <path id="b07-mkcore" d="M50 39 L61 50 L50 61 L39 50 Z" fill="#3987e5" />
+          </svg>
+          <div class="b07-wordmark" id="b07-wordmark"
+            ><span class="b07-ch">v</span><span class="b07-ch">a</span><span class="b07-ch">r</span><span
+              class="b07-ch"
+              >-</span
+            ><span class="b07-ch">r</span><span class="b07-ch">u</span><span class="b07-ch">n</span><span
+              class="b07-ch"
+              >t</span
+            ><span class="b07-ch">i</span><span class="b07-ch">m</span><span class="b07-ch">e</span></div
+          >
+        </div>
+        <div class="b07-meta" id="b07-meta"><span>OPEN SOURCE · github.com/signet-labs/var-runtime</span></div>
+        <div class="b07-statement" id="b07-statement"><span class="b07-proof">proof</span>-or-stop.</div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <script>
+    (function () {
+      var tl = gsap.timeline({ paused: true });
+
+      // ── Scene 1 (0.00–1.42s): line builds word-by-word, center; green tick draws after "construction."
+      tl.fromTo('#b07-w1', { y: 44, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: 'power3.out' }, 0.05);
+      tl.fromTo('#b07-w2', { y: 44, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: 'power3.out' }, 0.32);
+      tl.fromTo('#b07-w3', { y: 44, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: 'power3.out' }, 0.59);
+      tl.fromTo(
+        '#b07-tickpath',
+        { strokeDashoffset: 80 },
+        { strokeDashoffset: 0, duration: 0.34, ease: 'power2.inOut' },
+        1.08
+      );
+
+      // ── Scene 2a (1.52–1.86s): line clears FULLY out, left-first — gone at 1.86s
+      tl.to('#b07-w1', { y: -30, opacity: 0, duration: 0.18, ease: 'power2.in' }, 1.52);
+      tl.to('#b07-w2', { y: -30, opacity: 0, duration: 0.18, ease: 'power2.in' }, 1.6);
+      tl.to('#b07-w3', { y: -30, opacity: 0, duration: 0.18, ease: 'power2.in' }, 1.68);
+      tl.to('#b07-tick', { opacity: 0, duration: 0.14, ease: 'power1.in' }, 1.7);
+
+      // ── Scene 2b (1.94–2.56s): lockup assembles — starts strictly AFTER the clear completes.
+      // ◈ mark draws once (stroke draw), inner core pops to complete the glyph.
+      tl.fromTo(
+        '#b07-mkpath',
+        { strokeDashoffset: 250 },
+        { strokeDashoffset: 0, duration: 0.36, ease: 'power2.inOut' },
+        1.94
+      );
+      tl.fromTo(
+        '#b07-mkcore',
+        { scale: 0, transformOrigin: '50% 50%', opacity: 0 },
+        { scale: 1, opacity: 1, duration: 0.2, ease: 'back.out(2.2)' },
+        2.24
+      );
+      // wordmark cascades left→right
+      tl.fromTo(
+        '.b07-ch',
+        { x: 26, opacity: 0 },
+        { x: 0, opacity: 1, duration: 0.26, ease: 'power3.out', stagger: 0.02 },
+        2.04
+      );
+      // meta line wipes left→right
+      tl.fromTo(
+        '#b07-meta',
+        { clipPath: 'inset(0% 100% 0% 0%)' },
+        { clipPath: 'inset(0% 0% 0% 0%)', duration: 0.26, ease: 'power2.inOut' },
+        2.2
+      );
+      // statement lands: proof (accent blue) -or-stop.
+      tl.fromTo('#b07-statement', { y: 34, opacity: 0 }, { y: 0, opacity: 1, duration: 0.26, ease: 'power3.out' }, 2.3);
+
+      // ── Scene 3 (2.56–4.075s): DEAD STILL — no tweens after 2.56s; hold = 1.515s ≥ 1.5s.
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines['07-bookend'] = tl;
+    })();
+  </script>
+</template>

@@ -1,0 +1,431 @@
+<template>
+  <style>
+    /* @font-face block copied from compositions/frames/04-checks.html */
+    @font-face {
+      font-family: "Barlow";
+      font-style: normal;
+      font-weight: 900;
+      font-display: block;
+      src: url("assets/fonts/barlow-latin-900-normal.woff2") format("woff2"),
+        url("assets/fonts/Barlow-900.woff2") format("woff2"),
+        url("assets/fonts/Barlow-Black.woff2") format("woff2");
+    }
+    @font-face {
+      font-family: "IBM Plex Mono";
+      font-style: normal;
+      font-weight: 400;
+      font-display: block;
+      src: url("assets/fonts/ibm-plex-mono-latin-400-normal.woff2") format("woff2"),
+        url("assets/fonts/IBMPlexMono-400.woff2") format("woff2"),
+        url("assets/fonts/IBMPlexMono-Regular.woff2") format("woff2");
+    }
+    @font-face {
+      font-family: "IBM Plex Mono";
+      font-style: normal;
+      font-weight: 500;
+      font-display: block;
+      src: url("assets/fonts/ibm-plex-mono-latin-500-normal.woff2") format("woff2"),
+        url("assets/fonts/IBMPlexMono-500.woff2") format("woff2"),
+        url("assets/fonts/IBMPlexMono-Medium.woff2") format("woff2");
+    }
+    @font-face {
+      font-family: "IBM Plex Mono";
+      font-style: normal;
+      font-weight: 600;
+      font-display: block;
+      src: url("assets/fonts/ibm-plex-mono-latin-600-normal.woff2") format("woff2"),
+        url("assets/fonts/IBMPlexMono-600.woff2") format("woff2"),
+        url("assets/fonts/IBMPlexMono-SemiBold.woff2") format("woff2");
+    }
+
+    #root {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      container-type: size;
+      font-family: "Barlow", "Helvetica Neue", Arial, sans-serif;
+    }
+    .clip {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+    }
+
+    /* ── ground: field + faint grid + vignette ── */
+    .f01-bg {
+      background: #1a1a19;
+    }
+    .f01-grid {
+      position: absolute;
+      inset: 0;
+      background-image: repeating-linear-gradient(
+          to right,
+          rgba(215, 216, 217, 0.1) 0 1px,
+          transparent 1px 12.5cqw
+        ),
+        repeating-linear-gradient(
+          to bottom,
+          rgba(215, 216, 217, 0.1) 0 1px,
+          transparent 1px 12.5cqw
+        );
+    }
+    .f01-vig {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(
+        ellipse 78% 68% at 50% 44%,
+        transparent 55%,
+        rgba(0, 0, 0, 0.34) 100%
+      );
+    }
+
+    /* ── ghost watermark: "proof", type as texture, behind center ── */
+    .f01-ghostcam {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .f01-ghost {
+      font-weight: 900;
+      font-size: 30cqw;
+      line-height: 0.88;
+      letter-spacing: -0.05em;
+      color: #ffffff;
+      opacity: 0;
+      white-space: nowrap;
+      user-select: none;
+    }
+
+    /* ── stage: content lives in the top 83% (caption keep-out) ── */
+    .f01-stage {
+      inset: 0 0 17cqh 0;
+    }
+    .f01-cluster {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 5.2cqh;
+      margin-bottom: 2cqh;
+    }
+
+    /* row: "your" + the glass role-pill */
+    .f01-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 2.8cqw;
+    }
+    .f01-your {
+      font-weight: 900;
+      font-size: 6.6cqw;
+      line-height: 1;
+      letter-spacing: -0.03em;
+      color: #ffffff;
+    }
+    .f01-pill {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      padding: 1.4cqw 3.2cqw;
+      border-radius: 100cqw;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.1));
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.38),
+        0 26px 70px rgba(0, 0, 0, 0.45);
+      overflow: hidden;
+    }
+    /* one glass sheen pass — parked fully left of the pill until fired */
+    .f01-sheen {
+      position: absolute;
+      top: -20%;
+      bottom: -20%;
+      left: -36%;
+      width: 34%;
+      background: linear-gradient(
+        100deg,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.22) 50%,
+        rgba(255, 255, 255, 0) 100%
+      );
+    }
+    /* the rotating slot: one label visible, neighbors dimmed */
+    .f01-win {
+      position: relative;
+      display: block;
+      font-size: 4.4cqw;
+      line-height: 1.25;
+      height: 1.25em;
+      overflow: hidden;
+    }
+    .f01-sizer {
+      display: block;
+      visibility: hidden;
+      height: 0;
+    }
+    .f01-stack {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+    }
+    .f01-role {
+      display: block;
+      text-align: center;
+      white-space: nowrap;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+    }
+    #f01-role0 {
+      color: #ffffff;
+    }
+    #f01-role1,
+    #f01-role2 {
+      color: #9aa1a8;
+      opacity: 0.1;
+    }
+
+    /* the hard-cut claim tail + mono ✓ glyph */
+    .f01-claim {
+      font-weight: 900;
+      font-size: 4.8cqw;
+      line-height: 1;
+      letter-spacing: -0.03em;
+      white-space: nowrap;
+      color: #ffffff;
+    }
+    .f01-slot {
+      position: relative;
+      display: inline-block;
+    }
+    .f01-hide {
+      visibility: hidden;
+    }
+    .f01-tok {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      text-align: center;
+      white-space: nowrap;
+      color: #ffffff;
+      opacity: 0;
+    }
+    .f01-chk {
+      display: inline-block;
+      opacity: 0;
+      margin-left: 0.2em;
+      vertical-align: 1.8cqw;
+      font-family: "IBM Plex Mono", Menlo, monospace;
+      font-weight: 500;
+      font-size: 2.3cqw;
+      line-height: 1;
+      color: #3987e5;
+    }
+    .f01-chk .f01-g {
+      display: inline-block;
+    }
+
+    /* the payoff — SAYS. dead-center, semantic amber */
+    .f01-sayswrap {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .f01-says {
+      font-weight: 900;
+      font-size: 13cqw;
+      line-height: 0.88;
+      letter-spacing: -0.04em;
+      color: #fab219;
+      opacity: 0;
+      white-space: nowrap;
+    }
+    .f01-dot {
+      display: inline-block;
+    }
+  </style>
+
+  <div data-hf-id="hf-s1ra" id="root" data-composition-id="01-says" data-width="1920" data-height="1080">
+    <!-- ground -->
+    <div data-hf-id="hf-s1gb" class="clip f01-bg" data-start="0" data-duration="5.163" data-track-index="0">
+      <div data-hf-id="hf-s1gr" class="f01-grid"></div>
+      <div data-hf-id="hf-s1vg" class="f01-vig"></div>
+    </div>
+
+    <!-- ghost watermark -->
+    <div data-hf-id="hf-s1gw" class="clip" data-start="0" data-duration="5.163" data-track-index="1">
+      <div data-hf-id="hf-s1gc" class="f01-ghostcam" id="f01-ghostcam">
+        <div data-hf-id="hf-s1gh" class="f01-ghost" id="f01-ghost">proof</div>
+      </div>
+    </div>
+
+    <!-- content -->
+    <div data-hf-id="hf-s1st" class="clip f01-stage" data-start="0" data-duration="5.163" data-track-index="2">
+      <div data-hf-id="hf-s1cl" class="f01-cluster" id="f01-cluster">
+        <div data-hf-id="hf-s1rw" class="f01-row" id="f01-row">
+          <span data-hf-id="hf-s1yo" class="f01-your" id="f01-your">your</span>
+          <span data-hf-id="hf-s1pl" class="f01-pill" id="f01-pill">
+            <span data-hf-id="hf-s1sh" class="f01-sheen" id="f01-sheen"></span>
+            <span data-hf-id="hf-s1wn" class="f01-win">
+              <span data-hf-id="hf-s1sz" class="f01-sizer">support agent</span>
+              <span data-hf-id="hf-s1tk" class="f01-stack" id="f01-stack">
+                <span data-hf-id="hf-s1r0" class="f01-role" id="f01-role0">coding agent</span>
+                <span data-hf-id="hf-s1r1" class="f01-role" id="f01-role1">support agent</span>
+                <span data-hf-id="hf-s1r2" class="f01-role" id="f01-role2">finance agent</span>
+              </span>
+            </span>
+          </span>
+        </div>
+        <div data-hf-id="hf-s1cm" class="f01-claim"><span data-hf-id="hf-s1sl" class="f01-slot"><span data-hf-id="hf-s1hd" class="f01-hide">payments sent</span><span data-hf-id="hf-s1t0" class="f01-tok" id="f01-tok0">tests passed</span><span data-hf-id="hf-s1t1" class="f01-tok" id="f01-tok1">payments sent</span><span data-hf-id="hf-s1t2" class="f01-tok" id="f01-tok2">shipped</span></span><span data-hf-id="hf-s1ck" class="f01-chk" id="f01-chk"><span data-hf-id="hf-s1gg" class="f01-g" id="f01-g">✓</span></span>
+        </div>
+      </div>
+
+      <div data-hf-id="hf-s1sw" class="f01-sayswrap">
+        <div data-hf-id="hf-s1sy" class="f01-says" id="f01-says">SAYS<span data-hf-id="hf-s1dt" class="f01-dot" id="f01-dot">.</span></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <script>
+    (function () {
+      var DUR = 5.163;
+      var DIM = "#9aa1a8";
+
+      var $ = function (id) {
+        return document.getElementById(id);
+      };
+
+      /* measured slot step — one label's rendered line box (descender-safe) */
+      var roles = [$("f01-role0"), $("f01-role1"), $("f01-role2")];
+      var H = roles[0].getBoundingClientRect().height;
+
+      var tl = gsap.timeline({ paused: true });
+      window.__timelines = window.__timelines || {};
+      window.__timelines["01-says"] = tl;
+
+      /* ── discrete-text-sequence: hard-cut claim tail at VO cues (seek-safe driver) ── */
+      var SEQ = [
+        { t: 0.0, tok: -1, chk: false },
+        { t: 1.02, tok: 0, chk: true }, // "tests passed"
+        { t: 1.86, tok: 1, chk: true }, // "payments sent"
+        { t: 2.66, tok: 2, chk: true }, // "shipped"
+        { t: 3.22, tok: -1, chk: false }, // line collapses
+      ];
+      var toks = [$("f01-tok0"), $("f01-tok1"), $("f01-tok2")];
+      var chk = $("f01-chk");
+      var stateAt = function (time) {
+        for (var i = SEQ.length - 1; i >= 0; i--) if (time >= SEQ[i].t) return SEQ[i];
+        return SEQ[0];
+      };
+      var drv = { t: 0 };
+      tl.to(
+        drv,
+        {
+          t: DUR,
+          duration: DUR,
+          ease: "none",
+          onUpdate: function () {
+            var s = stateAt(drv.t);
+            for (var i = 0; i < toks.length; i++)
+              toks[i].style.opacity = i === s.tok ? "1" : "0";
+            chk.style.opacity = s.chk && s.tok >= 0 ? "1" : "0";
+          },
+        },
+        0
+      );
+
+      /* macro camera — the watermark breathes under the whole shot */
+      tl.fromTo(
+        "#f01-ghostcam",
+        { scale: 1.03 },
+        { scale: 1.09, duration: DUR, ease: "none", transformOrigin: "50% 50%" },
+        0
+      );
+
+      /* ── Scene 1 (0.0–1.0): ghost seats, "your" + glass pill enter word-by-word ── */
+      tl.fromTo("#f01-ghost", { opacity: 0 }, { opacity: 0.06, duration: 0.7, ease: "power1.out" }, 0.06);
+      tl.fromTo(
+        "#f01-your",
+        { opacity: 0, y: 30, filter: "blur(14px)" },
+        { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.5, ease: "power2.out" },
+        0.1
+      );
+      tl.fromTo(
+        "#f01-pill",
+        { opacity: 0, scale: 0.9, filter: "blur(10px)" },
+        { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.55, ease: "power3.out" },
+        0.34
+      );
+      /* one glass sheen pass */
+      tl.fromTo(
+        "#f01-sheen",
+        { xPercent: 0 },
+        { xPercent: 480, duration: 0.6, ease: "power1.inOut" },
+        0.82
+      );
+
+      /* ── Scene 2 (1.0–3.2): the rotating slot — active brightens, others dim ── */
+      tl.fromTo("#f01-stack", { y: 0 }, { y: -H, duration: 0.36, ease: "power2.inOut" }, 1.8);
+      tl.to(roles[0], { opacity: 0.1, color: DIM, duration: 0.3, ease: "power2.out" }, 1.8);
+      tl.fromTo(
+        roles[1],
+        { opacity: 0.1, color: DIM },
+        { opacity: 1, color: "#ffffff", duration: 0.3, ease: "power2.out" },
+        1.8
+      );
+
+      tl.fromTo(
+        "#f01-stack",
+        { y: -H },
+        { y: -2 * H, duration: 0.36, ease: "power2.inOut", immediateRender: false },
+        2.6
+      );
+      tl.to(roles[1], { opacity: 0.1, color: DIM, duration: 0.3, ease: "power2.out" }, 2.6);
+      tl.fromTo(
+        roles[2],
+        { opacity: 0.1, color: DIM },
+        { opacity: 1, color: "#ffffff", duration: 0.3, ease: "power2.out" },
+        2.6
+      );
+
+      /* ✓ punctuation pops — the swap itself is the instant driver cut */
+      [1.06, 1.9, 2.7].forEach(function (t) {
+        tl.fromTo(
+          "#f01-g",
+          { scale: 0 },
+          { scale: 1, duration: 0.28, ease: "back.out(2.4)" },
+          t
+        );
+      });
+
+      /* ── Scene 3 (3.2–5.163): collapse, SAYS. slams amber over the ghost, holds ── */
+      tl.to(
+        "#f01-cluster",
+        { opacity: 0, scale: 0.93, filter: "blur(9px)", duration: 0.22, ease: "power2.in" },
+        3.22
+      );
+      tl.to("#f01-ghost", { opacity: 0.11, duration: 0.8, ease: "power1.out" }, 3.5);
+      tl.fromTo(
+        "#f01-says",
+        { opacity: 0, scale: 1.5, filter: "blur(10px)" },
+        { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.38, ease: "power3.out" },
+        3.3
+      );
+      /* final-token punctuation snap — the period lands a beat late */
+      tl.fromTo(
+        "#f01-dot",
+        { opacity: 0, scale: 0 },
+        { opacity: 1, scale: 1, duration: 0.26, ease: "back.out(2.6)", transformOrigin: "30% 70%" },
+        3.92
+      );
+    })();
+  </script>
+</template>

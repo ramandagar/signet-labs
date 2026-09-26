@@ -1,0 +1,129 @@
+<template>
+  <style>
+    @font-face { font-family: "IBM Plex Mono"; src: url("assets/fonts/IBMPlexMono-400.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: block; }
+    @font-face { font-family: "IBM Plex Mono"; src: url("assets/fonts/IBMPlexMono-500.woff2") format("woff2"); font-weight: 500; font-style: normal; font-display: block; }
+
+    #root {
+      position: absolute; inset: 0; width: 1920px; height: 1080px; overflow: hidden;
+      container-type: size;
+      font-family: "IBM Plex Mono", monospace;
+    }
+
+    /* full-bleed ground — dedicated clip layer, never on #root */
+    .f03e-ground { position: absolute; inset: 0; background: #1A1A19; }
+    .f03e-stage  { position: absolute; inset: 0; }
+    .f03e-world  { position: absolute; inset: 0; will-change: transform; }
+
+    /* the terminal well — flat slab, 1px hairline, 0 radius */
+    .f03e-well {
+      position: absolute; left: 100px; top: 300px; width: 1720px; height: 360px;
+      box-sizing: border-box;
+      background: rgba(255,255,255,0.035);
+      border: 1px solid #D7D8D9;
+    }
+
+    .f03e-chrome {
+      position: absolute; top: 0; left: 0; right: 0; height: 60px; box-sizing: border-box;
+      border-bottom: 1px solid #D7D8D9;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 26px;
+    }
+    .f03e-chleft  { display: flex; align-items: center; gap: 16px; }
+    .f03e-stub    { width: 36px; height: 2px; background: #3987E5; }
+    .f03e-chtitle { font-size: 15px; font-weight: 500; letter-spacing: 0.09em; color: #AFB3B7; }
+    .f03e-chnum   { font-size: 13px; font-weight: 400; letter-spacing: 0.22em; color: rgba(175,179,183,0.5); }
+
+    /* code line — 44px mono, advance 0.6em = 26.4px per cell (caret math depends on it) */
+    .f03e-codeline {
+      position: absolute; left: 64px; top: 78px; height: 66px;
+      font-size: 44px; line-height: 66px; font-weight: 500; letter-spacing: normal;
+      white-space: pre; color: #FFFFFF;
+    }
+    .f03e-prompt { color: #AFB3B7; font-weight: 400; }
+    .f03e-ch     { visibility: hidden; }
+    .f03e-caret  {
+      position: absolute; left: 211.2px; top: 3px; width: 26.4px; height: 60px;
+      background: #3987E5; transform-origin: 50% 100%;
+    }
+  </style>
+
+  <div id="root" data-composition-id="03-edit" data-start="0" data-duration="5.269" data-width="1920" data-height="1080">
+    <div class="clip f03e-ground" data-start="0" data-duration="5.269" data-track-index="0"></div>
+    <div class="clip f03e-stage" data-start="0" data-duration="5.269" data-track-index="1">
+      <div class="f03e-world">
+        <div class="f03e-well">
+          <div class="f03e-chrome">
+            <div class="f03e-chleft">
+              <div class="f03e-stub"></div>
+              <div class="f03e-chtitle">demo.db · events</div>
+            </div>
+            <div class="f03e-chnum">03</div>
+          </div>
+          <div class="f03e-codeline" data-layout-allow-overlap=""><div class="f03e-caret"></div><span class="f03e-prompt">sqlite&gt; </span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script>
+    (function () {
+      var rootEl = document.querySelector('[data-composition-id="03-edit"]');
+      if (!rootEl || !window.gsap) return;
+
+      var q = function (s) { return rootEl.querySelector(s); };
+      var world = q(".f03e-world");
+      var well = q(".f03e-well");
+      var stub = q(".f03e-stub");
+      var caret = q(".f03e-caret");
+      var lineEl = q(".f03e-codeline");
+
+      /* build the verbatim statement as per-char spans (build-time, deterministic) */
+      var SQL = "UPDATE events SET principal='mallory' WHERE seq=3;";
+      var frag = document.createDocumentFragment();
+      var chars = SQL.split("").map(function (ch) {
+        var s = document.createElement("span");
+        s.className = "f03e-ch";
+        s.setAttribute("data-layout-allow-overlap", "");
+        s.textContent = ch;
+        frag.appendChild(s);
+        return s;
+      });
+      lineEl.appendChild(frag);
+
+      var STEP = 26.4;            /* 0.6em at 44px IBM Plex Mono */
+      var D = 5.269;
+
+      var tl = gsap.timeline({ paused: true });
+      gsap.set(world, { transformOrigin: "50% 42%" });
+
+      /* Scene 1 — the well rises, rule stub draws, caret blinks */
+      tl.fromTo(well, { y: 72, opacity: 0 }, { y: 0, opacity: 1, duration: 0.9, ease: "power3.out" }, 0);
+      tl.fromTo(stub, { scaleX: 0 }, { scaleX: 1, duration: 0.55, ease: "power2.out", transformOrigin: "left center" }, 0.3);
+      tl.set(caret, { x: 0, opacity: 1 }, 0.9);
+      tl.set(caret, { opacity: 0 }, 0.98);
+      tl.set(caret, { opacity: 1 }, 1.24);
+
+      /* Scene 2 — the SQL types verbatim; solid block caret rides the front */
+      var T0 = 1.5, BASE = 0.056, t = T0;
+      chars.forEach(function (el, i) {
+        tl.set(el, { visibility: "visible" }, t);
+        tl.set(caret, { x: (i + 1) * STEP }, t);
+        /* micro-beats: a breath before 'mallory', a settle before the ';' */
+        t += BASE + (i === 28 ? 0.10 : 0) + (i === 48 ? 0.06 : 0);
+      });
+
+      /* Scene 3 — submit beat: caret press dip (the Enter), then hold blinking */
+      tl.to(caret, { scaleY: 0.6, duration: 0.07, ease: "power2.in" }, 4.58);
+      tl.to(caret, { scaleY: 1, duration: 0.12, ease: "power2.out" }, 4.65);
+      tl.set(caret, { opacity: 0 }, 4.88);
+      tl.set(caret, { opacity: 1 }, 5.14);
+
+      /* one slow push-in under the whole shot, decelerating to a near-hold */
+      tl.fromTo(world, { scale: 1 }, { scale: 1.04, duration: D, ease: "power1.out" }, 0);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["03-edit"] = tl;
+    })();
+  </script>
+</template>

@@ -1,0 +1,253 @@
+<template>
+  <style>
+    /* fonts shipped with the project */
+    @font-face {
+      font-family: "Barlow";
+      src: url("assets/fonts/Barlow-800.woff2") format("woff2");
+      font-weight: 800;
+      font-style: normal;
+      font-display: block;
+    }
+    @font-face {
+      font-family: "Barlow";
+      src: url("assets/fonts/Barlow-900.woff2") format("woff2");
+      font-weight: 900;
+      font-style: normal;
+      font-display: block;
+    }
+    @font-face {
+      font-family: "IBM Plex Mono";
+      src: url("assets/fonts/IBMPlexMono-Medium.woff2") format("woff2");
+      font-weight: 500;
+      font-style: normal;
+      font-display: block;
+    }
+
+    /* root — styled via #root only */
+    #root {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      container-type: size;
+      font-family: "Barlow", sans-serif;
+    }
+
+    /* full-bleed ground on its own clip, never on #root */
+    .f07-bookend-bg {
+      position: absolute;
+      inset: 0;
+      background: #1a1a19;
+    }
+
+    .f07-bookend-stage {
+      position: absolute;
+      inset: 0;
+    }
+
+    /* ---- Scene 1 — the resolve line (typeset, word-by-word) ---- */
+    .f07-bookend-resolve {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 20.6cqw;
+      display: flex;
+      justify-content: center;
+    }
+    .f07-bookend-line {
+      display: flex;
+      align-items: baseline;
+      gap: 1.35cqw;
+      white-space: nowrap;
+      font-weight: 800;
+      font-size: 5.8cqw;
+      line-height: 1;
+      letter-spacing: -0.03em;
+      color: #ffffff;
+    }
+    .f07-bookend-w {
+      opacity: 0;
+    }
+    /* green tick — green use #2 of 2, the film's only other green (#0ca30c).
+       Reserved inline width so the line never re-centers when it draws. */
+    .f07-bookend-tick {
+      display: inline-block;
+      width: 3.1cqw;
+      height: 3.1cqw;
+      margin-left: 0.6cqw;
+      vertical-align: 0.9cqw;
+      overflow: visible;
+    }
+    .f07-bookend-tickpath {
+      fill: none;
+      stroke: #0ca30c;
+      stroke-width: 11;
+      stroke-linecap: square;
+      stroke-linejoin: miter;
+      stroke-dasharray: 110;
+      stroke-dashoffset: 110;
+    }
+
+    /* ---- Scene 2 — the end-card lockup ---- */
+    .f07-bookend-lockup {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 14.4cqw;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .f07-bookend-row {
+      display: flex;
+      align-items: center;
+      gap: 1.6cqw;
+    }
+    .f07-bookend-mark {
+      width: 6.4cqw;
+      height: 6.4cqw;
+      overflow: visible;
+    }
+    .f07-bookend-markouter {
+      fill: none;
+      stroke: #3987e5;
+      stroke-width: 6.5;
+      stroke-linecap: butt;
+      stroke-linejoin: miter;
+      stroke-dasharray: 306;
+      stroke-dashoffset: 306;
+    }
+    .f07-bookend-markinner {
+      stroke: #3987e5;
+      stroke-width: 6;
+      stroke-linecap: butt;
+      stroke-linejoin: miter;
+      stroke-dasharray: 131;
+      stroke-dashoffset: 131;
+      fill: #3987e5;
+      fill-opacity: 0;
+    }
+    .f07-bookend-word {
+      font-weight: 800;
+      font-size: 6.2cqw;
+      line-height: 1;
+      letter-spacing: -0.035em;
+      color: #ffffff;
+      white-space: nowrap;
+    }
+    .f07-bookend-wch {
+      display: inline-block;
+      opacity: 0;
+    }
+    .f07-bookend-meta {
+      margin-top: 1.9cqw;
+      font-family: "IBM Plex Mono", monospace;
+      font-weight: 500;
+      font-size: 1.05cqw;
+      letter-spacing: 0.14em;
+      color: #afb3b7;
+      white-space: nowrap;
+      clip-path: inset(0 100% 0 0);
+    }
+    .f07-bookend-hairline {
+      width: 26cqw;
+      height: 1px;
+      margin-top: 2.1cqw;
+      background: rgba(255, 255, 255, 0.18);
+      transform-origin: left center;
+    }
+    .f07-bookend-statement {
+      margin-top: 1.7cqw;
+      font-weight: 900;
+      font-size: 4.9cqw;
+      line-height: 1;
+      letter-spacing: -0.03em;
+      color: #ffffff;
+      opacity: 0;
+    }
+    .f07-bookend-proof {
+      color: #3987e5;
+    }
+  </style>
+
+  <div id="root" data-composition-id="07-bookend" data-width="1920" data-height="1080">
+    <div class="clip f07-bookend-bg" data-start="0" data-duration="3.691" data-track-index="0"></div>
+
+    <div class="clip f07-bookend-stage" data-start="0" data-duration="3.691" data-track-index="1">
+      <!-- Scene 1: resolve line + green tick -->
+      <div class="f07-bookend-resolve" id="f07-bookend-resolve">
+        <div class="f07-bookend-line">
+          <span class="f07-bookend-w" id="f07-bookend-w1">crash-proof</span><span class="f07-bookend-w" id="f07-bookend-w2">by</span><span class="f07-bookend-w" id="f07-bookend-w3">default.<svg class="f07-bookend-tick" viewBox="0 0 100 100" fill="none" aria-hidden="true"><path class="f07-bookend-tickpath" id="f07-bookend-tickpath" d="M14 54 L40 80 L86 24"></path></svg></span>
+        </div>
+      </div>
+
+      <!-- Scene 2/3: the lockup — ◈ mark + var-runtime / meta / proof-or-stop. -->
+      <div class="f07-bookend-lockup" id="f07-bookend-lockup">
+        <div class="f07-bookend-row">
+          <svg class="f07-bookend-mark" viewBox="0 0 120 120" fill="none" aria-hidden="true">
+            <path class="f07-bookend-markouter" id="f07-bookend-markouter" d="M60 6 L114 60 L60 114 L6 60 Z"></path>
+            <path class="f07-bookend-markinner" id="f07-bookend-markinner" d="M60 37 L83 60 L60 83 L37 60 Z"></path>
+          </svg>
+          <div class="f07-bookend-word"><span class="f07-bookend-wch">v</span><span class="f07-bookend-wch">a</span><span class="f07-bookend-wch">r</span><span class="f07-bookend-wch">-</span><span class="f07-bookend-wch">r</span><span class="f07-bookend-wch">u</span><span class="f07-bookend-wch">n</span><span class="f07-bookend-wch">t</span><span class="f07-bookend-wch">i</span><span class="f07-bookend-wch">m</span><span class="f07-bookend-wch">e</span></div>
+        </div>
+        <div class="f07-bookend-meta" id="f07-bookend-meta">OPEN SOURCE · github.com/signet-labs/var-runtime</div>
+        <div class="f07-bookend-hairline" id="f07-bookend-hairline"></div>
+        <div class="f07-bookend-statement" id="f07-bookend-statement"><span class="f07-bookend-proof">proof</span>-or-stop.</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var tl = gsap.timeline({ paused: true });
+
+      /* Scene windows are the packet's three beats compressed into the fixed
+         3.691s slot (packet's nominal windows sum to 6.5s):
+         Scene 1  0.00–1.41  resolve line builds word-by-word; green tick draws
+         Scene 2  1.41–2.12  line clears FULLY out (invisible by 1.41); blank beat;
+                             lockup assembles 1.56–2.12 (never overlaps the line)
+         Scene 3  2.12–3.691 DEAD STILL (1.57s hold, nothing tweens past 2.12) */
+
+      /* ---- Scene 1 (0.0–1.41): "crash-proof by default." + tick draw ---- */
+      tl.fromTo("#f07-bookend-w1", { opacity: 0, y: 44 }, { opacity: 1, y: 0, duration: 0.32, ease: "power3.out" }, 0.04);
+      tl.fromTo("#f07-bookend-w2", { opacity: 0, y: 44 }, { opacity: 1, y: 0, duration: 0.3, ease: "power3.out" }, 0.18);
+      tl.fromTo("#f07-bookend-w3", { opacity: 0, y: 44 }, { opacity: 1, y: 0, duration: 0.3, ease: "power3.out" }, 0.32);
+      /* the tick draws on AFTER "default." lands (svg-path-draw: dashoffset full→0) */
+      tl.fromTo("#f07-bookend-tickpath", { strokeDashoffset: 110 }, { strokeDashoffset: 0, duration: 0.34, ease: "power3.inOut" }, 0.64);
+
+      /* ---- Scene 2a (1.16–1.41): the line clears — word-by-word, left-first ---- */
+      tl.to("#f07-bookend-w1", { opacity: 0, y: -14, duration: 0.15, ease: "power2.in" }, 1.16);
+      tl.to("#f07-bookend-w2", { opacity: 0, y: -14, duration: 0.15, ease: "power2.in" }, 1.21);
+      tl.to("#f07-bookend-w3", { opacity: 0, y: -14, duration: 0.15, ease: "power2.in" }, 1.26);
+      /* line is at opacity 0 from 1.41 — hard blank stage until the mark starts at 1.56 */
+
+      /* ---- Scene 2b (1.56–2.12): the lockup assembles ---- */
+      /* ◈ mark draws ONCE: outer diamond stroke, then inner, then the fill settles */
+      tl.fromTo("#f07-bookend-markouter", { strokeDashoffset: 306 }, { strokeDashoffset: 0, duration: 0.22, ease: "power2.inOut" }, 1.56);
+      tl.fromTo("#f07-bookend-markinner", { strokeDashoffset: 131 }, { strokeDashoffset: 0, duration: 0.18, ease: "power2.inOut" }, 1.72);
+      tl.fromTo("#f07-bookend-markinner", { fillOpacity: 0 }, { fillOpacity: 1, duration: 0.08, ease: "power1.in" }, 1.86);
+      /* wordmark cascades left→right with overshoot (per-letter back.out) */
+      tl.fromTo(
+        ".f07-bookend-wch",
+        { opacity: 0, y: 36 },
+        { opacity: 1, y: 0, duration: 0.24, ease: "back.out(1.6)", stagger: 0.016 },
+        1.66
+      );
+      /* meta line wipes in left→right (clip-path inset reveal) */
+      tl.fromTo(
+        "#f07-bookend-meta",
+        { clipPath: "inset(0 100% 0 0)" },
+        { clipPath: "inset(0 0% 0 0)", duration: 0.2, ease: "power1.inOut" },
+        1.88
+      );
+      /* hairline sweep, then the payoff statement */
+      tl.fromTo("#f07-bookend-hairline", { scaleX: 0 }, { scaleX: 1, duration: 0.14, ease: "power3.out" }, 1.9);
+      tl.fromTo("#f07-bookend-statement", { opacity: 0, y: 28 }, { opacity: 1, y: 0, duration: 0.2, ease: "power3.out" }, 1.92);
+
+      /* ---- Scene 3 (2.12–3.691): DEAD STILL — nothing tweens in this window ---- */
+      /* pad the timeline to the exact slot length so end-of-frame seeks hold the lockup */
+      tl.to({}, { duration: 0.01, ease: "none" }, 3.681);
+
+      window.__timelines["07-bookend"] = tl;
+    })();
+  </script>
+</template>

@@ -1,0 +1,160 @@
+<template>
+  <style>
+    /* fonts shipped with the project */
+    @font-face {
+      font-family: "Barlow";
+      src: url("assets/fonts/Barlow-900.woff2") format("woff2");
+      font-weight: 900;
+      font-style: normal;
+      font-display: block;
+    }
+    @font-face {
+      font-family: "IBM Plex Mono";
+      src: url("assets/fonts/IBMPlexMono-500.woff2") format("woff2");
+      font-weight: 500;
+      font-style: normal;
+      font-display: block;
+    }
+
+    /* root — styled via #root only */
+    #root {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      container-type: size;
+      font-family: "Barlow", sans-serif;
+      color: #ffffff;
+    }
+
+    /* full-bleed ground on its own clip, never on #root */
+    .f01-hook-bg {
+      position: absolute;
+      inset: 0;
+      background: #1a1a19;
+    }
+
+    .f01-hook-stage {
+      position: absolute;
+      inset: 0;
+    }
+
+    /* ---- ghost "$" watermark: the meter, looming behind the line ---- */
+    .f01-hook-ghost {
+      position: absolute;
+      left: 56cqw;
+      top: 7cqh;
+      font-size: 50cqw;
+      font-weight: 900;
+      line-height: 0.8;
+      letter-spacing: -0.04em;
+      color: rgba(57, 135, 229, 0.13);
+      user-select: none;
+    }
+
+    /* ---- the statement (hero), lean-left, two ragged lines ---- */
+    .f01-hook-line {
+      position: absolute;
+      left: 5.5cqw;
+      top: 27cqh;
+      font-size: 7.2cqw;
+      font-weight: 900;
+      line-height: 1.06;
+      letter-spacing: -0.03em;
+      color: #ffffff;
+    }
+    .f01-hook-w {
+      display: inline-block;
+      will-change: transform, opacity, filter;
+    }
+    .f01-hook-acc {
+      color: #3987e5;
+    }
+
+    /* ---- tiny mono meter chip ---- */
+    .f01-hook-chip {
+      position: absolute;
+      left: 5.5cqw;
+      top: 57cqh;
+      display: inline-block;
+      font-family: "IBM Plex Mono", monospace;
+      font-weight: 500;
+      font-size: 0.95cqw;
+      letter-spacing: 0.14em;
+      color: #ffffff;
+      font-variant-numeric: tabular-nums;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      background: #1a1a19;
+      padding: 0.6cqw 1cqw;
+      white-space: nowrap;
+      transform-origin: left center;
+    }
+  </style>
+
+  <div id="root" data-composition-id="01-hook" data-width="1920" data-height="1080">
+    <div class="clip f01-hook-bg" data-start="0" data-duration="1.749" data-track-index="0"></div>
+
+    <div class="clip f01-hook-stage" data-start="0" data-duration="1.749" data-track-index="1">
+      <div class="f01-hook-ghost" id="f01-hook-ghost">$</div>
+
+      <div class="f01-hook-line">
+        <span class="f01-hook-w" id="f01-hook-w1">the</span>
+        <span class="f01-hook-w" id="f01-hook-w2">meter</span><br />
+        <span class="f01-hook-w" id="f01-hook-w3">was</span>
+        <span class="f01-hook-w f01-hook-acc" id="f01-hook-w4">always</span>
+        <span class="f01-hook-w f01-hook-acc" id="f01-hook-w5">running.</span>
+      </div>
+
+      <div class="f01-hook-chip" id="f01-hook-chip">$0.1854</div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      window.__timelines = window.__timelines || {};
+      var tl = gsap.timeline({ paused: true, defaults: { ease: "power3.out" } });
+
+      /* ambient: the ghost $ fades onto the field, then drifts almost imperceptibly all shot */
+      tl.fromTo(
+        "#f01-hook-ghost",
+        { opacity: 0 },
+        { opacity: 1, duration: 0.55, ease: "power2.out" },
+        0
+      );
+      tl.fromTo(
+        "#f01-hook-ghost",
+        { scale: 1.03 },
+        { scale: 1.06, duration: 1.749, ease: "sine.inOut" },
+        0
+      );
+
+      /* Scene 1: the statement builds word-by-word on the voiceover's word onsets */
+      var words = [
+        ["#f01-hook-w1", 0.02],
+        ["#f01-hook-w2", 0.2],
+        ["#f01-hook-w3", 0.56],
+        ["#f01-hook-w4", 0.82],
+        ["#f01-hook-w5", 1.1]
+      ];
+      words.forEach(function (w) {
+        tl.fromTo(
+          w[0],
+          { opacity: 0, y: 34, filter: "blur(9px)" },
+          { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.28 },
+          w[1]
+        );
+      });
+
+      /* payoff: the meter chip pops in as the line lands, then blinks ONCE */
+      tl.fromTo(
+        "#f01-hook-chip",
+        { opacity: 0, y: 14, scale: 0.94 },
+        { opacity: 1, y: 0, scale: 1, duration: 0.2, ease: "back.out(1.7)" },
+        1.26
+      );
+      tl.to("#f01-hook-chip", { opacity: 0, duration: 0.045, ease: "none" }, 1.52);
+      tl.to("#f01-hook-chip", { opacity: 1, duration: 0.05, ease: "none" }, 1.575);
+
+      window.__timelines["01-hook"] = tl;
+    })();
+  </script>
+</template>

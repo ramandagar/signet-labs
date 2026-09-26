@@ -1,0 +1,554 @@
+<template>
+  <style>
+    @font-face {
+      font-family: 'Barlow';
+      src: url('assets/fonts/Barlow-900.woff2') format('woff2');
+      font-weight: 900;
+      font-style: normal;
+      font-display: block;
+    }
+    @font-face {
+      font-family: 'IBM Plex Mono';
+      src: url('assets/fonts/IBMPlexMono-400.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+      font-display: block;
+    }
+    @font-face {
+      font-family: 'IBM Plex Mono';
+      src: url('assets/fonts/IBMPlexMono-500.woff2') format('woff2');
+      font-weight: 500;
+      font-style: normal;
+      font-display: block;
+    }
+    @font-face {
+      font-family: 'IBM Plex Mono';
+      src: url('assets/fonts/IBMPlexMono-600.woff2') format('woff2');
+      font-weight: 600;
+      font-style: normal;
+      font-display: block;
+    }
+
+    #root {
+      position: relative;
+      width: 1920px;
+      height: 1080px;
+      overflow: hidden;
+      font-family: 'IBM Plex Mono', monospace;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* full-bleed ground — dedicated clip layer, never on #root (dark register) */
+    .f05b-ground {
+      position: absolute;
+      inset: 0;
+      background: #1a1a19;
+    }
+
+    .f05b-stageclip {
+      position: absolute;
+      inset: 0;
+    }
+
+    /* ── left: the caption card ─────────────────────────────────── */
+    .f05b-card {
+      position: absolute;
+      left: 105px;
+      top: 296px;
+      width: 480px;
+    }
+    .f05b-rule {
+      width: 36px;
+      height: 2px;
+      background: #3987e5;
+      margin-bottom: 30px;
+      will-change: transform;
+    }
+    .f05b-kicker {
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      color: #3987e5;
+      margin-bottom: 36px;
+      will-change: transform;
+    }
+    .f05b-word {
+      font-family: 'Barlow', sans-serif;
+      font-weight: 900;
+      font-size: 185px;
+      line-height: 0.88;
+      letter-spacing: -0.04em;
+      color: #ffffff;
+      will-change: transform;
+    }
+
+    /* ── right: the terminal well ───────────────────────────────── */
+    .f05b-well {
+      position: absolute;
+      left: 624px;
+      top: 168px;
+      width: 1190px;
+      height: 468px;
+      background: #101010;
+      border: 1px solid rgba(215, 216, 217, 0.24);
+      will-change: transform;
+    }
+    .f05b-wellhead {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 52px;
+      padding: 0 36px;
+      border-bottom: 1px solid rgba(215, 216, 217, 0.16);
+    }
+    .f05b-welllabel {
+      font-size: 17px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      color: #afb3b7;
+    }
+    .f05b-wellstep {
+      font-size: 17px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      color: #3987e5;
+    }
+    .f05b-stream {
+      padding: 34px 36px 0;
+    }
+    .f05b-line {
+      height: 36px;
+      font-size: 25px;
+      font-weight: 400;
+      line-height: 36px;
+      white-space: pre;
+    }
+    .f05b-m {
+      margin-bottom: 14px;
+    }
+    .f05b-seg {
+      white-space: pre;
+    }
+    .f05b-k {
+      color: #ffffff;
+    }
+    .f05b-d {
+      color: #afb3b7;
+    }
+    .f05b-c {
+      color: #3987e5;
+    }
+    .f05b-caret {
+      display: inline-block;
+      width: 14px;
+      height: 29px;
+      margin-left: 3px;
+      vertical-align: -4px;
+      background: #3987e5;
+      opacity: 0;
+    }
+    /* gate_claim underline — 2px accent bar, draws left→right in scene 3 */
+    .f05b-u {
+      position: relative;
+    }
+    .f05b-ubar {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -6px;
+      height: 2px;
+      background: #3987e5;
+      will-change: transform;
+    }
+
+    /* ── the zero-deps chip, under the well ─────────────────────── */
+    .f05b-chip {
+      position: absolute;
+      left: 624px;
+      top: 672px;
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      padding: 20px 26px;
+      border: 1px solid rgba(215, 216, 217, 0.28);
+      will-change: transform;
+    }
+    .f05b-chipsq {
+      width: 10px;
+      height: 10px;
+      background: #3987e5;
+      flex: none;
+    }
+    .f05b-chiptext {
+      font-size: 20px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      color: #ffffff;
+      white-space: nowrap;
+    }
+  </style>
+
+  <div
+    id="root"
+    data-composition-id="05b-five-lines"
+    data-start="0"
+    data-duration="8.469"
+    data-width="1920"
+    data-height="1080"
+  >
+    <div class="clip f05b-ground" data-start="0" data-duration="8.469" data-track-index="0"></div>
+
+    <div class="clip f05b-stageclip" data-start="0" data-duration="8.469" data-track-index="1">
+      <!-- caption card — the one display moment -->
+      <div class="f05b-card">
+        <div class="f05b-rule" id="f05b-rule"></div>
+        <div class="f05b-kicker" id="f05b-kicker">SIGNET · VAR</div>
+        <div class="f05b-word" id="f05b-w1" data-layout-allow-overlap="">five</div>
+        <div class="f05b-word" id="f05b-w2" data-layout-allow-overlap="">lines.</div>
+      </div>
+
+      <!-- terminal well — snippet types in verbatim from the README -->
+      <div class="f05b-well" id="f05b-well">
+        <div class="f05b-wellhead">
+          <span class="f05b-welllabel">SIGNET · VAR INSTALL</span>
+          <span class="f05b-wellstep">INTEGRATION EXAMPLE</span>
+        </div>
+        <div class="f05b-stream">
+          <div class="f05b-line f05b-m" id="f05b-l1"
+            ><span class="f05b-seg f05b-k" id="f05b-l1s0"></span
+            ><span class="f05b-seg f05b-d" id="f05b-l1s1"></span
+            ><span class="f05b-seg f05b-k" id="f05b-l1s2"></span
+            ><span class="f05b-seg f05b-c" id="f05b-l1s3"></span
+            ><span class="f05b-seg f05b-d" id="f05b-l1s4"></span
+            ><span class="f05b-seg f05b-c" id="f05b-l1s5"></span
+            ><span class="f05b-caret" id="f05b-c1"></span
+          ></div>
+          <div class="f05b-line f05b-m" id="f05b-l2"
+            ><span class="f05b-seg f05b-k" id="f05b-l2s0"></span
+            ><span class="f05b-seg f05b-c" id="f05b-l2s1"></span
+            ><span class="f05b-seg f05b-k" id="f05b-l2s2"></span
+            ><span class="f05b-seg f05b-d" id="f05b-l2s3"></span
+            ><span class="f05b-seg f05b-d" id="f05b-l2s4"></span
+            ><span class="f05b-seg f05b-k" id="f05b-l2s5"></span
+            ><span class="f05b-seg f05b-d" id="f05b-l2s6"></span
+            ><span class="f05b-seg f05b-d" id="f05b-l2s7"></span
+            ><span class="f05b-caret" id="f05b-c2"></span
+          ></div>
+          <div class="f05b-line" id="f05b-l3"
+            ><span class="f05b-seg f05b-k" id="f05b-l3s0"></span
+            ><span class="f05b-seg f05b-d" id="f05b-l3s1"></span
+            ><span class="f05b-seg f05b-d" id="f05b-l3s2"></span
+            ><span class="f05b-seg f05b-k" id="f05b-l3s3"></span
+            ><span class="f05b-seg f05b-d" id="f05b-l3s4"></span
+            ><span class="f05b-seg f05b-d" id="f05b-l3s5"></span
+            ><span class="f05b-caret" id="f05b-c3"></span
+          ></div>
+          <div class="f05b-line" id="f05b-l4"
+            ><span class="f05b-seg f05b-d" id="f05b-l4s0"></span
+            ><span class="f05b-seg f05b-k" id="f05b-l4s1"></span
+            ><span class="f05b-seg f05b-d" id="f05b-l4s2"></span
+            ><span class="f05b-seg f05b-d" id="f05b-l4s3"></span
+            ><span class="f05b-seg f05b-d" id="f05b-l4s4"></span
+            ><span class="f05b-seg f05b-d" id="f05b-l4s5"></span
+            ><span class="f05b-caret" id="f05b-c4"></span
+          ></div>
+          <div class="f05b-line f05b-m" id="f05b-l5"
+            ><span class="f05b-seg f05b-d" id="f05b-l5s0"></span
+            ><span class="f05b-seg f05b-k" id="f05b-l5s1"></span
+            ><span class="f05b-seg f05b-c" id="f05b-l5s2"></span
+            ><span class="f05b-seg f05b-k" id="f05b-l5s3"></span
+            ><span class="f05b-seg f05b-k" id="f05b-l5s4"></span
+            ><span class="f05b-seg f05b-d" id="f05b-l5s5"></span
+            ><span class="f05b-caret" id="f05b-c5"></span
+          ></div>
+          <div class="f05b-line" id="f05b-l6"
+            ><span class="f05b-seg f05b-k" id="f05b-l6s0"></span
+            ><span class="f05b-u"
+              ><span class="f05b-seg f05b-k" id="f05b-l6s1"></span
+              ><span class="f05b-ubar" id="f05b-ubar"></span
+            ></span
+            ><span class="f05b-seg f05b-k" id="f05b-l6s2"></span
+            ><span class="f05b-seg f05b-d" id="f05b-l6s3"></span
+            ><span class="f05b-seg f05b-d" id="f05b-l6s4"></span
+            ><span class="f05b-seg f05b-d" id="f05b-l6s5"></span
+            ><span class="f05b-seg f05b-d" id="f05b-l6s6"></span
+            ><span class="f05b-caret" id="f05b-c6"></span
+          ></div>
+          <div class="f05b-line f05b-m" id="f05b-l7"
+            ><span class="f05b-seg f05b-d" id="f05b-l7s0"></span
+            ><span class="f05b-seg f05b-d" id="f05b-l7s1"></span
+            ><span class="f05b-seg f05b-d" id="f05b-l7s2"></span
+            ><span class="f05b-seg f05b-d" id="f05b-l7s3"></span
+            ><span class="f05b-seg f05b-d" id="f05b-l7s4"></span
+            ><span class="f05b-seg f05b-k" id="f05b-l7s5"></span
+            ><span class="f05b-seg f05b-d" id="f05b-l7s6"></span
+            ><span class="f05b-seg f05b-d" id="f05b-l7s7"></span
+            ><span class="f05b-seg f05b-d" id="f05b-l7s8"></span
+            ><span class="f05b-seg f05b-k" id="f05b-l7s9"></span
+            ><span class="f05b-seg f05b-d" id="f05b-l7s10"></span
+            ><span class="f05b-caret" id="f05b-c7"></span
+          ></div>
+          <div class="f05b-line" id="f05b-l8"
+            ><span class="f05b-seg f05b-k" id="f05b-l8s0"></span
+            ><span class="f05b-seg f05b-k" id="f05b-l8s1"></span
+            ><span class="f05b-seg f05b-d" id="f05b-l8s2"></span
+            ><span class="f05b-caret" id="f05b-c8"></span
+          ></div>
+        </div>
+      </div>
+
+      <!-- zero-deps chip -->
+      <div class="f05b-chip" id="f05b-chip">
+        <span class="f05b-chipsq"></span>
+        <span class="f05b-chiptext">ZERO DEPENDENCIES · PYTHON STDLIB ONLY</span>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <script>
+    (function () {
+      var root = document.querySelector('[data-composition-id="05b-five-lines"]');
+      if (!root || !window.gsap) return;
+      var $ = function (id) {
+        return root.querySelector('#' + id);
+      };
+
+      var D = 8.469;
+      var TYPE0 = 1.4;
+      var TYPE1 = 5.6;
+      var sp = function (n) {
+        return new Array(n + 1).join(' ');
+      };
+
+      // Verbatim README "5-line integration" snippet (8 physical lines),
+      // typed as character slices — every rendered value is a pure function of
+      // driver.t (discrete-text-sequence / context-sensitive-cursor mechanics).
+      var LINES = [
+        {
+          caret: $('f05b-c1'),
+          segs: [
+            [$('f05b-l1s0'), 'from '],
+            [$('f05b-l1s1'), 'var_runtime'],
+            [$('f05b-l1s2'), ' import '],
+            [$('f05b-l1s3'), 'VerifiableRuntime'],
+            [$('f05b-l1s4'), ', '],
+            [$('f05b-l1s5'), 'Budget']
+          ]
+        },
+        {
+          caret: $('f05b-c2'),
+          segs: [
+            [$('f05b-l2s0'), 'rt = '],
+            [$('f05b-l2s1'), 'VerifiableRuntime'],
+            [$('f05b-l2s2'), '(store='],
+            [$('f05b-l2s3'), '"var.db"'],
+            [$('f05b-l2s4'), ', '],
+            [$('f05b-l2s5'), 'proofs='],
+            [$('f05b-l2s6'), '"proofs.json"'],
+            [$('f05b-l2s7'), ')']
+          ]
+        },
+        {
+          caret: $('f05b-c3'),
+          segs: [
+            [$('f05b-l3s0'), 's = rt.start_session(principal_id='],
+            [$('f05b-l3s1'), '"alice@co"'],
+            [$('f05b-l3s2'), ', '],
+            [$('f05b-l3s3'), 'agent_id='],
+            [$('f05b-l3s4'), '"coder-1"'],
+            [$('f05b-l3s5'), ',']
+          ]
+        },
+        {
+          caret: $('f05b-c4'),
+          segs: [
+            [$('f05b-l4s0'), sp(21)],
+            [$('f05b-l4s1'), 'permissions=['],
+            [$('f05b-l4s2'), '"read:repo"'],
+            [$('f05b-l4s3'), ', '],
+            [$('f05b-l4s4'), '"run:tests"'],
+            [$('f05b-l4s5'), '],']
+          ]
+        },
+        {
+          caret: $('f05b-c5'),
+          segs: [
+            [$('f05b-l5s0'), sp(21)],
+            [$('f05b-l5s1'), 'budget='],
+            [$('f05b-l5s2'), 'Budget'],
+            [$('f05b-l5s3'), '(max_usd='],
+            [$('f05b-l5s4'), '2.00'],
+            [$('f05b-l5s5'), '))']
+          ]
+        },
+        {
+          caret: $('f05b-c6'),
+          segs: [
+            [$('f05b-l6s0'), 'd = rt.'],
+            [$('f05b-l6s1'), 'gate_claim'],
+            [$('f05b-l6s2'), '(s, {'],
+            [$('f05b-l6s3'), '"claim"'],
+            [$('f05b-l6s4'), ': '],
+            [$('f05b-l6s5'), '"tests_passed"'],
+            [$('f05b-l6s6'), ',']
+          ]
+        },
+        {
+          caret: $('f05b-c7'),
+          segs: [
+            [$('f05b-l7s0'), sp(22)],
+            [$('f05b-l7s1'), '"target"'],
+            [$('f05b-l7s2'), ': {'],
+            [$('f05b-l7s3'), '"commit_sha"'],
+            [$('f05b-l7s4'), ': '],
+            [$('f05b-l7s5'), 'sha'],
+            [$('f05b-l7s6'), '}, '],
+            [$('f05b-l7s7'), '"confidence"'],
+            [$('f05b-l7s8'), ': '],
+            [$('f05b-l7s9'), '0.97'],
+            [$('f05b-l7s10'), '})']
+          ]
+        },
+        {
+          caret: $('f05b-c8'),
+          segs: [
+            [$('f05b-l8s0'), 'if '],
+            [$('f05b-l8s1'), 'd.admitted'],
+            [$('f05b-l8s2'), ': ...']
+          ]
+        }
+      ];
+      var TOTALS = LINES.map(function (l) {
+        return l.segs.reduce(function (a, s) {
+          return a + s[1].length;
+        }, 0);
+      });
+      // uniform character rate across the type window → per-line windows
+      var TOTAL = TOTALS.reduce(function (a, b) {
+        return a + b;
+      }, 0);
+      (function () {
+        var cum = 0;
+        for (var i = 0; i < LINES.length; i++) {
+          LINES[i].w0 = TYPE0 + (cum / TOTAL) * (TYPE1 - TYPE0);
+          cum += TOTALS[i];
+          LINES[i].w1 = TYPE0 + (cum / TOTAL) * (TYPE1 - TYPE0);
+        }
+      })();
+
+      var rule = $('f05b-rule');
+      var kicker = $('f05b-kicker');
+      var w1 = $('f05b-w1');
+      var w2 = $('f05b-w2');
+      var well = $('f05b-well');
+      var ubar = $('f05b-ubar');
+      var chip = $('f05b-chip');
+
+      var tl = gsap.timeline({ paused: true });
+      window.__timelines = window.__timelines || {};
+      window.__timelines['05b-five-lines'] = tl;
+
+      // Scene 1 — caption card lands left-of-center; well slides in right, empty with caret.
+      tl.fromTo(
+        rule,
+        { scaleX: 0, transformOrigin: '0% 50%' },
+        { scaleX: 1, duration: 0.5, ease: 'power3.out' },
+        0.05
+      );
+      tl.fromTo(
+        kicker,
+        { y: 16, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.55, ease: 'power2.out' },
+        0.18
+      );
+      tl.fromTo(
+        w1,
+        { y: 70, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.75, ease: 'power4.out' },
+        0.28
+      );
+      tl.fromTo(
+        w2,
+        { y: 70, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.75, ease: 'power4.out' },
+        0.5
+      );
+      tl.fromTo(
+        well,
+        { x: 130, opacity: 0 },
+        { x: 0, opacity: 1, duration: 0.85, ease: 'power3.out' },
+        0.45
+      );
+
+      // Typing driver — seek-safe both ways; caret owned by the active line,
+      // solid while typing, deterministic square-wave blink while idle/parked.
+      var driver = { t: 0 };
+      tl.to(
+        driver,
+        {
+          t: D,
+          duration: D,
+          ease: 'none',
+          onUpdate: function () {
+            var t = driver.t;
+            var i, j, l, n;
+            for (i = 0; i < LINES.length; i++) {
+              l = LINES[i];
+              if (t <= l.w0) n = 0;
+              else if (t >= l.w1) n = TOTALS[i];
+              else n = Math.floor(((t - l.w0) / (l.w1 - l.w0)) * TOTALS[i]);
+              for (j = 0; j < l.segs.length; j++) {
+                var seg = l.segs[j];
+                var take = Math.max(0, Math.min(seg[1].length, n));
+                n -= take;
+                var txt = seg[1].substring(0, take);
+                if (seg[0].textContent !== txt) seg[0].textContent = txt;
+              }
+            }
+            var blink = Math.sin((Math.PI * 2 * t) / 0.53) > 0 ? 1 : 0.15;
+            var active, op;
+            if (t < TYPE0) {
+              active = 0;
+              op = blink;
+            } else if (t < TYPE1) {
+              active = LINES.length - 1;
+              for (i = 0; i < LINES.length; i++) {
+                if (t < LINES[i].w1) {
+                  active = i;
+                  break;
+                }
+              }
+              op = 1;
+            } else {
+              active = LINES.length - 1;
+              op = blink;
+            }
+            for (i = 0; i < LINES.length; i++) {
+              LINES[i].caret.style.opacity = i === active ? op : 0;
+            }
+          }
+        },
+        0
+      );
+
+      // Scene 3 — gate_claim: 2px blue underline draws left→right; caret parks at end.
+      tl.fromTo(
+        ubar,
+        { scaleX: 0, transformOrigin: '0% 50%' },
+        { scaleX: 1, duration: 1.2, ease: 'power2.inOut' },
+        5.7
+      );
+
+      // Scene 4 — zero-deps chip under the well; hold still to the end.
+      tl.fromTo(
+        chip,
+        { y: 22, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.5, ease: 'power2.out' },
+        7.45
+      );
+
+      tl.seek(0);
+    })();
+  </script>
+</template>

@@ -1,0 +1,41 @@
+{
+  "provider": "kokoro",
+  "speed": 1,
+  "lines": [
+    {
+      "id": "01",
+      "text": "Some claims need a human. Chain the human to the proof."
+    },
+    {
+      "id": "02",
+      "text": "An agent wants to deploy to production. No approval in the chain — the claim halts. Evidence missing. The gate doesn't guess, and it doesn't forget."
+    },
+    {
+      "id": "03",
+      "text": "The approval lands where humans live: who is asking, what claim, which role must sign. No hallway approvals."
+    },
+    {
+      "id": "04",
+      "text": "A senior engineer reviews. Approves. The signature is real, scoped, and expiring."
+    },
+    {
+      "id": "05",
+      "text": "And the approval chains into the signed envelope — the human is now part of the proof."
+    },
+    {
+      "id": "06",
+      "text": "Admit. The deploy proceeds — with a name attached."
+    },
+    {
+      "id": "07",
+      "text": "Accountability, built in. var-runtime. Proof-or-Stop."
+    }
+  ],
+  "bgm": {
+    "mode": "retrieve",
+    "query": "dark-tech minimal ambient, slow build, one impact at the ADMIT (~38s)",
+    "blob": "Some claims need a human. Chain the human to the proof.",
+    "arc": "sign-off theater (halt, ask, sign, chain, admit)"
+  },
+  "voice": "am_michael"
+}

@@ -1,0 +1,45 @@
+{
+  "provider": "kokoro",
+  "speed": 1,
+  "lines": [
+    {
+      "id": "01",
+      "text": "Sixty seconds from clone to your first gated claim."
+    },
+    {
+      "id": "02",
+      "text": "One repo. Python three-eleven, standard library only. Clone it, run the demo — nothing to install."
+    },
+    {
+      "id": "03",
+      "text": "A session opens. Identity is signed. The meter starts. Eight steps run — every call metered, every event attested."
+    },
+    {
+      "id": "04",
+      "text": "The agent claims tests passed. The gate checks the evidence — and stops it cold. Stale. Eight forty-seven seconds old."
+    },
+    {
+      "id": "05",
+      "text": "The recovery is machine-readable — re-run the tests. The agent does. Same claim, fresh evidence: admit."
+    },
+    {
+      "id": "06",
+      "text": "Your whole integration is five lines. Wrap the tool calls. Gate the claim. No wrappers to maintain — the gate does the rest."
+    },
+    {
+      "id": "07",
+      "text": "Every decision lands in a tamper-evident chain. Seventeen events, one hash chain — verifiable offline, forever."
+    },
+    {
+      "id": "08",
+      "text": "Sixty seconds. Your first gated claim. var-runtime — open source. Proof-or-Stop."
+    }
+  ],
+  "bgm": {
+    "mode": "retrieve",
+    "query": "dark-tech minimal ambient, slow build, one impact at the ADMIT moment (~34s)",
+    "blob": "Sixty seconds from clone to your first gated claim.",
+    "arc": "demo-led (show the product being installed and gate its first claim live)"
+  },
+  "voice": "am_michael"
+}
