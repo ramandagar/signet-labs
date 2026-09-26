@@ -48,14 +48,23 @@
      mechanically verifiable evidence before your lifecycle advances.
      <b>No evidence, no advance. Proof-or-Stop.</b></p>
   <form class="waitlist" onsubmit="return joinWaitlist(event)">
-    <input id="wlEmail" type="email" required placeholder="you@company.com">
-    <button>Join the waitlist</button>
+    <button type="button" onclick="location.hash='quickstart'" style="background:var(--good);font-weight:700">Get started — it's open source</button>
   </form>
   <p class="okmsg" id="wlMsg" hidden></p>
-  <p class="dim" style="margin-top:10px">Double opt-in. No scraped lists, ever.</p>
+  <p class="dim" style="margin-top:10px">
+    Clone the repo, run <code>python3 demo.py</code>, gate your first claim in 2 minutes · MIT, zero dependencies.</p>
+  <form class="waitlist" onsubmit="return joinWaitlist(event)" style="margin-top:18px;max-width:560px">
+    <input id="wlEmail" type="email" required placeholder="you@company.com — want the hosted tier instead?">
+    <button>Join hosted waitlist</button>
+  </form>
+  <p class="dim" style="margin-top:8px">Hosted = we run the API + console for you (deploying soon). Double opt-in, no scraped lists, ever.</p>
 </div>
 
-<section class="block">
+<section class="block" id="quickstart">
+  <h2>Get started in 2 minutes</h2>
+  <div class="snippet mono" style="margin:0 0 28px">git clone https://github.com/your-org/var-runtime
+cd var-runtime && python3 demo.py   <span class="c"># full lifecycle, ~2s: HALT → ADMIT → crash-resume → tamper detection</span>
+python3 -m var_runtime.server --port 8788   <span class="c"># landing + console + /architecture</span></div>
   <h2>Six guarantees, one runtime</h2>
   <div class="feats">
     <div class="panel feat"><div class="n">01 · EVIDENCE GATE</div><h3>Proof-or-Stop</h3>
