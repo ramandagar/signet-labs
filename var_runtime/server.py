@@ -211,11 +211,11 @@ class Api:
             return
         import smtplib
         from email.message import EmailMessage
-        base = os.environ.get("VAR_SMTP_BASE", "https://var-runtime.dev")
+        base = os.environ.get("VAR_SMTP_BASE", "https://signetlabs.dev")
         body = body.replace("/waitlist/confirm", base + "/waitlist/confirm")
         msg = EmailMessage()
         msg["To"], msg["Subject"] = to, subject
-        msg["From"] = os.environ.get("VAR_SMTP_FROM", "waitlist@var-runtime.dev")
+        msg["From"] = os.environ.get("VAR_SMTP_FROM", "hello@signetlabs.dev")
         msg.set_content(body)
         with smtplib.SMTP(host, int(os.environ.get("VAR_SMTP_PORT", "587")), timeout=10) as s:
             s.starttls()

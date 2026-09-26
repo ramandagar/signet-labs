@@ -45,7 +45,7 @@ verdict.
 
 ## Reporting a security issue
 
-Email security@var-runtime.dev (or open a private security advisory on the
+Email security@signetlabs.dev (or open a private security advisory on the
 repo). Please do not open public issues for signature-verification bypasses.
 
 ## License

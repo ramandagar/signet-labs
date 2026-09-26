@@ -1,5 +1,7 @@
 # var-runtime — The Verifiable Agent Runtime
 
+**by Signet Labs**
+
 **Proof-or-Stop.** A control layer that sits between any agent framework and
 the tools it invokes. Autonomous agents make claims — "tests passed", "payment
 sent", "identity verified". The runtime intercepts every critical action,

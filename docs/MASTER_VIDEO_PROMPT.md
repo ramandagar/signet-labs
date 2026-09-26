@@ -66,7 +66,7 @@ io.var.identity.envelope = eyJhbGciOiJIUzI1NiIs… (signed JWT)
 ```
 **Tagline:** `Your agent says done. Prove it.` · **Law:** `Proof-or-Stop.`
 · **Mark:** `◈` before the wordmark `var-runtime` · **CTA line:**
-`github.com/your-org/var-runtime — open source · Proof-or-Stop.`
+`github.com/signet-labs/var-runtime — open source · Proof-or-Stop.`
 
 ═══════════════════════════════════════════════════════════════════
 B. BRAND LAW (violating any of these fails QA)
@@ -111,7 +111,7 @@ C. STRUCTURE LAW (every film follows this)
   −16 LUFS overall, true-peak −1.5 dB. License-clean music only (CC0 or
    owned). VO: calm male, dry, factual — never hype.
 5. **Captions:** bottom 17% band reserved; 2–4 word groups, brand skin.
-6. **End card:** `◈ var-runtime · github.com/your-org/var-runtime ·
+6. **End card:** `◈ var-runtime · github.com/signet-labs/var-runtime ·
    Proof-or-Stop.` held absolutely still for ≥1.5s.
 
 ═══════════════════════════════════════════════════════════════════

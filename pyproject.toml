@@ -9,6 +9,7 @@ description = "Verifiable Agent Runtime — Proof-or-Stop control layer for auto
 readme = "README.md"
 requires-python = ">=3.11"
 license = { text = "MIT" }
+authors = [{ name = "Signet Labs" }]
 
 [project.scripts]
 var = "cli:main"

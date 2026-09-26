@@ -57,4 +57,4 @@ week format, Linear/Stripe/Vercel launch genre conventions.
 9. Human-in-the-loop (deploy blocked → Slack approval → envelope chained → ADMIT)
 10. "Proof-or-Stop" manifesto (typographic, manifesto style, bookends the slate)
 
-Every video ends: `github.com/your-org/var-runtime — Proof-or-Stop.`
+Every video ends: `github.com/signet-labs/var-runtime — Proof-or-Stop.`

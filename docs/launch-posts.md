@@ -87,7 +87,7 @@ binding, tampered payloads, forged signatures, failing runs. 13 correct
 verdicts. The suite ships in the repo. [video 2 or eval post]
 
 10/ Everything above is Python stdlib. Zero dependencies. MIT.
-github.com/your-org/var-runtime — Proof-or-Stop. [manifesto video]
+github.com/signet-labs/var-runtime — Proof-or-Stop. [manifesto video]
 
 ## Reddit discussion post (r/LocalLLaMA etc.)
 

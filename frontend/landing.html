@@ -8,7 +8,7 @@
 <meta property="og:title" content="var-runtime — Your agent says done. Prove it.">
 <meta property="og:description" content="An open-source runtime that gates every critical agent action on mechanically verifiable evidence. Fresh, bound, signed — or the lifecycle stops.">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://var-runtime.dev/">
+<meta property="og:url" content="https://signetlabs.dev/">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Your agent says done. Prove it.">
 <meta name="twitter:description" content="The Verifiable Agent Runtime — Proof-or-Stop. Zero dependencies, MIT.">
@@ -43,6 +43,7 @@
 <body class="viz-root" data-theme="dark">
 <div class="hero">
   <div class="brand" style="margin-bottom:26px"><span class="logo">◈</span> var-runtime</div>
+  <p class="dim" style="margin:-16px 0 20px;font-size:12.5px;letter-spacing:.12em;text-transform:uppercase">a Signet Labs project</p>
   <h1>Your agent says <em>done</em>.<br>Prove it.</h1>
   <p class="lead">The Verifiable Agent Runtime intercepts every critical action and demands
      mechanically verifiable evidence before your lifecycle advances.
@@ -62,7 +63,7 @@
 
 <section class="block" id="quickstart">
   <h2>Get started in 2 minutes</h2>
-  <div class="snippet mono" style="margin:0 0 28px">git clone https://github.com/your-org/var-runtime
+  <div class="snippet mono" style="margin:0 0 28px">git clone https://github.com/signet-labs/var-runtime
 cd var-runtime && python3 demo.py   <span class="c"># full lifecycle, ~2s: HALT → ADMIT → crash-resume → tamper detection</span>
 python3 -m var_runtime.server --port 8788   <span class="c"># landing + console + /architecture</span></div>
   <h2>Six guarantees, one runtime</h2>
@@ -102,11 +103,11 @@ d  = rt.gate_claim(s, {<span class="s">"claim"</span>: <span class="s">"tests_pa
       <button onclick="upgrade('team')">Upgrade</button></div>
     <div class="panel price"><div class="tag">Enterprise</div><div class="amt">Custom</div>
       <ul><li>Air-gapped deploy</li><li>SOC 2, 24/7 SLA</li><li>Dedicated support</li></ul>
-      <a href="mailto:enterprise@var-runtime.dev"><button>Talk to us</button></a></div>
+      <a href="mailto:enterprise@signetlabs.dev"><button>Talk to us</button></a></div>
   </div>
 </section>
 
-<footer>var-runtime · Proof-or-Stop · zero dependencies · <a href="/architecture">architecture</a> · <a href="/app">console</a> · <a href="/privacy">privacy</a> · <a href="/terms">terms</a></footer>
+<footer>◈ var-runtime — a Signet Labs project · Proof-or-Stop · zero dependencies · <a href="/architecture">architecture</a> · <a href="/app">console</a> · <a href="/privacy">privacy</a> · <a href="/terms">terms</a></footer>
 <script>
 async function joinWaitlist(e) {
   e.preventDefault();
