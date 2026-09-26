@@ -200,7 +200,113 @@ E. TECHNICAL CONTRACT (how you build)
   1920×1080 poster frame, and burned-in + sidecar (.srt) captions.
 
 ═══════════════════════════════════════════════════════════════════
-F. ACCEPTANCE GATES (all must pass before you say "done" — and you
+G. THE TOOLCHAIN — engines, repos, and licenses (pick ONE engine)
+═══════════════════════════════════════════════════════════════════
+
+All four routes below produce broadcast-quality output. Choose by team
+familiarity; do not mix engines inside one film.
+
+**ROUTE 1 — Remotion (React) — best default for product films**
+- Repo: `github.com/remotion-dev/remotion` · docs: remotion.dev
+- Videos are React components; `<Composition>` per film, `useCurrentFrame()`
+  drives everything; render via `npx remotion render` (Chromium headless →
+  H.264). `<Player>` previews in-browser; Remotion Lambda for cloud scale.
+- Strengths: parametrized videos (same composition, N products/cuts),
+  TypeScript, ecosystems of templates, server-side rendering.
+- ⚠ LICENSE TRAP: Remotion is **source-available, NOT plain OSS** — free for
+  individuals and companies ≤3 employees; larger companies must buy the
+  company license. Decide this consciously before building the series on it.
+
+**ROUTE 2 — Motion Canvas (TypeScript) — best for precise motion design**
+- Repo: `github.com/motion-canvas/motion-canvas` · MIT license
+- Generator-function timelines (`function* scene() { yield* node.play() }`),
+  frame-perfect keyframes, export to video via their renderer. Designer-grade
+  control; the strongest choice when the MOTION itself is the message (V10).
+
+**ROUTE 3 — Manim Community (Python) — best for diagram/explainer films**
+- Repo: `github.com/ManimCommunity/manim` · MIT
+- 3Blue1Brown's engine. Ideal for V3's five-checks roll-call and anything
+  that reads like a proof being written live. `manim -qh scene.py Scene`.
+
+**ROUTE 4 — HTML + GSAP + headless capture (what V1–V3 actually used)**
+- GSAP: `github.com/greensock/GSAP` — since Webflow's acquisition ALL
+  plugins (SplitText, MorphSVG, DrawSVG…) are 100% free.
+- Compose scenes as HTML/CSS at 1920×1080; one paused GSAP timeline per
+  scene; capture with headless Chromium (`playwright`) frame-by-frame at
+  60fps; assemble with FFmpeg (`-framerate 60 -i frame-%05d.png`).
+- Reference implementation: this repo's `videos/var-hero/` — 13 frames,
+  brand tokens, the exact house style, all linted. REUSE IT: the frames are
+  your design system; read `frame.md` + `compositions/frames/*.html` first.
+
+**Supporting repos (any route):**
+- `airbnb/lottie-web` + `lottieFiles` — After Effects→JSON animations
+  (free); good for logo stings (end cards).
+- `theatre-js/theatre` — visual timeline editor for tweaking GSAP/Three cues.
+- `mrdoob/three.js` — only if a film needs real 3D (avoid; 2.5D fakes it
+  cheaper and on-brand).
+- `animejs/anime.js` — lighter alternative to GSAP for simple tweens.
+- `FFmpeg/FFmpeg` — final assembly, audio mix, LUFS normalization
+  (`loudnorm`), 9:16/1:1 re-frames (`crop`+`scale`), burned captions
+  (`subtitles` filter).
+- `openai/whisper` or `whisper.cpp` — caption timing from the VO stem.
+- TTS for VO: Kokoro (`kokoro-onnx`, free/local) or ElevenLabs (paid,
+  best quality). Voice spec in section C.
+- Music (license-clean only): archive.org CC0 search
+  (`advancedsearch.php?q=subject:"dark ambient" AND licenseurl:*publicdomain*`),
+  Pixabay/Uppbeat if you accept attribution terms. Log the license per track.
+
+**Fonts (both OFL — free, self-hostable):** Barlow (400–900) + IBM Plex Mono
+(400/500/600). Ship the .woff2 files; never fetch fonts at render time.
+
+═══════════════════════════════════════════════════════════════════
+H. TACTICS — the proven playbook (research-derived; follow in order)
+═══════════════════════════════════════════════════════════════════
+
+Pre-production
+1. **VO first.** Write the script, record/generate the VO, measure each
+   line's real duration, THEN build scenes to those timings. Never animate
+   first. (V1–V3 were cut to measured VO durations — this is why the reveals
+   land on words.)
+2. **Storyboard as time-coded windows:** every scene lists what's on screen
+   per VO cue. Ban front-loading — an element that appears before its spoken
+   cue is a bug.
+
+The film
+3. **Hook ≤8s or die:** 73% of drop-off is in the first 8 seconds. Open on
+   the viewer's pain in their words, never on the company.
+4. **Product-in-motion > abstraction:** real terminals, real decision cards,
+   verbatim system strings. Cursor/Devin-era lesson: the grounded demo
+   builds trust; the abstract hype-film invites backlash.
+5. **Contrast pacing:** calm ~120 WPM VO over precise, deliberate motion.
+   The stillness of holds makes the impacts hit (the ADMIT frame holds
+   DEAD STILL under the sub-drop — stillness is a feature).
+6. **One idea per shot change; shot changes every 2.5–4s.** Faster strobes
+   only in the social cuts.
+7. **Sound design is 3 elements:** ambient bed (slow build) + ONE riser
+   (~2.5s) into ONE sub-drop impact on the film's key green moment + the
+   VO. Nothing else. Silence for 0.5s before the impact makes it land.
+8. **Bookend:** the closing line resolves the opening line verbatim
+   ("says done" → "proves it"). End card holds ≥1.5s, dead still.
+
+Cuts & distribution
+9. **One master film → many cuts:** render 16:9 master, then re-frame 9:16
+   (type ×1.4, captions high-center) and 1:1 (crop to the focal card).
+   Don't re-animate per format; re-frame.
+10. **Sound-off autoplay:** captions always on; first frame must read as a
+    thumbnail (test: screenshot t=0 — would you click it?).
+11. **Loop-friendly social endings:** the last frame's motion state should
+    match frame 0 where possible, so the loop feels intentional.
+
+Quality discipline
+12. **Deterministic everything:** fixed seeds/pseudo-patterns, no clocks in
+    animation code — a render today must equal a render next month.
+13. **Seek-test:** scrub 5 random timestamps; any element in the wrong state
+    = a seek-safety bug = fix before delivery.
+14. **Watch at 1× before saying done** and name the weakest moment.
+    (Gate F, item 12 — the whole point of this product.)
+
+═══════════════════════════════════════════════════════════════════
+I. ACCEPTANCE GATES (all must pass before you say "done" — and you
    never say "done" about your own work without pasting this checklist
    with real answers; that's the product's whole point)
 ═══════════════════════════════════════════════════════════════════
