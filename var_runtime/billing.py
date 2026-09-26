@@ -88,9 +88,12 @@ def verify_webhook_signature(payload: bytes, header: str, secret: str,
 
 def handle_webhook(api, payload: bytes, signature: str | None = None) -> tuple[int, dict]:
     secret = os.environ.get("STRIPE_WEBHOOK_SECRET")
-    if secret:
-        if not signature or not verify_webhook_signature(payload, signature, secret):
-            raise ApiError(400, "INVALID_SIGNATURE", "webhook signature invalid")
+    if not secret:
+        # fail closed: unsigned acceptance would let anyone upgrade their plan
+        raise ApiError(503, "BILLING_UNCONFIGURED",
+                       "set STRIPE_WEBHOOK_SECRET — unsigned webhooks are never accepted")
+    if not signature or not verify_webhook_signature(payload, signature, secret):
+        raise ApiError(400, "INVALID_SIGNATURE", "webhook signature invalid")
     event = json.loads(payload)
     et = event.get("type", "")
     obj = event.get("data", {}).get("object", {})

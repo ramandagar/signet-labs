@@ -396,6 +396,17 @@ class Api:
                      types.get(f.suffix, "application/octet-stream"))
 
 
+def main() -> None:
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--db", default="var.db")
+    ap.add_argument("--port", type=int, default=8788)
+    ap.add_argument("--host", default="127.0.0.1")
+    ap.add_argument("--static", default="frontend")
+    ap.add_argument("--key-hex", default=None)
+    a = ap.parse_args()
+    serve(a.host, a.port, a.db, a.static, a.key_hex)
+
+
 def serve(host: str = "0.0.0.0", port: int = 8788, db: str = "var.db",
           static_dir: str = "frontend", key_hex: str | None = None) -> None:
     api = Api(store_path=db, static_dir=static_dir,
@@ -441,11 +452,9 @@ def serve(host: str = "0.0.0.0", port: int = 8788, db: str = "var.db",
 
 
 if __name__ == "__main__":
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--db", default="var.db")
-    ap.add_argument("--port", type=int, default=8788)
-    ap.add_argument("--host", default="127.0.0.1")
-    ap.add_argument("--static", default="frontend")
-    ap.add_argument("--key-hex", default=None)
-    a = ap.parse_args()
-    serve(a.host, a.port, a.db, a.static, a.key_hex)
+    # Re-import the package module and run ITS main: running this file as
+    # __main__ would create a second module instance, and ApiError raised by
+    # billing (which imports var_runtime.server.ApiError) would be a DIFFERENT
+    # class than the one dispatch catches — turning clean 4xx into 500s.
+    from var_runtime.server import main as _pkg_main
+    _pkg_main()
