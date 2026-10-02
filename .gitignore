@@ -15,3 +15,5 @@ videos/*/index.html.bak
 *.egg-info/
 .pytest_cache/
 .DS_Store
+
+videos/
